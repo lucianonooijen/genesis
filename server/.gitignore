@@ -1,0 +1,8 @@
+.env
+sqreen.yaml
+vendor/
+platform-backend
+server
+tmp/
+.gocache/
+
