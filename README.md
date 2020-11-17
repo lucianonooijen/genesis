@@ -17,7 +17,7 @@
 
 ## Used variables
 
-* Project Name
-* projectName
-* ProjectName
+* Genesis
+* genesis
+* git.bytecode.nl/bytecode/genesis
 
