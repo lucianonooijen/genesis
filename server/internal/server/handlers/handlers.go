@@ -6,11 +6,11 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-// Gin request handlers
+// Handlers contains Gin request handlers as methods
 type Handlers struct{}
 
-// Returns Handlers instance
-func NewHandlers() (Handlers, error) {
+// New returns Handlers instance
+func New() (Handlers, error) {
 	handlers := Handlers{}
 	validate := validator.New()
 	err := validate.Struct(handlers)

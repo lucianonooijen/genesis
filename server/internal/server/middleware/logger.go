@@ -12,6 +12,7 @@ import (
 )
 
 const (
+	// MaxRequestTimeBeforeLoggingError is the amount in ms requests may take before they are too long and logged by Sentry as taking too long.
 	MaxRequestTimeBeforeLoggingError = 1000
 )
 
@@ -19,7 +20,7 @@ const (
 // TODO: Use Sentry's ConfigureScope to set the current user in middleware
 // TODO: Add custom logging fields, f.e. the LogFields
 
-// Middleware to log request metadata and save Sentry data
+// GinLogger is Gin middleware to log request metadata and save Sentry data
 func GinLogger() gin.HandlerFunc {
 	var timeFormat = "02/Jan/2006:15:04:05 -0700"
 	return func(c *gin.Context) {

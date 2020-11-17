@@ -1,9 +1,9 @@
 package responses
 
-// Gets overwritten with build script to git tag or commit hash
+// ServerVersion gets overwritten with build script to git tag or commit hash
 var ServerVersion = "development" // TODO: Do this differently
 
-// The body sent for every response
+// ResponseBody is the body base sent for every response
 type ResponseBody struct {
 	Success bool        `json:"success"`
 	Error   *string     `json:"error"`

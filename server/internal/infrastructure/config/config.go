@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Config is the application configuration
 type Config struct {
 	IsDevMode         bool   `mapstructure:"development"` // Not marked required as it would fail when `false` is given as value TODO: Add to docs
 	ServerPort        int    `mapstructure:"api_port" validate:"required"`
@@ -21,7 +22,7 @@ type Config struct {
 	SentryEnvironment string `mapstructure:"sentry_environment" validate:"required"`
 	SendinblueName    string `mapstructure:"sendinblue_from_name" validate:"required"`
 	SendinblueEmail   string `mapstructure:"sendinblue_from_email" validate:"required"`
-	SendinblueApiKey  string `mapstructure:"sendinblue_api_key" validate:"required"`
+	SendinblueAPIKey  string `mapstructure:"sendinblue_api_key" validate:"required"`
 }
 
 // LoadConfig reads in config file and ENV variables if set.
@@ -52,6 +53,7 @@ func LoadConfig() (Config, error) {
 	return config, err
 }
 
+// DatabaseConnectionString returns database connection string for connection to PostgreSQL
 func (c Config) DatabaseConnectionString() string {
 	connStr := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s",
 		c.DatabaseHost, c.DatabasePort, c.DatabaseUser, c.DatabasePass, c.DatabaseName)

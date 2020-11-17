@@ -12,15 +12,18 @@ import (
 )
 
 const (
-	ApiBasePath = "/v1"
+	// BasePathAPI is the base used for the base of all requests
+	// Example: [server url]:[port]/[BasePathAPI]/[all other urls]
+	BasePathAPI = "/v1"
 )
 
+// GinServer is the Server instance struct
 type GinServer struct {
 	port   int
 	Router *gin.Engine
 }
 
-// The requirements for creating a new Server instance
+// Requirements are the requirements for creating a new Server instance
 type Requirements struct {
 	Debug bool
 	Port  int `validate:"required"`
@@ -31,9 +34,9 @@ func (s GinServer) Start() error {
 	return s.Router.Run(":" + strconv.Itoa(s.port))
 }
 
-// Generate a new Server instance with middleware and handlers added.
+// New creates a new Server instance with middleware and handlers added.
 // Use Server.Start() to run the server.
-func NewServer(r Requirements) (GinServer, error) {
+func New(r Requirements) (GinServer, error) {
 	validate := validator.New()
 	err := validate.Struct(r)
 	if err != nil {
@@ -56,12 +59,12 @@ func NewServer(r Requirements) (GinServer, error) {
 
 	registerMiddleware(server.Router, r.Debug)
 
-	initializedHandlers, err := handlers.NewHandlers()
+	initializedHandlers, err := handlers.New()
 	if err != nil {
 		return server, err
 	}
 
-	registerRoutes(server.Router.Group(ApiBasePath), initializedHandlers)
+	registerRoutes(server.Router.Group(BasePathAPI), initializedHandlers)
 	return server, nil
 }
 

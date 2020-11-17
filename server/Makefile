@@ -8,6 +8,7 @@ bootstrap: # Installs Go packages and sets defaults
 	@GO111MODULE=off go get -u golang.org/x/tools/cmd/goimports
 	@GO111MODULE=off go get -u github.com/cosmtrek/air
 	@GO111MODULE=off go get -u go101.org/golds
+	@GO111MODULE=off go get -u golang.org/x/lint/golint
 	@echo "Packages installed. Copying files..."
 	cp .env.example .env
 	cp sqreen.yaml.example sqreen.yaml
@@ -24,10 +25,11 @@ build: # Runs the Golang build for production, including the Sqreen intrumentati
 test: # Runs the unit tests
 	go test ./...
 
-.PHONY: fmt
-fmt: # Code style formatting for the project
+.PHONY: lint
+lint: # Code style formatting and linting check for the project
 	goimports -w .
 	go fmt ./...
+	golint ./...
 
 .PHONY: docs
 docs: # Runs documentation website # TODO: Improve

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	"git.bytecode.nl/bytecode/genesis/internal/server"
 
 	"git.bytecode.nl/bytecode/genesis/internal/infrastructure/config"
@@ -12,7 +13,7 @@ func main() {
 	fmt.Println(c)
 	fmt.Println(err)
 
-	s, err := server.NewServer(server.Requirements{
+	s, err := server.New(server.Requirements{
 		Debug: c.IsDevMode,
 		Port:  c.ServerPort,
 	})
