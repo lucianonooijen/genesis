@@ -17,3 +17,6 @@ _Bytecode Digital Agency's Project Scaffolding_
 * genesis
 * git.bytecode.nl/bytecode/genesis
 
+## License
+
+The project is licensed under GPL-3.0, except for the mobile application, which is Apache-2.0 licensed
