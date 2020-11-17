@@ -1,6 +1,6 @@
 help: # Shows all commands
 	@echo 'All Makefile commands'
-	@cat Makefile | grep -v '^\W'
+	@cat Makefile | grep -v '^\W' | grep -v '^\.'
 
 .PHONY: bootstrap
 bootstrap: # Installs Go packages and sets defaults
@@ -37,12 +37,20 @@ docs: # Runs documentation website
 	golds .
 
 .PHONY: ci
-ci: # Runs the CI tasks # TODO: Implement
-	# Run tests
-	# Run linting checks
-	# Run goimports checks
-	@echo "Not implemented"
-	exit 1
+ci: # Runs the CI tasks
+	@echo "Installing Go packages with GO111MODULE=off..." # TODO: don't do here
+	@GO111MODULE=off go get -u golang.org/x/tools/cmd/goimports
+	@GO111MODULE=off go get -u golang.org/x/lint/golint
+	@echo "Checking if golangci-lint is installed"
+	@golangci-lint --version
+	@echo "Running golangci-lint"
+	@golangci-lint run
+	@echo "Running go vet"
+	@go vet ./...
+	@echo "Running golint"
+	@golint ./...
+	@echo "Running goimports checks (displaying changes, does not fail CI)"
+	@goimports -e -d .
 
 .PHONY: migrateup
 migrateup: # Runs the database migrations up
