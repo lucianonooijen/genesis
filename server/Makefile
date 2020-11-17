@@ -4,8 +4,11 @@ help: # Shows all commands
 
 .PHONY: bootstrap
 bootstrap: # Installs Go packages and sets defaults
-	go get go get golang.org/x/tools/cmd/goimports
-	go get golang.org/x/tools/cmd/goimports
+	@echo "Installing Go packages with GO111MODULE=off..."
+	@GO111MODULE=off go get -u golang.org/x/tools/cmd/goimports
+	@GO111MODULE=off go get -u github.com/cosmtrek/air
+	@GO111MODULE=off go get -u go101.org/golds
+	@echo "Packages installed. Copying files..."
 	cp .env.example .env
 	cp sqreen.yaml.example sqreen.yaml
 
@@ -25,6 +28,10 @@ test: # Runs the unit tests
 fmt: # Code style formatting for the project
 	goimports -w .
 	go fmt ./...
+
+.PHONY: docs
+docs: # Runs documentation website # TODO: Improve
+	golds .
 
 .PHONY: ci
 ci: # Runs the CI tasks # TODO: Implement

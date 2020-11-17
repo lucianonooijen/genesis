@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Contains methods for returning data in the correct format
 type Responses struct{}
 
 func New() Responses {

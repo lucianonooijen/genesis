@@ -10,6 +10,7 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
+// Creates  a user friendly validation error with the missing fields, based on validator.ValidationErrors.
 func createValidationError(err error) error {
 	// Convert to ValidationErrors type
 	validationErrors, ok := err.(validator.ValidationErrors)
@@ -29,6 +30,8 @@ func createValidationError(err error) error {
 	return formattedError
 }
 
+// Extracts the response body into the data argument and validates the data structure (for required fields, etc.)
+// c.Abort is called if the data cannot be extracted or if the post body is invalid
 func (h Handlers) extractBody(c *gin.Context, data interface{}) {
 	// Bind the request body
 	if err := binding.JSON.Bind(c.Request, data); err != nil {
@@ -48,6 +51,7 @@ func (h Handlers) extractBody(c *gin.Context, data interface{}) {
 	}
 }
 
+// Checks if the response body is valid, sends 500 and aborts if it's not the case
 func (h Handlers) checkResponseBody(c *gin.Context, data interface{}) {
 	if data == nil {
 		return // When data is nil, do not run validation

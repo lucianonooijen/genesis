@@ -3,8 +3,7 @@
 ## Requirements
 
 * Go 1.15 or higher
-* [Air](https://github.com/cosmtrek/air) in your $PATH (`go get`-ted by `make bootstrap`)
-* [Goimports](https://godoc.org/golang.org/x/tools/cmd/goimports) in your $PATH (`go get`-ted by `make bootstrap`)
+* [Air](https://github.com/cosmtrek/air), [Goimports](https://godoc.org/golang.org/x/tools/cmd/goimports) and [Golds](https://github.com/go101/golds) in your $PATH (`go get`-ted by `make bootstrap`)
 * PostgreSQL
 
 ## Installation

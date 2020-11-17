@@ -20,15 +20,19 @@ type GinServer struct {
 	Router *gin.Engine
 }
 
+// The requirements for creating a new Server instance
 type Requirements struct {
 	Debug bool
 	Port  int `validate:"required"`
 }
 
+// Start the server instance
 func (s GinServer) Start() error {
 	return s.Router.Run(":" + strconv.Itoa(s.port))
 }
 
+// Generate a new Server instance with middleware and handlers added.
+// Use Server.Start() to run the server.
 func NewServer(r Requirements) (GinServer, error) {
 	validate := validator.New()
 	err := validate.Struct(r)
@@ -61,6 +65,7 @@ func NewServer(r Requirements) (GinServer, error) {
 	return server, nil
 }
 
+// Registers middleware
 func registerMiddleware(router *gin.Engine, devMode bool) {
 	if !devMode { // Run Sqreen in production
 		router.Use(sqgin.Middleware())

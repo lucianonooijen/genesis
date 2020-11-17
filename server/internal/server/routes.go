@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Registers routes to the Gin RouterGroup, in an ExpressJS-like fashion
 func registerRoutes(r *gin.RouterGroup, h handlers.Handlers) {
 	// STATUS
 	r.GET("/status", h.Status)

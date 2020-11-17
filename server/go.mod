@@ -3,7 +3,6 @@ module git.bytecode.nl/bytecode/genesis
 go 1.15
 
 require (
-	github.com/cosmtrek/air v1.21.2 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/getsentry/sentry-go v0.8.0
 	github.com/gin-contrib/cors v1.3.1
