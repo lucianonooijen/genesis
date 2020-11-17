@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"git.bytecode.nl/bytecode/genesis/internal/infrastructure/logger"
+	"git.bytecode.nl/bytecode/genesis/internal/utils/logger"
 
 	"git.bytecode.nl/bytecode/genesis/internal/server/handlers"
 	"git.bytecode.nl/bytecode/genesis/internal/server/middleware"

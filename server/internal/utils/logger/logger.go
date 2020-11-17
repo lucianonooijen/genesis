@@ -30,7 +30,7 @@ type Logger struct {
 // TODO: Add functionality for tracing errors/function calls (like automatic `trace` logging) and/or stacktrace like support (the 'history' of called functions) when debugging locally
 // TODO: Clean up duplicate code
 
-// Configure configures logrus and Sentry. Should only be called once when initting the application
+// Configure configures logrus and Sentry. Should only be called once when initting the application.
 func Configure(isDevMode bool, sentryDSN string, sentryEnv string) error {
 	if isDevMode {
 		log.SetLevel(log.TraceLevel) // Lowest level in Logrus.
