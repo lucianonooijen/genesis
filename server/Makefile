@@ -7,23 +7,23 @@ bootstrap: # Copies the defaults
 	cp .env.example .env
 	cp sqreen.yaml.example sqreen.yaml
 
-.PHONY: bootstrap
+.PHONY: dev
 dev: # Runs the Gin HTTP server
 	air
 
-.PHONY: bootstrap
+.PHONY: build
 build: # Runs the Golang build for production, including the Sqreen intrumentation
 	./bin/build
 
-.PHONY: bootstrap
+.PHONY: test
 test: # Runs the unit tests
 	go test ./...
 
-.PHONY: bootstrap
+.PHONY: fmt
 fmt: # Code style formatting for the project
 	go fmt ./...
 
-.PHONY: bootstrap
+.PHONY: ci
 ci: # Runs the CI tasks # TODO: Implement
 	# Run tests
 	# Run linting checks
@@ -31,19 +31,19 @@ ci: # Runs the CI tasks # TODO: Implement
 	@echo "Not implemented"
 	exit 1
 
-.PHONY: bootstrap
+.PHONY: migrateup
 migrateup: # Runs the database migrations up
 	go run . migrate -d up --verbose
 
-.PHONY: bootstrap
+.PHONY: migratedown
 migratedown: # Runs the database migrations down
 	go run . migrate -d down --verbose
 
-.PHONY: bootstrap
+.PHONY: newmigration
 newmigration: # Asks for the new migration name and creates migration files
 	./bin/create_migration
 
-.PHONY: bootstrap
+.PHONY: newdb
 newdb: # Migrates db down and up - WARNING: ALL DB DATA IS DELETED
 	make migratedown
 	make migrateup
