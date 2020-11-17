@@ -3,7 +3,9 @@ help: # Shows all commands
 	@cat Makefile | grep -v '^\W'
 
 .PHONY: bootstrap
-bootstrap: # Copies the defaults
+bootstrap: # Installs Go packages and sets defaults
+	go get go get golang.org/x/tools/cmd/goimports
+	go get golang.org/x/tools/cmd/goimports
 	cp .env.example .env
 	cp sqreen.yaml.example sqreen.yaml
 
@@ -21,6 +23,7 @@ test: # Runs the unit tests
 
 .PHONY: fmt
 fmt: # Code style formatting for the project
+	goimports -w .
 	go fmt ./...
 
 .PHONY: ci

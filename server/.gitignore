@@ -1,8 +1,13 @@
+# Configuration files
 .env
 sqreen.yaml
+
+# Dependecies
 vendor/
-platform-backend
-server
-tmp/
 .gocache/
+
+# Temporary files and binaries
+tmp/
+/platform-backend
+/server
 

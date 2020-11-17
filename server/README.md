@@ -2,12 +2,14 @@
 
 ## Requirements
 
-* Go 1.14 or higher
-* [Air](https://github.com/cosmtrek/air) in your $PATH
+* Go 1.15 or higher
+* [Air](https://github.com/cosmtrek/air) in your $PATH (`go get`-ted by `make bootstrap`)
+* [Goimports](https://godoc.org/golang.org/x/tools/cmd/goimports) in your $PATH (`go get`-ted by `make bootstrap`)
 * PostgreSQL
 
 ## Installation
 
+* Run `make bootstrap` and set the correct details in `.env`
 * Copy the `.env.example` file to `.env` and set the correct credentials
 * Run `make migrateup` to run all database migrations
 
