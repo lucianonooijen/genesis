@@ -57,6 +57,9 @@ func New(location string) interactors.Logger {
 
 func (l Logger) saveAndGetFields(additionalFields interactors.LogFields) log.Fields {
 	additionalFields["location"] = l.location
+	// TODO: Also add runtime information, from where the error was called, example
+	//_, file, line, _ := runtime.Caller(3) // Must be 3/4 depending on X or XWithFields being called
+	//additionalFields["called_from"] = file + ":" + strconv.Itoa(line)
 	fields := log.Fields(additionalFields)
 	sentry.AddBreadcrumb(&sentry.Breadcrumb{Data: fields})
 	return fields

@@ -1,7 +1,13 @@
 package server
 
 import (
+	"fmt"
+	"io/ioutil"
+	"os"
 	"strconv"
+	"strings"
+
+	"git.bytecode.nl/bytecode/genesis/internal/infrastructure/logger"
 
 	"git.bytecode.nl/bytecode/genesis/internal/server/handlers"
 	"git.bytecode.nl/bytecode/genesis/internal/server/middleware"
@@ -16,6 +22,8 @@ const (
 	// Example: [server url]:[port]/[BasePathAPI]/[all other urls]
 	BasePathAPI = "/v1"
 )
+
+var log = logger.New("server_init")
 
 // GinServer is the Server instance struct
 type GinServer struct {
@@ -44,18 +52,19 @@ func New(r Requirements) (GinServer, error) {
 	}
 
 	if r.Debug {
-		//r.Logger.Debug("Detected debug mode for Gin")
+		log.Debug("Detected debug mode for Gin")
 		gin.SetMode(gin.DebugMode)
 	} else {
-		//r.Logger.Debug("Detected production mode for Gin")
+		log.Debug("Detected production mode for Gin")
 		gin.SetMode(gin.ReleaseMode)
 	}
 
+	gin.DefaultWriter = ioutil.Discard // Hacky way to don't get the "you are using Gin debug" error
 	server := GinServer{
 		Router: gin.New(),
 		port:   r.Port,
-		//Logger: r.Logger,
 	}
+	gin.DefaultWriter = os.Stdout // Reset to the default writer
 
 	registerMiddleware(server.Router, r.Debug)
 
@@ -64,7 +73,10 @@ func New(r Requirements) (GinServer, error) {
 		return server, err
 	}
 
+	setGinRouteLogger() // Print the Gin routes using our own logger
+	log.Info("Registering routes")
 	registerRoutes(server.Router.Group(BasePathAPI), initializedHandlers)
+	log.Info("Routes registered")
 	return server, nil
 }
 
@@ -78,7 +90,7 @@ func registerMiddleware(router *gin.Engine, devMode bool) {
 	//router.Use(middleware.ActivityTableLog(r.SaveActivity))
 	config := cors.DefaultConfig()
 	config.AllowAllOrigins = true
-	config.AllowHeaders = []string{
+	config.AllowHeaders = []string{ // TODO: Remove unused
 		"Access-Control-Allow-Headers",
 		"Content-Type", "Content-Length",
 		"Accept-Encoding", "X-CSRF-Token",
@@ -88,4 +100,11 @@ func registerMiddleware(router *gin.Engine, devMode bool) {
 	router.Use(cors.New(config))
 	//router.Use(middleware.EnsureKeysMap())
 	//router.Use(middleware.JwtAuth(r.User.CheckUserJwt))
+}
+
+func setGinRouteLogger() {
+	gin.DebugPrintRouteFunc = func(httpMethod, absolutePath, handlerName string, nuHandlers int) {
+		handlerShort := strings.ReplaceAll(handlerName, "git.bytecode.nl/bytecode/genesis/internal/server/handlers.", "") // TODO: cleaner
+		log.Debug(fmt.Sprintf("Route registered: %-6s %-25s --> %s (%d handlers)", httpMethod, absolutePath, handlerShort, nuHandlers))
+	}
 }
