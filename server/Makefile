@@ -33,7 +33,7 @@ lint: # Code style formatting and linting check for the project
 	golint ./...
 
 .PHONY: docs
-docs: # Runs documentation website # TODO: Improve
+docs: # Runs documentation website
 	golds .
 
 .PHONY: ci
