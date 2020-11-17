@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# Check if there are no changes, otherwise exit
+if [[ ! -z $(git status -s) ]]; then
+    echo "Error: Can only build without Git changes, changes:"
+    git status
+    exit 1
+fi
+
+## Create variables
+#LAST_GIT_TAG=$(git tag | sort -V | tail -n 1)
+#LAST_GIT_TAG_HASH=$(git rev-list -1 ${LAST_GIT_TAG})
+#LAST_GIT_COMMIT_HASH=$(git rev-list -1 HEAD)
+#
+## Echo the variables
+#echo "Last tag is: $LAST_GIT_TAG"
+#echo "Hash for tag is: $LAST_GIT_TAG_HASH"
+#echo "Last git commit is: $LAST_GIT_COMMIT_HASH"
+#
+## Set the correct value for SERVER_VERSION
+#if [[ "$LAST_GIT_TAG_HASH" == "$LAST_GIT_COMMIT_HASH" ]]; then
+#    echo "Last commit seems to be a tag"
+#    SERVER_VERSION=$(echo "$LAST_GIT_TAG")
+#else
+#    echo "Last commit seems NOT to be a tag"
+#    SERVER_VERSION=$(echo "$LAST_GIT_COMMIT_HASH" | cut -c 1-7)
+#fi
+#
+## Echo out the found variable for debugging and such
+#echo "Injecting server build with version: $SERVER_VERSION"
+
+SERVER_VERSION="DEVELOPMENT"
+
+# Get Sqreen tool for building
+go get -v github.com/sqreen/go-agent/sdk/sqreen-instrumentation-tool
+
+# TODO: Check if sqreen.yaml is set
+
+# Perform the build
+echo "Building..."
+go build \
+    -a -toolexec $(go env GOPATH)/bin/sqreen-instrumentation-tool \
+    -ldflags "-X git.bytecode.nl/bytecode/genesis/server/internal/http/responses.ServerVersion=$SERVER_VERSION" \
+    -o server
