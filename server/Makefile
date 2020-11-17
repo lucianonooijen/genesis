@@ -1,6 +1,6 @@
 help: # Shows all commands
 	@echo 'All Makefile commands'
-	@cat Makefile | grep -v '^\W' | grep -v '^\.'
+	@cat Makefile | grep -v '^\W' | grep -v '^\.' | grep -v -e '^$$'
 
 .PHONY: bootstrap
 bootstrap: # Installs Go packages and sets defaults
