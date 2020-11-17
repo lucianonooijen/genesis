@@ -14,4 +14,6 @@ type Logger interface {
 	InfoWithFields(message string, fields LogFields)
 	Debug(message string)
 	DebugWithFields(message string, fields LogFields)
+	Trace(message string)
+	TraceWithFields(message string, fields LogFields)
 }

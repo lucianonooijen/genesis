@@ -52,17 +52,17 @@ func main() {
 	 * Step 2: build infrastructure instances
 	 */
 	log.Info("Building infrastructure instances")
-	log.Debug("Building migrator")
+	log.Trace("Building migrator")
 	migrate := migrator.New(c.DatabaseConnectionString(), "postgres", c.DatabaseName, getMigrationSourceURL())
 
 	/**
 	 * Step 3: build the data instances
 	 */
 	log.Info("Building data instances")
-	log.Debug("Building JWT instance for users")
+	log.Trace("Building JWT instance for users")
 	_, err = jwt.New(c.JWTSecret, "users", time.Hour*24*365) // Valid for 1 year
 	exitOnErr(err)
-	log.Debug("Building password hasher instance")
+	log.Trace("Building password hasher instance")
 	_ = passhash.New()
 
 	/**
@@ -75,12 +75,12 @@ func main() {
 	 * Step 5: build the application closures
 	 */
 	log.Info("Building application closures")
-	log.Debug("Building server instance")
+	log.Trace("Building server instance")
 	s, err := server.New(server.Requirements{
 		Debug: c.IsDevMode,
 		Port:  c.ServerPort,
 	})
-	log.Debug("Assembling ApplicationClosures")
+	log.Trace("Assembling ApplicationClosures")
 	apps := cmd.ApplicationClosures{
 		Migrate:     migrate,
 		StartServer: s.Start,

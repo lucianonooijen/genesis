@@ -28,10 +28,13 @@ type Logger struct {
 
 // TODO: Add wrapper method for logging thrown errors, f.e. `return LogIfError(err)`, so that when developing we can always trace created errors everywhere
 // TODO: Add functionality for tracing errors/function calls (like automatic `trace` logging) and/or stacktrace like support (the 'history' of called functions) when debugging locally
+// TODO: Clean up duplicate code
 
 // Configure configures logrus and Sentry. Should only be called once when initting the application
 func Configure(isDevMode bool, sentryDSN string, sentryEnv string) error {
-	if !isDevMode {
+	if isDevMode {
+		log.SetLevel(log.TraceLevel) // Lowest level in Logrus.
+	} else { // Is production
 		log.SetFormatter(&log.JSONFormatter{})
 		log.SetLevel(log.InfoLevel)
 		if err := sentry.Init(sentry.ClientOptions{
@@ -41,10 +44,7 @@ func Configure(isDevMode bool, sentryDSN string, sentryEnv string) error {
 			return err
 		}
 		sentry.Flush(time.Second * 5)
-	} else {
-		log.SetLevel(log.TraceLevel) // Lowest level in Logrus
 	}
-
 	return nil
 }
 
@@ -134,6 +134,23 @@ func (l Logger) Debug(message string) {
 func (l Logger) DebugWithFields(message string, fields interactors.LogFields) {
 	logWithFields := log.WithFields(l.saveAndGetFields(fields))
 	logWithFields.Debug(message)
+	sentry.AddBreadcrumb(&sentry.Breadcrumb{
+		Message: message,
+		Level:   sentry.LevelDebug,
+	})
+}
+
+// Trace logs a string with debug severity.
+// To pass additional information use TraceWithFields
+func (l Logger) Trace(message string) {
+	l.TraceWithFields(message, interactors.LogFields{})
+}
+
+// TraceWithFields logs a string with trace severity.
+// To call without LogFields, use Trace
+func (l Logger) TraceWithFields(message string, fields interactors.LogFields) {
+	logWithFields := log.WithFields(l.saveAndGetFields(fields))
+	logWithFields.Trace(message)
 	sentry.AddBreadcrumb(&sentry.Breadcrumb{
 		Message: message,
 		Level:   sentry.LevelDebug,
