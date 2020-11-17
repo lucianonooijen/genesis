@@ -5,6 +5,7 @@ type LogFields map[string]interface{}
 
 // Logger is the interface used for logging throughout the application
 type Logger interface {
+	Fatal(err error)
 	Error(err error)
 	ErrorWithFields(err error, fields LogFields)
 	Warn(err error)

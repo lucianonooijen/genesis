@@ -62,6 +62,14 @@ func (l Logger) saveAndGetFields(additionalFields interactors.LogFields) log.Fie
 	return fields
 }
 
+// Fatal logs an error as fatal, exits with exit code 1
+// Should only be used in the main function
+func (l Logger) Fatal(err error) {
+	sentry.CaptureException(err)
+	logWithFields := log.WithFields(l.saveAndGetFields(interactors.LogFields{}))
+	logWithFields.Fatal(err.Error())
+}
+
 // Error logs an error as error
 // To pass additional information use ErrorWithFields
 func (l Logger) Error(err error) {

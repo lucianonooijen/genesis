@@ -24,8 +24,8 @@ const (
 	DownAll
 )
 
-// CreateMigrator returns a migrator function that will accept UpAll or DownAll to up or down migrate the database
-func CreateMigrator(dbString string, dbType string, dbName string, migrationScriptsPath string) func(Direction) error {
+// New returns a migrator closure that will accept UpAll or DownAll to up or down migrate the database
+func New(dbString string, dbType string, dbName string, migrationScriptsPath string) func(Direction) error {
 	return func(direction Direction) error {
 		// TODO: Add support for migrating +1/-1 or to a specific migration
 		// Direction check
