@@ -74,9 +74,9 @@ func New(r Requirements) (GinServer, error) {
 	}
 
 	setGinRouteLogger() // Print the Gin routes using our own logger
-	log.Info("Registering routes")
+	log.Debug("Registering routes")
 	registerRoutes(server.Router.Group(BasePathAPI), initializedHandlers)
-	log.Info("Routes registered")
+	log.Debug("Routes registered")
 	return server, nil
 }
 
