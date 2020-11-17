@@ -1,4 +1,6 @@
-# Project Name
+# Genesis
+
+_Bytecode Digital Agency's Project Scaffolding_
 
 ## Project directory structure
 
@@ -8,12 +10,6 @@
 * `/bin`: scripts for project-wide actions, f.e. deployments
 * `/.ansible`: deployment scripts
 * `/.gitlab`: GitLab related configurations
-
-## Wishlist
-
-* `/web` web application
-* Separate API SDK in Javascript (shared between `/web` and `/app`)
-* `/admin` admin panel
 
 ## Used variables
 
