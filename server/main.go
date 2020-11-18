@@ -23,10 +23,10 @@ import (
 	"time"
 
 	"git.bytecode.nl/bytecode/genesis/internal/cmd"
-	"git.bytecode.nl/bytecode/genesis/internal/data/jwt"
-	"git.bytecode.nl/bytecode/genesis/internal/data/passhash"
 	"git.bytecode.nl/bytecode/genesis/internal/infrastructure/config"
+	"git.bytecode.nl/bytecode/genesis/internal/infrastructure/jwt"
 	"git.bytecode.nl/bytecode/genesis/internal/infrastructure/migrator"
+	"git.bytecode.nl/bytecode/genesis/internal/infrastructure/passhash"
 	"git.bytecode.nl/bytecode/genesis/internal/server"
 	"git.bytecode.nl/bytecode/genesis/internal/utils/logger"
 )
