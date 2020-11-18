@@ -19,8 +19,11 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"time"
+
+	"git.bytecode.nl/bytecode/genesis/internal/constants"
 
 	"git.bytecode.nl/bytecode/genesis/internal/cmd"
 	"git.bytecode.nl/bytecode/genesis/internal/data/mailer"
@@ -66,7 +69,9 @@ func main() {
 	 */
 	log.Debug("Building data instances")
 	log.Trace("Building mailer instance")
-	_, err = mailer.New(c.EmailSenderEmail, c.EmailSenderName, c.SendinblueAPIKey)
+	staticFileURLBase := fmt.Sprintf("%s%s%s", c.ServerHostname, constants.BasePathAPI, constants.APIStaticPath)
+	log.Trace(fmt.Sprintf("Serving static files from %s", staticFileURLBase))
+	_, err = mailer.New(c.EmailSenderEmail, c.EmailSenderName, c.SendinblueAPIKey, staticFileURLBase)
 	exitOnErr(err)
 
 	/**

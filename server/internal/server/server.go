@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"strings"
 
+	"git.bytecode.nl/bytecode/genesis/internal/constants"
+
 	"git.bytecode.nl/bytecode/genesis/internal/utils/logger"
 
 	"git.bytecode.nl/bytecode/genesis/internal/server/handlers"
@@ -15,12 +17,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/sqreen/go-agent/sdk/middleware/sqgin"
-)
-
-const (
-	// BasePathAPI is the base used for the base of all requests
-	// Example: [server url]:[port]/[BasePathAPI]/[all other urls]
-	BasePathAPI = "/v1"
 )
 
 var log = logger.New("server_init")
@@ -75,7 +71,7 @@ func New(r Requirements) (GinServer, error) {
 
 	setGinRouteLogger() // Print the Gin routes using our own logger
 	log.Debug("Registering routes")
-	registerRoutes(server.Router.Group(BasePathAPI), initializedHandlers)
+	registerRoutes(server.Router.Group(constants.BasePathAPI), initializedHandlers)
 	log.Debug("Routes registered")
 	return server, nil
 }
@@ -105,6 +101,7 @@ func registerMiddleware(router *gin.Engine, devMode bool) {
 func setGinRouteLogger() {
 	gin.DebugPrintRouteFunc = func(httpMethod, absolutePath, handlerName string, nuHandlers int) {
 		handlerShort := strings.ReplaceAll(handlerName, "git.bytecode.nl/bytecode/genesis/internal/server/handlers.", "") // TODO: cleaner
+		handlerShort = strings.ReplaceAll(handlerShort, "github.com/gin-gonic/", "")                                      // TODO: cleaner
 		log.Debug(fmt.Sprintf("Route registered: %-6s %-25s --> %s (%d handlers)", httpMethod, absolutePath, handlerShort, nuHandlers))
 	}
 }

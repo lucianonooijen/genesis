@@ -11,13 +11,19 @@ _Bytecode Digital Agency's Project Scaffolding_
 * `/.ansible`: deployment scripts
 * `/.gitlab`: GitLab related configurations
 
-## Used variables
+## Stuff that should be replaced in Scaffold step
+
+### Variables in code
 
 * Genesis
 * genesis
 * git.bytecode.nl/bytecode/genesis
 * https://bytecode.nl
 * https://placekitten.com/400/400
+
+## Files
+
+* `/server/static/logo.png`
 
 ## License
 

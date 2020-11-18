@@ -18,26 +18,28 @@ var log = logger.New("mailer")
 
 // Mailer contains methods for interactors.MailerService to send emails to users of Genesis
 type Mailer struct {
-	fromEmail string
-	fromName  string
-	apiKey    string
-	hermes    hermes.Hermes
+	fromEmail         string
+	fromName          string
+	apiKey            string
+	staticFileURLBase string
+	hermes            hermes.Hermes
 }
 
 // New returns a new Mailer instance as a interactors.MailerService
-func New(fromEmail, fromName, apiKey string) (interactors.MailerService, error) {
-	if fromEmail == "" || fromName == "" || apiKey == "" {
-		return nil, errors.New("Arguments cannot have default values")
+func New(fromEmail, fromName, apiKey, staticFileURLBase string) (interactors.MailerService, error) {
+	if fromEmail == "" || fromName == "" || apiKey == "" || staticFileURLBase == "" {
+		return nil, errors.New("arguments cannot have default values")
 	}
 	mailer := Mailer{
-		fromEmail: fromEmail,
-		fromName:  fromName,
-		apiKey:    apiKey,
+		fromEmail:         fromEmail,
+		fromName:          fromName,
+		apiKey:            apiKey,
+		staticFileURLBase: staticFileURLBase,
 		hermes: hermes.Hermes{
 			Product: hermes.Product{
 				Name:        "Genesis",
-				Link:        "https://bytecode.nl",             // TODO: Load this from the configuration
-				Logo:        "https://placekitten.com/400/400", // TODO: Also add static file serving for logo
+				Link:        "https://bytecode.nl",                         // TODO: Load this from the configuration (?)
+				Logo:        fmt.Sprintf("%s/logo.png", staticFileURLBase), // TODO: This breaks on localhost due to SendInBlue serving the images. Can this be fixed?
 				Copyright:   fmt.Sprintf("Copyright © %d Genesis. All rights reserved.", time.Now().Year()),
 				TroubleText: "Als je problemen hebt met de knop '{ACTION}', knip en plak de URL hieronder in je webbrowser.",
 			},
@@ -64,6 +66,7 @@ type emailRequest struct {
 
 func (m Mailer) sendEmail(toMail string, toName string, subject string, HTMLContents string) error {
 	url := "https://api.sendinblue.com/v3/smtp/email"
+	// TODO: Support reply-to (?)
 	reqBody := emailRequest{
 		Sender: contact{
 			Name:  m.fromName,
