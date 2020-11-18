@@ -66,7 +66,7 @@ func main() {
 	 */
 	log.Debug("Building data instances")
 	log.Trace("Building mailer instance")
-	_, err = mailer.New(c.SendinblueEmail, c.SendinblueName, c.SendinblueAPIKey)
+	_, err = mailer.New(c.EmailSenderEmail, c.EmailSenderName, c.SendinblueAPIKey)
 	exitOnErr(err)
 
 	/**

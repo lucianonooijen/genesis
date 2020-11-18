@@ -9,20 +9,27 @@ import (
 
 // Config is the application configuration
 type Config struct {
-	IsDevMode         bool   `mapstructure:"development"` // Not marked required as it would fail when `false` is given as value TODO: Add to docs
-	ServerPort        int    `mapstructure:"api_port" validate:"required"`
-	JWTSecret         string `mapstructure:"jwt_secret" validate:"required"`
-	DatabaseHost      string `mapstructure:"db_host" validate:"required"`
-	DatabasePort      int    `mapstructure:"db_port" validate:"required"`
-	DatabaseName      string `mapstructure:"db_name" validate:"required"`
-	DatabaseUser      string `mapstructure:"db_user" validate:"required"`
-	DatabasePass      string `mapstructure:"db_pass" validate:"required"`
-	DatabaseSSL       bool   `mapstructure:"db_ssl"` // Not marked required as it would fail when `false` is given as value
+	// Application configuration
+	IsDevMode  bool   `mapstructure:"development"` // Not marked required as it would fail when `false` is given as value TODO: Add to docs
+	ServerPort int    `mapstructure:"api_port" validate:"required"`
+	JWTSecret  string `mapstructure:"jwt_secret" validate:"required"`
+
+	// Database configuration
+	DatabaseHost string `mapstructure:"db_host" validate:"required"`
+	DatabasePort int    `mapstructure:"db_port" validate:"required"`
+	DatabaseName string `mapstructure:"db_name" validate:"required"`
+	DatabaseUser string `mapstructure:"db_user" validate:"required"`
+	DatabasePass string `mapstructure:"db_pass" validate:"required"`
+	DatabaseSSL  bool   `mapstructure:"db_ssl"` // Not marked required as it would fail when `false` is given as value
+
+	// Sentry configuration
 	SentryDSN         string `mapstructure:"sentry_dsn" validate:"required"`
 	SentryEnvironment string `mapstructure:"sentry_environment" validate:"required"`
-	SendinblueName    string `mapstructure:"sendinblue_from_name" validate:"required"`
-	SendinblueEmail   string `mapstructure:"sendinblue_from_email" validate:"required"`
-	SendinblueAPIKey  string `mapstructure:"sendinblue_api_key" validate:"required"`
+
+	// Email configuration
+	EmailSenderName  string `mapstructure:"email_sender_name" validate:"required"`
+	EmailSenderEmail string `mapstructure:"email_sender_email" validate:"required"`
+	SendinblueAPIKey string `mapstructure:"sendinblue_api_key" validate:"required"`
 }
 
 // LoadConfig reads in config file and ENV variables if set.
