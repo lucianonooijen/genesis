@@ -89,6 +89,7 @@ func main() {
 		Debug: c.IsDevMode,
 		Port:  c.ServerPort,
 	})
+	exitOnErr(err)
 	log.Trace("Assembling ApplicationClosures")
 	apps := cmd.ApplicationClosures{
 		Migrate:     migrate,
