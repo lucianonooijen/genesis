@@ -23,6 +23,7 @@ import (
 	"time"
 
 	"git.bytecode.nl/bytecode/genesis/internal/cmd"
+	"git.bytecode.nl/bytecode/genesis/internal/data/mailer"
 	"git.bytecode.nl/bytecode/genesis/internal/infrastructure/config"
 	"git.bytecode.nl/bytecode/genesis/internal/infrastructure/jwt"
 	"git.bytecode.nl/bytecode/genesis/internal/infrastructure/migrator"
@@ -54,11 +55,6 @@ func main() {
 	log.Debug("Building infrastructure instances")
 	log.Trace("Building migrator")
 	migrate := migrator.New(c.DatabaseConnectionString(), "postgres", c.DatabaseName, getMigrationSourceURL())
-
-	/**
-	 * Step 3: build the data instances
-	 */
-	log.Debug("Building data instances")
 	log.Trace("Building JWT instance for users")
 	_, err = jwt.New(c.JWTSecret, "users", time.Hour*24*365) // Valid for 1 year
 	exitOnErr(err)
@@ -66,7 +62,15 @@ func main() {
 	_ = passhash.New()
 
 	/**
-	 * Step 4: build the domain instances
+	 * Step 3: build the data instances
+	 */
+	log.Debug("Building data instances")
+	log.Trace("Building mailer instance")
+	_, err = mailer.New(c.SendinblueEmail, c.SendinblueName, c.SendinblueAPIKey)
+	exitOnErr(err)
+
+	/**
+	* Step 4: build the domain instances
 	 */
 	log.Debug("Building domain instances")
 	// TODO: Implement
