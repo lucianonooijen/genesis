@@ -16,6 +16,8 @@ _Bytecode Digital Agency's Project Scaffolding_
 * Genesis
 * genesis
 * git.bytecode.nl/bytecode/genesis
+* https://bytecode.nl
+* https://placekitten.com/400/400
 
 ## License
 
