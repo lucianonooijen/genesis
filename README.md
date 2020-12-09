@@ -1,6 +1,6 @@
 # Genesis
 
-_Bytecode Digital Agency's Project Scaffolding_
+_Bytecode Digital Agency's Project Scaffolding, with the name taken from the Ancient Greek 'γένεσις', meaning origin, generation, source, beginning._
 
 ## Project directory structure
 
