@@ -320,7 +320,7 @@ PODS:
     - React-RCTImage
   - UMAppLoader (2.2.0)
   - UMCore (7.1.1)
-  - UMReactNativeAdapter (6.3.5):
+  - UMReactNativeAdapter (6.3.4):
     - ExpoModulesCore
     - React-Core
     - UMCore
@@ -517,10 +517,10 @@ SPEC CHECKSUMS:
   RNScreens: 21b73c94c9117e1110a79ee0ee80c93ccefed8ce
   UMAppLoader: 21af63390e55c82e037fb9752d93114a80ecf16e
   UMCore: 2f671796d7439604a1cf8ac7bbe5809cd5c50437
-  UMReactNativeAdapter: f808906d586a16cebdc3844d86e1bdb8f114a873
+  UMReactNativeAdapter: 684b07b79d5fe52b496d2b50bfe31f68d7daf71a
   UMTaskManagerInterface: 2be431101b73604e64fbfffcf759336f9d8fccbb
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
 
 PODFILE CHECKSUM: a84c3483a5530ef1e114ec93aaaebc602265df92
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.10.2
