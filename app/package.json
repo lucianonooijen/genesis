@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
+    "bcr": "./node_modules/bytecode-react-cli/bin/cli.js",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
@@ -11,6 +12,8 @@
     "lint": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern '/web-build' --ignore-pattern '/__mocks__' ./"
   },
   "dependencies": {
+    "@types/enzyme": "^3.10.9",
+    "enzyme": "^3.11.0",
     "react": "17.0.1",
     "react-native": "0.64.1"
   },
@@ -22,7 +25,7 @@
     "@types/react-native": "^0.64.5",
     "@types/react-test-renderer": "^16.9.2",
     "babel-jest": "^26.6.3",
-    "bcr": "^1.0.0",
+    "bytecode-react-cli": "^0.4.2",
     "eslint": "^7.14.0",
     "jest": "^26.6.3",
     "metro-react-native-babel-preset": "^0.64.0",
