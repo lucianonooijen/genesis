@@ -17,12 +17,21 @@ _Bytecode Digital Agency's Project Scaffolding, with the name taken from the Anc
 
 * Genesis
 * genesis
+* com.genesis
+* GenesisTests
 * git.bytecode.nl/bytecode/genesis
 * https://bytecode.nl
 * https://placekitten.com/400/400
 
+### FolderNames
+* app/android/app/src/debug/java/com/genesis
+* app/android/app/src/main/java/com/genesis
+* app/ios/Genesis
+
 ## Files
 
+* `/app/ios/Genesis.xcodeproj`
+* `/app/ios/Genesis.xcodeproj/xcshareddata/xcschemes/Genesis.xcscheme`
 * `/server/static/logo.png`
 
 ## License
