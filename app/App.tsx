@@ -1,17 +1,13 @@
-import React from 'react';
-import {
-  SafeAreaView, StatusBar, useColorScheme,
-} from 'react-native';
+import React from "react";
+import { SafeAreaView, StatusBar, useColorScheme } from "react-native";
 
 const App = () => {
-
   const AppStatusBar = () => {
-    const isDarkMode = useColorScheme() === 'dark';
+    const isDarkMode = useColorScheme() === "dark";
     return (
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-      />)
-  }
+      <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
+    );
+  };
 
   return (
     <SafeAreaView>
