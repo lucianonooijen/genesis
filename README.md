@@ -17,6 +17,8 @@ _Bytecode Digital Agency's Project Scaffolding, with the name taken from the Anc
 
 * Genesis
 * genesis
+* @genesis/app
+* @genesis/api
 * com.genesis
 * GenesisTests
 * git.bytecode.nl/bytecode/genesis
