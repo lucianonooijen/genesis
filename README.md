@@ -4,11 +4,11 @@ _Bytecode Digital Agency's Project Scaffolding, with the name taken from the Anc
 
 ## Project directory structure
 
+* `/api`: the api sdk connectiong the app to the server
 * `/app`: mobile application
 * `/server`: backend application (api exposed)
 * `/docs`: documentation for the application as a whole
-* `/bin`: scripts for project-wide actions, f.e. deployments
-* `/.ansible`: deployment scripts
+* `/bin`: scripts for project-wide actions
 * `/.gitlab`: GitLab related configurations
 
 ## Stuff that should be replaced in Scaffold step
