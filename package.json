@@ -1,17 +1,18 @@
 {
   "name": "genesis",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Yarn workspace root",
   "repository": "git@git.bytecode.nl:bytecode/genesis.git",
   "author": "Bytecode Digital Agency BV <info@bytecode.nl>",
   "private": true,
   "workspaces": [
     "app",
-    "api"
+    "packages/*"
   ],
   "scripts": {
-    "app": "yarn workspace app",
-    "dev:ios": "yarn workspace app ios",
-    "dev:android": "yarn workspace app android"
+    "app": "yarn workspace @genesis/app",
+    "api": "yarn workspace @genesis/api",
+    "dev:ios": "yarn workspace @genesis/api ios",
+    "dev:android": "yarn workspace @genesis/api android"
   }
 }

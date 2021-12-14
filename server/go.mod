@@ -1,6 +1,6 @@
 module git.bytecode.nl/bytecode/genesis
 
-go 1.15
+go 1.17
 
 require (
 	github.com/Masterminds/goutils v1.1.0 // indirect

@@ -1,0 +1,22 @@
+{
+  "name": "@genesis/api",
+  "version": "0.0.1",
+  "private": true,
+  "description": "SDK for connecting a Javascript application to the server",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "author": "Bytecode Digital Agency BV <info@bytecode.nl>",
+  "license": "GPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git@git.bytecode.nl:bytecode/genesis.git",
+    "directory": "packages/api"
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch"
+  },
+  "devDependencies": {
+    "typescript": "^4.4.4"
+  }
+}

@@ -1,9 +1,0 @@
-{
-  "name": "@genesis/api-sdk",
-  "version": "1.0.0",
-  "description": "SDK for connecting a Javascript application to the server",
-  "main": "index.js",
-  "author": "Bytecode Digital Agency BV <info@bytecode.nl>",
-  "license": "GPL-3.0-only",
-  "private": true
-}
