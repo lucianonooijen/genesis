@@ -5,10 +5,12 @@
   "repository": "git@git.bytecode.nl:bytecode/genesis.git",
   "author": "Bytecode Digital Agency BV <info@bytecode.nl>",
   "private": true,
-  "workspaces": [
-    "app",
-    "packages/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "app",
+      "packages/*"
+    ]
+  },
   "scripts": {
     "app": "yarn workspace @genesis/app",
     "api": "yarn workspace @genesis/api",
