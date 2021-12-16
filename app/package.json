@@ -2,11 +2,6 @@
   "name": "@genesis/app",
   "version": "0.0.1",
   "private": true,
-  "workspaces": {
-    "nohoist": [
-      "**"
-    ]
-  },
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
@@ -16,7 +11,6 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@genesis/api": "*",
     "react": "17.0.2",
     "react-native": "0.66.4"
   },
@@ -29,6 +23,7 @@
     "@types/react-native": "^0.66.9",
     "@types/react-test-renderer": "^17.0.1",
     "babel-jest": "^26.6.3",
+    "babel-plugin-module-resolver": "^4.1.0",
     "eslint": "7.14.0",
     "jest": "^26.6.3",
     "react-native-monorepo-tools": "^1.1.3",

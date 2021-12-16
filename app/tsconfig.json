@@ -10,7 +10,11 @@
     "noEmit": true,
     "strict": true,
     "target": "esnext",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@genesis/*": ["./packages/*"]
+    }
   },
   "exclude": [
     "node_modules",
