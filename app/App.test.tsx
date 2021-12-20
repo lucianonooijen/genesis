@@ -1,6 +1,6 @@
 import React from "react";
 import {render} from "@testing-library/react-native";
-import App from "./app";
+import App from "./App";
 
 describe("app", () => {
     it("should render without throwing", () => {

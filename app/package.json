@@ -6,9 +6,11 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
+    "ci": "yarn run typecheck && yarn run lint && yarn run test --ci --coverage --coverageReporters=text",
     "test": "jest",
     "test:ci": "JEST=true jest --coverage --silent --ci --coverageReporters=text --coverageReporters=cobertura --testResultsProcessor=jest-junit",
     "lint": "eslint .",
+    "lint:fix": "yarn run lint --fix",
     "typecheck": "tsc"
   },
   "dependencies": {
@@ -32,6 +34,7 @@
     "eslint": "^8.2.0",
     "eslint-config-airbnb": "19.0.2",
     "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-prettier": "^4.0.0",
