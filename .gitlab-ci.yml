@@ -1,0 +1,14 @@
+##########################
+# CI CONFIG
+##########################
+image: alpine:3.9
+stages:
+  - test_lint
+  - build
+  - security
+
+variables:
+    DOCKER_AUTH_CONFIG: '{ "auths": { "https://index.docker.io/v1/": { "auth": "$DOCKER_AUTH" } }}'
+
+include:
+  - local: '.gitlab/ci/*.yml'

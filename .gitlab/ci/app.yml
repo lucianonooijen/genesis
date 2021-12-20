@@ -1,0 +1,36 @@
+##########################
+# BASE CONFIG
+##########################
+.app_base: &app_base
+  image: node:12-alpine
+  before_script:
+    - cd app
+    - apk add git
+    - yarn install --network-timeout 1000000
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - app/node_modules/
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - app/**/*
+    - if: $CI_COMMIT_TAG
+      when: never
+
+##########################
+# LINTING AND TEST STAGE
+##########################
+test_lint_app:
+  <<: *app_base
+  stage: test_lint
+  script:
+    - yarn run typecheck
+    - yarn run lint
+    - yarn run test:ci
+  artifacts:
+    reports:
+      junit: app/junit.xml
+      cobertura: app/coverage/cobertura-coverage.xml
