@@ -46,7 +46,9 @@ _Project documentation below_
 
 ## Requirements
 
-* NodeJS v16 LTS
+* NodeJS v16 LTS, with Yarn installed globally
+* Android Studio for running the Android app
+* XCode for running the iOS app
 * Yarn 1.13.0+ (`npm i -g yarn@latest`)
 * Golang 1.17+
 
@@ -54,11 +56,7 @@ _Project documentation below_
 
 Instructions for running the back-end can be found in `/server/README.md`.
 
-The mobile application uses [Yarn Workspaces](https://classic.yarnpkg.com/lang/en/docs/workspaces/) to organize Typescipt code and to separate diffrent packages.
-
-Because Yarn Workspaces is used, you will have to run all `yarn` commands from the root of the repository.
-
-Run `yarn install && yarn run` to see which commands are available.
+For the app you can `cd app` and then after running `yarn` you can get a list of all available commands by running `yarn run .
 
 ## License
 
