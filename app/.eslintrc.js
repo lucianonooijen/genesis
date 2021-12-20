@@ -37,5 +37,13 @@ module.exports = {
         "react/prop-types": 0, // Done by using React.FC<PropsInterface>
         "@typescript-eslint/no-shadow": ["error"],
         "@typescript-eslint/no-use-before-define": 0, // Allow sane file layouts
-    }
+    },
+    overrides: [
+        {
+            files: ["*.test.js", "*.test.jsx", "*.test.ts", "*.test.tsx"], // All test files
+            rules: {
+                "import/no-extraneous-dependencies": ["error", { devDependencies: true }] // Test files import devDependencies
+            }
+        },
+    ],
 }
