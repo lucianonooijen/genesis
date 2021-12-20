@@ -1,9 +1,11 @@
 # OSX
-#
 .DS_Store
 
+# Output files
+coverage/
+junit.xml
+
 # Xcode
-#
 build/
 *.pbxuser
 !default.pbxuser
@@ -22,7 +24,6 @@ DerivedData
 *.xcuserstate
 
 # Android/IntelliJ
-#
 build/
 .idea
 .gradle
@@ -31,7 +32,6 @@ local.properties
 *.hprof
 
 # node.js
-#
 node_modules/
 npm-debug.log
 yarn-error.log
