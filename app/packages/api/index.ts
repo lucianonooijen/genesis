@@ -4,4 +4,4 @@
  * @param b {string} number two
  * @returns string adding them
  */
-export const example = (a: number, b: number) => a + b
+export const example = (a: number, b: number) => a + b;
