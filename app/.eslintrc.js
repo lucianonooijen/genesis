@@ -11,7 +11,7 @@ module.exports = {
     parser: "@typescript-eslint/parser",
     parserOptions: {
         ecmaFeatures: {
-            jsx: true
+            jsx: true,
         },
         ecmaVersion: 2018,
         sourceType: "module",
@@ -23,8 +23,8 @@ module.exports = {
                 extensions: [".js", ".jsx", ".ts", ".tsx", ".json"],
             },
             typescript: {
-                project: "./tsconfig.json"
-            }
+                project: "./tsconfig.json",
+            },
         },
     },
     rules: { // In alphabetical order, all rules require a comment to explain the change and necessity
@@ -43,8 +43,8 @@ module.exports = {
         {
             files: ["*.test.js", "*.test.jsx", "*.test.ts", "*.test.tsx"], // All test files
             rules: {
-                "import/no-extraneous-dependencies": ["error", { devDependencies: true }] // Test files import devDependencies
-            }
+                "import/no-extraneous-dependencies": ["error", { devDependencies: true }], // Test files import devDependencies
+            },
         },
     ],
 }
