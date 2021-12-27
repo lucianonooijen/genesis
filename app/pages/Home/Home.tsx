@@ -1,10 +1,17 @@
 import React from "react";
 import {Text, View} from "react-native";
+import {ButtonPrimary} from "../../components/Buttons/ButtonRegular/ButtonRegular";
+import {TutorialScreens} from "../../router/types";
+import {TutorialNavigationProps} from "../../types/Navigation";
 
-const Home = () => {
+const Home: React.FC<TutorialNavigationProps> = ({navigation}) => {
     return (
         <View style={{flex: 1, alignItems: "center", justifyContent: "center"}}>
             <Text>Home Screen</Text>
+            <ButtonPrimary
+                title="test"
+                onPress={() => navigation.navigate(TutorialScreens.Landing)}
+            />
         </View>
     );
 };

@@ -3,7 +3,7 @@ import {NavigationContainer} from "@react-navigation/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import Home from "../pages/Home/Home";
 import Landing from "../pages/Landing/Landing";
-import {TutorialScreens} from "./types";
+import {MainScreens, TutorialScreens} from "./types";
 import {RouterProps} from "./Router.types";
 
 const Stack = createNativeStackNavigator();
@@ -17,7 +17,7 @@ const Router: React.FC<RouterProps> = ({appState}) => {
                 }}
             >
                 {tutorialStack(appState.hasSeenTutorial)}
-                <Stack.Screen name="Home" component={Home} />
+                <Stack.Screen name={MainScreens.Home} component={Home} />
             </Stack.Navigator>
         </NavigationContainer>
     );
