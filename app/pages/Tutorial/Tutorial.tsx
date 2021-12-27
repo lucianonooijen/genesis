@@ -1,10 +1,10 @@
 import React from "react";
 import {Text, View} from "react-native";
 import {ButtonPrimary} from "../../components/Buttons/ButtonRegular/ButtonRegular";
-import {TutorialNavigationProps} from "../../types/Navigation";
+import {StackNavigationProps} from "../../types/Navigation";
 import {MainScreens} from "../../router/types";
 
-const Landing: React.FC<TutorialNavigationProps> = ({navigation}) => {
+const Tutorial: React.FC<StackNavigationProps> = ({navigation}) => {
     return (
         <View>
             <Text>Landing</Text>
@@ -16,4 +16,4 @@ const Landing: React.FC<TutorialNavigationProps> = ({navigation}) => {
     );
 };
 
-export default Landing;
+export default Tutorial;

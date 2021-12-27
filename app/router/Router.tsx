@@ -1,10 +1,12 @@
 import * as React from "react";
 import {NavigationContainer} from "@react-navigation/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import Home from "../pages/Home/Home";
-import Landing from "../pages/Landing/Landing";
+
 import {MainScreens, TutorialScreens} from "./types";
 import {RouterProps} from "./Router.types";
+
+import Home from "../pages/Home/Home";
+import Tutorial from "../pages/Tutorial/Tutorial";
 
 const Stack = createNativeStackNavigator();
 
@@ -29,5 +31,5 @@ const tutorialStack = (hasSeenTutorial: boolean) => {
     if (hasSeenTutorial) {
         return null;
     }
-    return <Stack.Screen name={TutorialScreens.Landing} component={Landing} />;
+    return <Stack.Screen name={TutorialScreens.Landing} component={Tutorial} />;
 };

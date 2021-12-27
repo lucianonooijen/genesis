@@ -14,9 +14,12 @@ export const ButtonPrimary: React.FC<ButtonRegularProps> = ({
         onPress();
     };
     return (
-        <TouchableOpacity onPress={onPressHandler}>
-            <ButtonContainer disabled={disabled}>
-                <ButtonText>{title}</ButtonText>
+        <TouchableOpacity
+            testID="button-touchableopacity"
+            onPress={onPressHandler}
+        >
+            <ButtonContainer testID="button-container" disabled={disabled}>
+                <ButtonText testID="button-title">{title}</ButtonText>
             </ButtonContainer>
         </TouchableOpacity>
     );
