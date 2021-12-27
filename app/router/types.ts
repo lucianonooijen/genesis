@@ -1,7 +1,7 @@
 export enum MainScreens {
-    Home = "home"
+    Home = "home",
 }
 
 export enum TutorialScreens {
-    Landing = "landing"
+    Landing = "landing",
 }

@@ -1,36 +1,15 @@
-import * as React from 'react';
-import { NavigationContainer} from "@react-navigation/native";
-import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import { createStackNavigator } from "@react-navigation/stack";
-
-import {MainScreens, TutorialScreens} from "./types";
-
-import Landing from "../pages/Landing/Landing";
+import * as React from "react";
+import {NavigationContainer} from "@react-navigation/native";
+import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import Home from "../pages/Home/Home";
 
-const Stack = createStackNavigator();
-const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
-interface AppState {
-    hasSeenTutorial: boolean
-}
-interface RouterProps {
-    appState: AppState
-}
-
-const Router: React.FC<RouterProps> = ({ appState }) => {
+const Router: React.FC = () => {
     return (
         <NavigationContainer>
-            <Stack.Navigator screenOptions={{
-                headerShown: false,
-            }}>
-                {!appState.hasSeenTutorial && (
-                    <Stack.Screen
-                        name={TutorialScreens.Landing}
-                        component={Landing}
-                    />
-                )}
-                <Stack.Screen name={MainScreens.Home} component={Home} />
+            <Stack.Navigator>
+                <Stack.Screen name="Home" component={Home} />
             </Stack.Navigator>
         </NavigationContainer>
     );
