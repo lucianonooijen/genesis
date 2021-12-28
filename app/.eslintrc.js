@@ -45,6 +45,7 @@ module.exports = {
             files: ["*.test.js", "*.test.jsx", "*.test.ts", "*.test.tsx"], // All test files
             rules: {
                 "import/no-extraneous-dependencies": ["error", { devDependencies: true }], // Test files import devDependencies
+                "@typescript-eslint/no-empty-function": 0, // Allow `() => {}` in test files
             },
         },
     ],

@@ -21,3 +21,7 @@ export const SubTitle = styled.Text`
 export const Paragraph = styled.Text`
     font-size: ${getFontSize(1)};
 `;
+
+export const Label = styled.Text`
+    font-size: ${getFontSize(-1)};
+`;

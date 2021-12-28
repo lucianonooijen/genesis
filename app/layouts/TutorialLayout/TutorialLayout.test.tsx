@@ -53,9 +53,9 @@ describe("TutorialLayout", () => {
         );
         const nextButton = r.getByTestId("tutorial-nextbutton");
         expect(nextButton).toBeTruthy();
-        expect(navigateFunction.mock.calls.length).toBe(0);
+        expect(navigateFunction).toBeCalledTimes(0);
         fireEvent.press(nextButton);
-        expect(navigateFunction.mock.calls.length).toBe(1);
-        expect(navigateFunction.mock.calls[0][0]).toBe(testData.nextScreen);
+        expect(navigateFunction).toBeCalledTimes(1);
+        expect(navigateFunction).toHaveBeenCalledWith(testData.nextScreen);
     });
 });
