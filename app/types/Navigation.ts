@@ -4,3 +4,5 @@ import {NativeStackNavigationProp} from "@react-navigation/native-stack/lib/type
 export interface StackNavigationProps {
     navigation: NativeStackNavigationProp<ParamListBase>;
 }
+
+export type WithStackNavigationProps<T> = T & StackNavigationProps;

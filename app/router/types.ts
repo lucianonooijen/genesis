@@ -3,5 +3,9 @@ export enum MainScreens {
 }
 
 export enum TutorialScreens {
-    Landing = "Landing",
+    ScreenOne = "Tutorial_ScreenOne",
+    ScreenTwo = "Tutorial_ScreenTwo",
+    ScreenThree = "Tutorial_ScreenThree",
 }
+
+export type ScreenTitle = MainScreens | TutorialScreens;

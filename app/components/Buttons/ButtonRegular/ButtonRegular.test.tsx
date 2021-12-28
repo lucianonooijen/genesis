@@ -13,10 +13,15 @@ describe("ButtonRegular", () => {
 
     it("should call onPress when pressed and the button is enabled", () => {
         const onPress = jest.fn();
+        const testID = "button-touchableopacity";
         const r = render(
-            <ButtonPrimary title="ExampleTitle" onPress={onPress} />,
+            <ButtonPrimary
+                title="ExampleTitle"
+                onPress={onPress}
+                testID={testID}
+            />,
         );
-        const touchableOpacity = r.getByTestId("button-touchableopacity");
+        const touchableOpacity = r.getByTestId(testID);
         expect(touchableOpacity).toBeTruthy();
         expect(onPress.mock.calls.length).toBe(0);
         fireEvent.press(touchableOpacity);
@@ -25,10 +30,16 @@ describe("ButtonRegular", () => {
 
     it("should not call onPress when pressed and the button is disabled", () => {
         const onPress = jest.fn();
+        const testID = "button-touchableopacity";
         const r = render(
-            <ButtonPrimary title="ExampleTitle" onPress={onPress} disabled />,
+            <ButtonPrimary
+                title="ExampleTitle"
+                onPress={onPress}
+                disabled
+                testID={testID}
+            />,
         );
-        const touchableOpacity = r.getByTestId("button-touchableopacity");
+        const touchableOpacity = r.getByTestId(testID);
         expect(touchableOpacity).toBeTruthy();
         expect(onPress.mock.calls.length).toBe(0);
         fireEvent.press(touchableOpacity);

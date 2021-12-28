@@ -7,6 +7,7 @@ export const ButtonPrimary: React.FC<ButtonRegularProps> = ({
     title,
     onPress,
     disabled,
+    testID,
 }) => {
     const onPressHandler = () => {
         if (disabled) return;
@@ -14,10 +15,7 @@ export const ButtonPrimary: React.FC<ButtonRegularProps> = ({
         onPress();
     };
     return (
-        <TouchableOpacity
-            testID="button-touchableopacity"
-            onPress={onPressHandler}
-        >
+        <TouchableOpacity testID={testID} onPress={onPressHandler}>
             <ButtonContainer testID="button-container" disabled={disabled}>
                 <ButtonText testID="button-title">{title}</ButtonText>
             </ButtonContainer>
