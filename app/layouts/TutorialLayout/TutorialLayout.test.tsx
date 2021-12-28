@@ -1,14 +1,14 @@
 import React from "react";
-import {fireEvent, render} from "@testing-library/react-native";
-import {TutorialPageData} from "./TutorialLayout.types";
-import {TutorialScreens} from "../../router/types";
+import { fireEvent, render } from "@testing-library/react-native";
+import { TutorialPageData } from "./TutorialLayout.types";
+import { TutorialScreens } from "../../router/types";
 import TutorialLayout from "./TutorialLayout";
 
 const getTestData = (): TutorialPageData => ({
     id: "test",
     title: "testTitle",
     text: "testText",
-    image: {uri: "test-image-source"},
+    image: { uri: "test-image-source" },
     nextScreen: TutorialScreens.ScreenTwo,
 });
 

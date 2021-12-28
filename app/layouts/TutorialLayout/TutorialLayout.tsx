@@ -1,7 +1,7 @@
 import React from "react";
-import {View} from "react-native";
-import {Paragraph, Title} from "components/Typography/Typography";
-import {TutorialLayoutProps, TutorialPageData} from "./TutorialLayout.types";
+import { View } from "react-native";
+import { Paragraph, Title } from "components/Typography/Typography";
+import { TutorialLayoutProps } from "./TutorialLayout.types";
 import {
     ImageHeader,
     NextButton,
@@ -12,7 +12,7 @@ const TutorialLayout: React.FC<TutorialLayoutProps> = ({
     pageData,
     navigateFunction,
 }) => {
-    const {id, image, title, text, nextScreen} = pageData;
+    const { id, image, title, text, nextScreen } = pageData;
     const goToNextPage = () => navigateFunction(nextScreen);
 
     return (

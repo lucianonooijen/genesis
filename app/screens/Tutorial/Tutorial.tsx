@@ -3,9 +3,9 @@ import {
     StackNavigationProps,
     WithStackNavigationProps,
 } from "../../types/Navigation";
-import {TutorialProps} from "./Tutorial.types";
+import { TutorialProps } from "./Tutorial.types";
 import TutorialLayout from "../../layouts/TutorialLayout/TutorialLayout";
-import {TutorialPageData} from "../../layouts/TutorialLayout/TutorialLayout.types";
+import { TutorialPageData } from "../../layouts/TutorialLayout/TutorialLayout.types";
 import tutorialData from "./data";
 
 const Tutorial: React.FC<WithStackNavigationProps<TutorialProps>> = ({
@@ -22,7 +22,7 @@ const Tutorial: React.FC<WithStackNavigationProps<TutorialProps>> = ({
 
 const generateTutorialPage =
     (pageData: TutorialPageData): React.FC<StackNavigationProps> =>
-    ({navigation}) =>
+    ({ navigation }) =>
         <Tutorial pageData={pageData} navigation={navigation} />;
 
 export const TutorialScreenOne = generateTutorialPage(tutorialData[0]);

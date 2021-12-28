@@ -1,4 +1,4 @@
-import {TutorialPageData} from "../../layouts/TutorialLayout/TutorialLayout.types";
+import { TutorialPageData } from "../../layouts/TutorialLayout/TutorialLayout.types";
 
 export interface TutorialProps {
     pageData: TutorialPageData;

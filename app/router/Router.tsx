@@ -1,9 +1,9 @@
 import * as React from "react";
-import {NavigationContainer} from "@react-navigation/native";
-import {createNativeStackNavigator} from "@react-navigation/native-stack";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import {MainScreens, TutorialScreens} from "./types";
-import {RouterProps} from "./Router.types";
+import { MainScreens, TutorialScreens } from "./types";
+import { RouterProps } from "./Router.types";
 
 import Home from "../screens/Home/Home";
 import {
@@ -14,7 +14,7 @@ import {
 
 const Stack = createNativeStackNavigator();
 
-const Router: React.FC<RouterProps> = ({appState}) => {
+const Router: React.FC<RouterProps> = ({ appState }) => {
     return (
         <NavigationContainer>
             <Stack.Navigator

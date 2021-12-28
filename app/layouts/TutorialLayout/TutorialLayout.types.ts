@@ -1,5 +1,5 @@
-import {ImageURISource} from "react-native";
-import {ScreenTitle} from "../../router/types";
+import { ImageURISource } from "react-native";
+import { ScreenTitle } from "../../router/types";
 
 export interface TutorialPageData {
     id: string;

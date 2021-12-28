@@ -1,6 +1,6 @@
-import {TutorialPageData} from "../../layouts/TutorialLayout/TutorialLayout.types";
-import {TutorialScreens} from "../../router/types";
-import {imageOne, imageThree, imageTwo} from "./images/images";
+import { TutorialPageData } from "../../layouts/TutorialLayout/TutorialLayout.types";
+import { TutorialScreens } from "../../router/types";
+import { imageOne, imageThree, imageTwo } from "./images/images";
 
 const tutorialData: TutorialPageData[] = [
     {

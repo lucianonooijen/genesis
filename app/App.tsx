@@ -1,6 +1,6 @@
 import * as React from "react";
 import Router from "router/Router";
-import {AppState} from "./router/Router.types";
+import { AppState } from "./router/Router.types";
 
 const App = () => {
     const appState: AppState = {

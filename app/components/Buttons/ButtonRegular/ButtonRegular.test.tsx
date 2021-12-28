@@ -1,6 +1,6 @@
 import React from "react";
-import {fireEvent, render} from "@testing-library/react-native";
-import {ButtonPrimary} from "./ButtonRegular";
+import { fireEvent, render } from "@testing-library/react-native";
+import { ButtonPrimary } from "./ButtonRegular";
 
 describe("ButtonRegular", () => {
     it("should render and show the title", () => {

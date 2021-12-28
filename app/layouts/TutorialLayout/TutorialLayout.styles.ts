@@ -1,5 +1,5 @@
 import styled from "styled-components/native";
-import {ButtonPrimary} from "../../components/Buttons/ButtonRegular/ButtonRegular";
+import { ButtonPrimary } from "../../components/Buttons/ButtonRegular/ButtonRegular";
 
 export const ImageHeader = styled.Image`
     height: 50%;

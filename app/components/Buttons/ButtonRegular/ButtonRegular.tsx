@@ -1,7 +1,7 @@
 import React from "react";
-import {TouchableOpacity} from "react-native";
+import { TouchableOpacity } from "react-native";
 import ButtonRegularProps from "./ButtonRegular.types";
-import {ButtonContainer, ButtonText} from "./ButtonRegular.styles";
+import { ButtonContainer, ButtonText } from "./ButtonRegular.styles";
 
 export const ButtonPrimary: React.FC<ButtonRegularProps> = ({
     title,

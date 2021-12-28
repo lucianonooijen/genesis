@@ -33,6 +33,7 @@ module.exports = {
         "jsx-a11y/accessible-emoji": "off", // Allow use of Emojis
         "no-shadow": 0, // For allowing headacheless Redux Action in props in JS code
         "no-use-before-define": 0, // Allow sane file layouts
+        "object-curly-spacing": ["error", "always"], // Force consistency for { item } instead of {item}
         "react/function-component-definition": [1, { namedComponents: "arrow-function", unnamedComponents: "arrow-function" }], // Force arrow function
         "react/jsx-filename-extension": [1, { extensions: [".tsx", ".jsx"] }], // Force files to have .jsx or .tsx
         "react/prop-types": 0, // Done by using React.FC<PropsInterface>
