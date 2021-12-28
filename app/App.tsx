@@ -5,6 +5,7 @@ import { AppState } from "./router/Router.types";
 const App = () => {
     const appState: AppState = {
         hasSeenTutorial: false,
+        isLoggedIn: false,
     };
 
     return <Router appState={appState} />;

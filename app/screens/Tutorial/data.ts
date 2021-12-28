@@ -1,5 +1,5 @@
 import { TutorialPageData } from "../../layouts/TutorialLayout/TutorialLayout.types";
-import { TutorialScreens } from "../../router/types";
+import { LoginRegisterScreens, TutorialScreens } from "../../router/types";
 import { imageOne, imageThree, imageTwo } from "./images/images";
 
 const tutorialData: TutorialPageData[] = [
@@ -22,7 +22,7 @@ const tutorialData: TutorialPageData[] = [
         image: imageThree,
         title: "Example page three",
         text: "The Industrial Revolution and its consequences have been a disaster for the human race.",
-        nextScreen: TutorialScreens.ScreenOne, // FIXME: edit, or implement isLastPage for example, and load hasSeenTutorial to storage
+        nextScreen: LoginRegisterScreens.LoginRegisterLanding, // FIXME: implement isLastPage for example, and load hasSeenTutorial to storage and auto change the navigation stack
     },
 ];
 

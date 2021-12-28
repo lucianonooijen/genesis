@@ -10,8 +10,5 @@ export const TutorialTextContainer = styled.View`
 `;
 
 export const NextButton = styled(ButtonPrimary)`
-    position: absolute;
-    left: 20px;
-    bottom: 20px;
-    right: 20px;
+    // TODO: Styling
 `;
