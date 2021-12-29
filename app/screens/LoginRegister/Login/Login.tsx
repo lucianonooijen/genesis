@@ -12,6 +12,13 @@ const Login: React.FC<StackNavigationProps> = ({ navigation }) => {
     const [password, setPassword] = useState("");
     const canSubmitForm = email && password;
 
+    const submit = () => {
+        console.log("login request:");
+        console.log(`email: ${email}`);
+        console.log(`password: ${password}`);
+        navigation.navigate(MainScreens.Home);
+    };
+
     return (
         <PaddedEmptyLayout>
             <Title>Log in</Title>
@@ -20,17 +27,15 @@ const Login: React.FC<StackNavigationProps> = ({ navigation }) => {
                 type={InputFieldType.Email}
                 label="Email"
                 onChange={setEmail}
-                testID="input-email"
             />
             <TextInput
                 type={InputFieldType.Password}
                 label="Password"
                 onChange={setPassword}
-                testID="input-password"
             />
             <ButtonPrimary
                 title="Log in"
-                onPress={() => navigation.navigate(MainScreens.Home)}
+                onPress={submit}
                 disabled={!canSubmitForm}
             />
             <ButtonPrimary
@@ -39,6 +44,12 @@ const Login: React.FC<StackNavigationProps> = ({ navigation }) => {
                     navigation.navigate(
                         LoginRegisterScreens.PasswordForgotStart,
                     )
+                }
+            />
+            <ButtonPrimary
+                title="Create an account"
+                onPress={() =>
+                    navigation.navigate(LoginRegisterScreens.Register)
                 }
             />
         </PaddedEmptyLayout>
