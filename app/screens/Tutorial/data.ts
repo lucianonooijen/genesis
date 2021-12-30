@@ -1,28 +1,24 @@
-import { TutorialPageData } from "../../layouts/TutorialLayout/TutorialLayout.types";
-import { LoginRegisterScreens, TutorialScreens } from "../../router/types";
 import { imageOne, imageThree, imageTwo } from "./images/images";
+import { TutorialPropPageData } from "./Tutorial.types";
 
-const tutorialData: TutorialPageData[] = [
+const tutorialData: TutorialPropPageData[] = [
     {
         id: "tutorial_1",
         image: imageOne,
         title: "Example page one",
         text: "The Industrial Revolution and its consequences have been a disaster for the human race.",
-        nextScreen: TutorialScreens.ScreenTwo,
     },
     {
         id: "tutorial_2",
         image: imageTwo,
         title: "Example page two",
         text: "The Industrial Revolution and its consequences have been a disaster for the human race.",
-        nextScreen: TutorialScreens.ScreenThree,
     },
     {
         id: "tutorial_1",
         image: imageThree,
         title: "Example page three",
         text: "The Industrial Revolution and its consequences have been a disaster for the human race.",
-        nextScreen: LoginRegisterScreens.LoginRegisterLanding, // FIXME: implement isLastPage for example, and load hasSeenTutorial to storage and auto change the navigation stack
     },
 ];
 

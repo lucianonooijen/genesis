@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { StackNavigationProps } from "types/Navigation";
-import { LoginRegisterScreens, MainScreens } from "router/types";
+import { LoginRegisterScreens } from "router/types";
 import PaddedEmptyLayout from "layouts/PaddedEmptyLayout/PaddedEmptyLayout";
 import { ButtonPrimary } from "components/Buttons/ButtonRegular/ButtonRegular";
 import { SubTitle, Title } from "components/Typography/Typography";
 import TextInput from "../../../components/Input/TextInput/TextInput";
 import { InputFieldType } from "../../../components/Input/TextInput/TextInput.types";
+import AppStateContext from "../../../data/AppState/AppState";
 
 const Register: React.FC<StackNavigationProps> = ({ navigation }) => {
+    const { setIsLoggedIn } = useContext(AppStateContext);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -18,7 +20,7 @@ const Register: React.FC<StackNavigationProps> = ({ navigation }) => {
         console.log(`name: ${name}`);
         console.log(`email: ${email}`);
         console.log(`password: ${password}`);
-        navigation.navigate(MainScreens.Home);
+        setIsLoggedIn(true);
     };
 
     return (

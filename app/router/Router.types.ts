@@ -1,7 +1,5 @@
-export interface AppState {
-    hasSeenTutorial: boolean;
-    isLoggedIn: boolean;
-}
+import { AppState } from "data/AppState/AppState";
+
 export interface RouterProps {
     appState: AppState;
 }

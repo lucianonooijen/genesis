@@ -8,12 +8,8 @@ import {
     TutorialTextContainer,
 } from "./TutorialLayout.styles";
 
-const TutorialLayout: React.FC<TutorialLayoutProps> = ({
-    pageData,
-    navigateFunction,
-}) => {
-    const { id, image, title, text, nextScreen } = pageData;
-    const goToNextPage = () => navigateFunction(nextScreen);
+const TutorialLayout: React.FC<TutorialLayoutProps> = ({ pageData }) => {
+    const { id, image, title, text, onPressContinue } = pageData;
 
     return (
         <View key={id} testID={id}>
@@ -24,7 +20,7 @@ const TutorialLayout: React.FC<TutorialLayoutProps> = ({
             </TutorialTextContainer>
             <NextButton
                 title="Continue"
-                onPress={goToNextPage}
+                onPress={onPressContinue}
                 testID="tutorial-nextbutton"
             />
         </View>
