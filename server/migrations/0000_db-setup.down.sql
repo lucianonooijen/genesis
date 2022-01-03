@@ -1,8 +1,6 @@
 BEGIN;
 
-DROP TABLE password_forgot;
-
-DROP TABLE users;
+DROP SCHEMA genesis_server;
 
 DROP EXTENSION IF EXISTS "uuid-ossp";
 

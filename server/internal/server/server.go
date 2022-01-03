@@ -11,12 +11,13 @@ import (
 
 	"git.bytecode.nl/bytecode/genesis/internal/utils/logger"
 
-	"git.bytecode.nl/bytecode/genesis/internal/server/handlers"
-	"git.bytecode.nl/bytecode/genesis/internal/server/middleware"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/sqreen/go-agent/sdk/middleware/sqgin"
+
+	"git.bytecode.nl/bytecode/genesis/internal/server/handlers"
+	"git.bytecode.nl/bytecode/genesis/internal/server/middleware"
 )
 
 var log = logger.New("server_init")
@@ -83,7 +84,7 @@ func registerMiddleware(router *gin.Engine, devMode bool) {
 	}
 	router.Use(gin.Recovery())
 	router.Use(middleware.GinLogger())
-	//router.Use(middleware.ActivityTableLog(r.SaveActivity))
+	// router.Use(middleware.ActivityTableLog(r.SaveActivity))
 	config := cors.DefaultConfig()
 	config.AllowAllOrigins = true
 	config.AllowHeaders = []string{ // TODO: Remove unused
@@ -94,8 +95,8 @@ func registerMiddleware(router *gin.Engine, devMode bool) {
 		"Cache-Control",
 		"Authorization"}
 	router.Use(cors.New(config))
-	//router.Use(middleware.EnsureKeysMap())
-	//router.Use(middleware.JwtAuth(r.User.CheckUserJwt))
+	// router.Use(middleware.EnsureKeysMap())
+	// router.Use(middleware.JwtAuth(r.User.CheckUserJwt))
 }
 
 func setGinRouteLogger() {

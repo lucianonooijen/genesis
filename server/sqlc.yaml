@@ -1,0 +1,11 @@
+version: "1"
+packages:
+  - name: "queries"
+    path: "internal/data/database/internal/queries"
+    queries: "sql"
+    schema: "migrations/"
+    sql_package: "database/sql"
+    engine: "postgresql"
+    output_db_file_name: "db.go"
+    output_models_file_name: "models.go"
+    output_querier_file_name: "querier.go"

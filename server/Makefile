@@ -4,14 +4,15 @@ help: # Shows all commands
 
 .PHONY: bootstrap
 bootstrap: # Installs Go packages and sets defaults
-	@echo "Installing Go packages with GO111MODULE=off..."
-	@GO111MODULE=off go get -u golang.org/x/tools/cmd/goimports
-	@GO111MODULE=off go get -u github.com/cosmtrek/air
-	@GO111MODULE=off go get -u go101.org/golds
-	@GO111MODULE=off go get -u golang.org/x/lint/golint
+	@echo "Installing Go packages 'go install'"
+	@go install golang.org/x/tools/cmd/goimports@latest
+	@go install github.com/cosmtrek/air@latest
+	@go install go101.org/golds@latest
+	@go install golang.org/x/lint/golint@latest
+	@go install github.com/kyleconroy/sqlc/cmd/sqlc@latest
 	@echo "Packages installed. Copying files..."
-	cp .env.example .env
-	cp sqreen.yaml.example sqreen.yaml
+#	cp .env.example .env
+#	cp sqreen.yaml.example sqreen.yaml
 
 .PHONY: dev
 dev: # Runs the Gin HTTP server
@@ -20,6 +21,12 @@ dev: # Runs the Gin HTTP server
 .PHONY: build
 build: # Runs the Golang build for production, including the Sqreen intrumentation
 	./bin/build
+
+.PHONY: sql
+sql: # Checks SQL for syntax and type errors, then generates Go code for ./SQL/ files
+	@sqlc compile
+	@sqlc generate
+	@sqlc compile
 
 .PHONY: test
 test: # Runs the unit tests
@@ -60,8 +67,8 @@ migrateup: # Runs the database migrations up
 migratedown: # Runs the database migrations down
 	go run . migrate -d down --verbose
 
-.PHONY: newmigration
-newmigration: # Asks for the new migration name and creates migration files
+.PHONY: migration
+migration: # Asks for the new migration name and creates migration files
 	./bin/create_migration
 
 .PHONY: newdb

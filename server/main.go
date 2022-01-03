@@ -23,9 +23,8 @@ import (
 	"os"
 	"time"
 
-	"git.bytecode.nl/bytecode/genesis/internal/constants"
-
 	"git.bytecode.nl/bytecode/genesis/internal/cmd"
+	"git.bytecode.nl/bytecode/genesis/internal/constants"
 	"git.bytecode.nl/bytecode/genesis/internal/data/mailer"
 	"git.bytecode.nl/bytecode/genesis/internal/infrastructure/config"
 	"git.bytecode.nl/bytecode/genesis/internal/infrastructure/jwt"
