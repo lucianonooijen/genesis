@@ -8,14 +8,14 @@ import (
 	"github.com/google/uuid"
 )
 
-type GenesisServerPasswordForgot struct {
+type PasswordForgot struct {
 	UserID     int32     `json:"userID"`
 	ResetToken uuid.UUID `json:"resetToken"`
 	ValidUntil time.Time `json:"validUntil"`
 	IsUsed     bool      `json:"isUsed"`
 }
 
-type GenesisServerUser struct {
+type User struct {
 	ID           int32     `json:"id"`
 	UserUuid     uuid.UUID `json:"userUuid"`
 	PasswordHash string    `json:"passwordHash"`

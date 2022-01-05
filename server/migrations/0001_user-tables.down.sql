@@ -1,7 +1,7 @@
 BEGIN;
 
-DROP TABLE genesis_server.password_forgot;
+DROP TABLE password_forgot;
 
-DROP TABLE genesis_server.users;
+DROP TABLE users;
 
 COMMIT;

@@ -8,7 +8,7 @@ import (
 )
 
 const createUser = `-- name: CreateUser :exec
-INSERT INTO genesis_server.users
+INSERT INTO users
     (email, password_hash, first_name)
 VALUES
     ($1, $2, $3)
@@ -20,19 +20,20 @@ type CreateUserParams struct {
 	FirstName    string `json:"firstName"`
 }
 
+// Inserts new user into database
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) error {
 	_, err := q.db.ExecContext(ctx, createUser, arg.Email, arg.PasswordHash, arg.FirstName)
 	return err
 }
 
 const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT id, user_uuid, password_hash, password_uuid, email, first_name, created_at FROM genesis_server.users
+SELECT id, user_uuid, password_hash, password_uuid, email, first_name, created_at FROM users
 WHERE email = $1
 `
 
-func (q *Queries) GetUserByEmail(ctx context.Context, email string) (GenesisServerUser, error) {
+func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error) {
 	row := q.db.QueryRowContext(ctx, getUserByEmail, email)
-	var i GenesisServerUser
+	var i User
 	err := row.Scan(
 		&i.ID,
 		&i.UserUuid,
@@ -46,13 +47,13 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (GenesisServ
 }
 
 const getUserByID = `-- name: GetUserByID :one
-SELECT id, user_uuid, password_hash, password_uuid, email, first_name, created_at FROM genesis_server.users
+SELECT id, user_uuid, password_hash, password_uuid, email, first_name, created_at FROM users
 WHERE id = $1
 `
 
-func (q *Queries) GetUserByID(ctx context.Context, id int32) (GenesisServerUser, error) {
+func (q *Queries) GetUserByID(ctx context.Context, id int32) (User, error) {
 	row := q.db.QueryRowContext(ctx, getUserByID, id)
-	var i GenesisServerUser
+	var i User
 	err := row.Scan(
 		&i.ID,
 		&i.UserUuid,
@@ -66,7 +67,7 @@ func (q *Queries) GetUserByID(ctx context.Context, id int32) (GenesisServerUser,
 }
 
 const updateUserPassword = `-- name: UpdateUserPassword :exec
-UPDATE genesis_server.users
+UPDATE users
 SET password_hash = $1, password_uuid = uuid_generate_v4()
 WHERE id = $1
 `
