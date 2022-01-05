@@ -16,4 +16,7 @@ func registerRoutes(r *gin.RouterGroup, h handlers.Handlers) {
 
 	// STATUS
 	r.GET("/status", h.Status)
+
+	// USER LOGIN AND REGISTER
+	r.POST("/user/register", h.CreateUser)
 }

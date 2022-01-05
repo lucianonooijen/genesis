@@ -15,7 +15,7 @@ type Config struct {
 	ServerPort     int    `mapstructure:"api_port" validate:"required"`
 	JWTSecret      string `mapstructure:"jwt_secret" validate:"required"`
 
-	// Database configuration
+	// DbConn configuration
 	DatabaseHost string `mapstructure:"db_host" validate:"required"`
 	DatabasePort int    `mapstructure:"db_port" validate:"required"`
 	DatabaseName string `mapstructure:"db_name" validate:"required"`

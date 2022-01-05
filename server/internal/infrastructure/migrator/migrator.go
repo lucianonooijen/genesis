@@ -7,7 +7,6 @@ import (
 
 	"github.com/golang-migrate/migrate/v4"
 
-	//"github.com/golang-migrate/migrate/v4/database"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	// Needs side effects from golang-migrate
 	_ "github.com/golang-migrate/migrate/v4/source/file"
@@ -25,20 +24,13 @@ const (
 )
 
 // New returns a migrator closure that will accept UpAll or DownAll to up or down migrate the database
-func New(dbString string, dbType string, dbName string, migrationScriptsPath string) func(Direction) error {
+func New(db *sql.DB, dbName string, migrationScriptsPath string) func(Direction) error {
 	return func(direction Direction) error {
 		// TODO: Add support for migrating +1/-1 or to a specific migration
 		// Direction check
 		if direction != UpAll && direction != DownAll {
 			return fmt.Errorf("migration direction should be 'UpAll' or 'DownAll'")
 		}
-
-		// Build database instance and migrator
-		db, err := sql.Open(dbType, dbString)
-		if err != nil {
-			return err
-		}
-		defer db.Close()
 
 		// Generating migration instance
 		driver, err := postgres.WithInstance(db, &postgres.Config{})

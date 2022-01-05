@@ -18,97 +18,118 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package main
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
+	"log"
 	"os"
 	"time"
 
+	"github.com/go-playground/validator/v10"
+
 	"git.bytecode.nl/bytecode/genesis/internal/cmd"
 	"git.bytecode.nl/bytecode/genesis/internal/constants"
+	"git.bytecode.nl/bytecode/genesis/internal/data/database"
 	"git.bytecode.nl/bytecode/genesis/internal/data/mailer"
 	"git.bytecode.nl/bytecode/genesis/internal/infrastructure/config"
 	"git.bytecode.nl/bytecode/genesis/internal/infrastructure/jwt"
+	"git.bytecode.nl/bytecode/genesis/internal/infrastructure/logger"
 	"git.bytecode.nl/bytecode/genesis/internal/infrastructure/migrator"
 	"git.bytecode.nl/bytecode/genesis/internal/infrastructure/passhash"
+	"git.bytecode.nl/bytecode/genesis/internal/interactors"
 	"git.bytecode.nl/bytecode/genesis/internal/server"
-	"git.bytecode.nl/bytecode/genesis/internal/utils/logger"
 )
 
-var log = logger.New("main")
-
-// TODO: Create cleaner startup procedure, but only when really necessary
+// TODO: Rework this and use this in cmd/ that returns the interactor,
+// only load CLI thingy here, nothing else
 
 func main() {
-	/**
-	 * Step 1: load config and configure the logger
-	 */
+	var services interactors.Services
+
+	// Config
+	// TODO: Change config to YAML
 	c, err := config.LoadConfig()
+	panicOnErr(err)
+	services.Config = c
+
+	// Logger
+	logBase, err := logger.New(c.IsDevMode)
+	panicOnErr(err)
+	services.BaseLogger = logBase
+	logInstance := logBase.Sugar()
+	logMain := logInstance.Named("main_init")
+	logMain.Info("Hello world. Config loaded, logger configured.")
+
+	// DbConn connection
+	logMain.Debug("opening database connection")
+	services.DbConn, err = sql.Open("postgres", c.DatabaseConnectionString())
+	panicOnErr(err)
+	err = services.DbConn.Ping()
 	if err != nil {
+		logMain.Error("error pinging database", err)
 		panic(err)
 	}
-	if err = logger.Configure(c.IsDevMode, c.SentryDSN, c.SentryEnvironment); err != nil {
-		panic(err)
-	}
-	log.Info("Config loaded, logger configured. Hi there!")
 
-	/**
-	 * Step 2: build infrastructure instances
-	 */
-	log.Debug("Building infrastructure instances")
-	log.Trace("Building migrator")
-	migrate := migrator.New(c.DatabaseConnectionString(), "postgres", c.DatabaseName, getMigrationSourceURL())
-	log.Trace("Building JWT instance for users")
-	_, err = jwt.New(c.JWTSecret, "users", time.Hour*24*365) // Valid for 1 year
-	exitOnErr(err)
-	log.Trace("Building password hasher instance")
-	_ = passhash.New()
+	// JWT
+	logMain.Debug("Building JWT instance for users")
+	services.JWT, err = jwt.New(c.JWTSecret, "users", time.Hour*24*365) // Valid for 1 year
+	panicOnErr(err)
 
-	/**
-	 * Step 3: build the data instances
-	 */
-	log.Debug("Building data instances")
-	log.Trace("Building mailer instance")
+	// Password hasher
+	logMain.Debug("Building password hasher instance")
+	services.PassHash = passhash.New()
+
+	// Static file URL
 	staticFileURLBase := fmt.Sprintf("%s%s%s", c.ServerHostname, constants.BasePathAPI, constants.APIStaticPath)
-	log.Trace(fmt.Sprintf("Serving static files from %s", staticFileURLBase))
-	_, err = mailer.New(c.EmailSenderEmail, c.EmailSenderName, c.SendinblueAPIKey, staticFileURLBase)
-	exitOnErr(err)
+	logMain.Info(fmt.Sprintf("Serving static files from %s", staticFileURLBase))
+
+	// Mailer
+	logMain.Debug("Building mailer instance")
+	services.Mailer, err = mailer.New(logBase, c.EmailSenderEmail, c.EmailSenderName, c.SendinblueAPIKey, staticFileURLBase)
+	panicOnErr(err)
+
+	// Database instance
+	logMain.Debug("Building database queryer instance")
+	services.Database = database.New(services.DbConn)
+
+	// Validating the Applications interactor instance
+	validate := validator.New()
+	err = validate.Struct(services)
+	panicOnErr(err)
 
 	/**
-	* Step 4: build the domain instances
+	 * Below are the instances passed to the CLI
 	 */
-	log.Debug("Building domain instances")
-	// TODO: Implement
 
-	/**
-	 * Step 5: build the application closures
-	 */
-	log.Debug("Building application closures")
-	log.Trace("Building server instance")
-	s, err := server.New(server.Requirements{
-		Debug: c.IsDevMode,
-		Port:  c.ServerPort,
-	})
-	exitOnErr(err)
-	log.Trace("Assembling ApplicationClosures")
+	// Build server instance
+	logMain.Info("Building server instance")
+	s, err := server.New(&services)
+	panicOnErr(err)
+
+	// Migrator
+	logMain.Debug("Building migrator")
+	migrate := migrator.New(services.DbConn, c.DatabaseName, getMigrationSourceURL())
+
+	// Build application closures
+	logMain.Debug("Assembling ApplicationClosures")
 	apps := cmd.ApplicationClosures{
 		Migrate:     migrate,
 		StartServer: s.Start,
 	}
 
-	/**
-	 * Step 6: run cmd.Execute to run the correct part of the application
-	 */
-	log.Info("Passing everything into the CLI handler and starting application")
+	// Pass to cmd package
+	logMain.Info("Passing everything into the CLI handler and starting application")
 	cmd.Execute(c, apps)
 }
 
-// exitOnErr is a helper in the init phase of the project to avoid error checks clutter
-func exitOnErr(err error) {
+// panicOnErr is a helper in the init phase of the project to avoid error checks clutter
+func panicOnErr(err error) {
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 }
 
+// TODO: Embed migrations into the binary
 func getMigrationSourceURL() string {
 	workingDir, err := os.Getwd()
 	if err != nil {

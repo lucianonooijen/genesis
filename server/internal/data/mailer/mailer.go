@@ -9,15 +9,13 @@ import (
 	"strings"
 	"time"
 
-	"git.bytecode.nl/bytecode/genesis/internal/interactors"
-	"git.bytecode.nl/bytecode/genesis/internal/utils/logger"
 	"github.com/matcornic/hermes/v2"
+	"go.uber.org/zap"
 )
 
-var log = logger.New("mailer")
-
-// Mailer contains methods for interactors.MailerService to send emails to users of Genesis
+// Mailer contains methods for interactors.Instance to send emails to users of Genesis
 type Mailer struct {
+	logger            *zap.Logger
 	fromEmail         string
 	fromName          string
 	apiKey            string
@@ -25,12 +23,13 @@ type Mailer struct {
 	hermes            hermes.Hermes
 }
 
-// New returns a new Mailer instance as a interactors.MailerService
-func New(fromEmail, fromName, apiKey, staticFileURLBase string) (interactors.MailerService, error) {
+// New returns a new Mailer instance as a interactors.Instance
+func New(loggerBase *zap.Logger, fromEmail, fromName, apiKey, staticFileURLBase string) (Mailer, error) {
 	if fromEmail == "" || fromName == "" || apiKey == "" || staticFileURLBase == "" {
-		return nil, errors.New("arguments cannot have default values")
+		return Mailer{}, errors.New("arguments cannot have default values")
 	}
 	mailer := Mailer{
+		logger:            loggerBase.Named("mailer"),
 		fromEmail:         fromEmail,
 		fromName:          fromName,
 		apiKey:            apiKey,
@@ -90,19 +89,19 @@ func (m Mailer) sendEmail(toMail string, toName string, subject string, HTMLCont
 	req.Header.Add("content-type", "application/json")
 	req.Header.Add("api-key", m.apiKey)
 
-	log.Debug("making email sending request")
+	m.logger.Debug("making email sending request")
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return err
 	}
 	defer func() {
 		if err := res.Body.Close(); err != nil {
-			log.Error(err)
+			m.logger.Error("error when closing res.Body", zap.Error(err))
 		}
 	}()
 
 	body, _ := ioutil.ReadAll(res.Body)
-	log.Trace("received email response: " + string(body))
+	m.logger.Debug("received email request response", zap.ByteString("response", body))
 	if res.StatusCode < 200 || res.StatusCode > 299 {
 		return fmt.Errorf("did not receive 2xx status code while sending email, got %d", res.StatusCode)
 	}

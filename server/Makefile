@@ -45,9 +45,6 @@ docs: # Runs documentation website
 
 .PHONY: ci
 ci: # Runs the CI tasks
-	@echo "Installing Go packages with GO111MODULE=off..." # TODO: don't do here
-	@GO111MODULE=off go get -u golang.org/x/tools/cmd/goimports
-	@GO111MODULE=off go get -u golang.org/x/lint/golint
 	@echo "Checking if golangci-lint is installed"
 	@golangci-lint --version
 	@echo "Running golangci-lint"

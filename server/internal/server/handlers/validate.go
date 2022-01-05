@@ -10,7 +10,7 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-// Creates  a user friendly validation error with the missing fields, based on validator.ValidationErrors.
+// Creates a user-friendly validation error with the missing fields, based on validator.ValidationErrors.
 func createValidationError(err error) error {
 	// Convert to ValidationErrors type
 	validationErrors, ok := err.(validator.ValidationErrors)
@@ -21,7 +21,7 @@ func createValidationError(err error) error {
 	// Build array with incorrect error fields and create error string
 	var incorrectFields []string
 	for _, e := range validationErrors {
-		incorrectFields = append(incorrectFields, e.Field()) // TODO: Return JSON fields instead of Go naming
+		incorrectFields = append(incorrectFields, fmt.Sprintf("%s (%s)", e.Field(), e.Tag())) // TODO: Return JSON fields instead of Go naming
 	}
 	incorrectFieldsString := strings.Join(incorrectFields, ", ")
 	formattedError := fmt.Errorf("incorrect or missing fields in body: %s", incorrectFieldsString)
@@ -32,12 +32,13 @@ func createValidationError(err error) error {
 
 // Extracts the response body into the data argument and validates the data structure (for required fields, etc.)
 // c.Abort is called if the data cannot be extracted or if the post body is invalid
-func (h Handlers) extractBody(c *gin.Context, data interface{}) {
+func (h Handlers) extractBody(c *gin.Context, data interface{}) (failed bool) {
 	// Bind the request body
 	if err := binding.JSON.Bind(c.Request, data); err != nil {
+		r.ClientError(c, s.BadRequest, "Invalid post body", err.Error(), nil)
 		h.sendInvalidPostBody(c, err)
 		c.Abort()
-		return
+		return true
 	}
 
 	// Validate the body with `validate` struct tags
@@ -46,9 +47,11 @@ func (h Handlers) extractBody(c *gin.Context, data interface{}) {
 		// When error is found, create user friendly error with the incorrect fields and send 400 response
 		h.sendInvalidPostBody(c, createValidationError(err))
 		c.Abort()
-		//h.Logger.Debug(validationErr.Error())
-		return
+		// h.Logger.Debug(validationErr.Error())
+		return true
 	}
+
+	return
 }
 
 // Checks if the response body is valid, sends 500 and aborts if it's not the case

@@ -4,6 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+
+	"git.bytecode.nl/bytecode/genesis/internal/constants"
 )
 
 // Responses contains methods for returning data in the correct format
@@ -14,23 +16,44 @@ func New() Responses {
 	return Responses{}
 }
 
-// Success sends 2XX responses
-func (r Responses) Success(c *gin.Context, code SuccessCode, data interface{}) {
-	c.JSON(int(code), generateResponseBody(true, nil, data))
+func setResponseHeaders(c *gin.Context) {
+	c.Header("X-API-Version", constants.APIVersion)
 }
 
-// ClientError sends 4XX responses
-func (r Responses) ClientError(c *gin.Context, code ClientErrorCode, message string) {
-	c.JSON(int(code), generateResponseBody(false, &message, nil))
+// Success sends 2XX responses
+func (r Responses) Success(c *gin.Context, code SuccessCode, data interface{}) {
+	setResponseHeaders(c)
+	c.JSON(int(code), data)
+}
+
+// ClientError returns a client error
+func (r Responses) ClientError(c *gin.Context, code ClientErrorCode, errTitle, errDetail string, err error) {
+	setResponseHeaders(c)
+	c.JSON(int(code), ErrorBody{
+		Title:    errTitle,
+		Detail:   errDetail,
+		RawError: err.Error(),
+		Status:   int(code),
+	})
 }
 
 // ServerError sends 500 responses
-func (r Responses) ServerError(c *gin.Context, message string) {
-	c.JSON(http.StatusInternalServerError, generateResponseBody(false, &message, nil))
+func (r Responses) ServerError(c *gin.Context, err error) {
+	setResponseHeaders(c)
+	c.JSON(http.StatusInternalServerError, ErrorBody{
+		Title:    "Unexpected server side error",
+		Detail:   "There has been an unexpected server side error",
+		Status:   http.StatusInternalServerError,
+		RawError: err.Error(),
+	})
 }
 
-// NotImplemented sends a http.StatusNotImplemented reponse
+// NotImplemented sends a http.StatusNotImplemented response
 func (r Responses) NotImplemented(c *gin.Context) {
-	msg := "not implemented"
-	c.JSON(http.StatusNotImplemented, generateResponseBody(false, &msg, nil))
+	setResponseHeaders(c)
+	c.JSON(http.StatusNotImplemented, ErrorBody{
+		Title:  "Endpoint not implemented",
+		Detail: "This API endpoint has not yet been implemented",
+		Status: http.StatusNotImplemented,
+	})
 }

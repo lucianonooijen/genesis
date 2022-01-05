@@ -5,24 +5,22 @@ import (
 	"fmt"
 	"time"
 
-	"git.bytecode.nl/bytecode/genesis/internal/interactors"
-
 	jwtLib "github.com/dgrijalva/jwt-go"
 )
 
-// CreatorValidator contains methods for creating and validating JSON Web Tokens (jwt)
-type CreatorValidator struct {
+// Util contains methods for creating and validating JSON Web Tokens (jwt)
+type Util struct {
 	jwtSecret []byte        `validate:"required,min=10"`
 	subject   string        `validate:"required"`
 	validity  time.Duration `validate:"required"`
 }
 
-// New creates a CreatorValidator instance and returns it if argument validation succeeds
-func New(jwtSecret string, subject string, validity time.Duration) (interactors.JwtUtil, error) {
+// New creates a Util instance and returns it if argument validation succeeds
+func New(jwtSecret string, subject string, validity time.Duration) (Util, error) {
 	if jwtSecret == "" || subject == "" || validity == 0 {
-		return nil, errors.New("arguments cannot be default values")
+		return Util{}, errors.New("arguments cannot be default values")
 	}
-	jwtUtil := CreatorValidator{
+	jwtUtil := Util{
 		jwtSecret: []byte(jwtSecret),
 		subject:   subject,
 		validity:  validity,
@@ -31,10 +29,10 @@ func New(jwtSecret string, subject string, validity time.Duration) (interactors.
 }
 
 // CreateJWT creates a JWT for a user string
-func (jwt CreatorValidator) CreateJWT(user string) (token string, err error) {
+func (jwt Util) CreateJWT(userUniqueIdentifyer string) (token string, err error) {
 	claims := &jwtLib.StandardClaims{
-		Audience:  user,
-		Issuer:    user,
+		Audience:  userUniqueIdentifyer,
+		Issuer:    userUniqueIdentifyer,
 		Subject:   jwt.subject,
 		ExpiresAt: time.Now().Add(jwt.validity).Unix(),
 	}
@@ -44,7 +42,7 @@ func (jwt CreatorValidator) CreateJWT(user string) (token string, err error) {
 }
 
 // ValidateJWT validates the JWT and returns the user string
-func (jwt CreatorValidator) ValidateJWT(token string) (user string, err error) {
+func (jwt Util) ValidateJWT(token string) (user string, err error) {
 	tok, err := jwtLib.Parse(token, func(token *jwtLib.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwtLib.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
@@ -62,7 +60,7 @@ func (jwt CreatorValidator) ValidateJWT(token string) (user string, err error) {
 			return "", fmt.Errorf("cannot convert sub claim of '%s' to string", subjectClaim)
 		}
 		if subject != jwt.subject {
-			return "", fmt.Errorf("JWT subject (%s) does not match CreatorValidator instance subject (%s)", subject, jwt.subject)
+			return "", fmt.Errorf("JWT subject (%s) does not match Util instance subject (%s)", subject, jwt.subject)
 		}
 
 		// Fetch the user from the JWT

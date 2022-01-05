@@ -7,4 +7,7 @@ const (
 	BasePathAPI = "/v1"
 	// APIStaticPath is the extension after BasePathAPI where static files are served
 	APIStaticPath = "/static"
+
+	// APIVersion is the version of the API
+	APIVersion = "0.0.1"
 )
