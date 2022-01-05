@@ -2,14 +2,13 @@ package mailer
 
 import "github.com/matcornic/hermes/v2"
 
-func addDefaultValuesToTemplate(template hermes.Email) hermes.Email {
+func addDefaultValuesToTemplate(template *hermes.Email) {
 	template.Body.Greeting = "Beste"
 	template.Body.Signature = "Met hartelijke groet"
-	return template
 }
 
 func accountCreatedTemplate(firstName string) hermes.Email {
-	return addDefaultValuesToTemplate(hermes.Email{
+	email := hermes.Email{
 		Body: hermes.Body{
 			Name: firstName,
 			Intros: []string{
@@ -20,11 +19,14 @@ func accountCreatedTemplate(firstName string) hermes.Email {
 				"Heb je hulp nodig, of een vraag? Antwoord gerust op deze email. We helpen je graag.",
 			},
 		},
-	})
+	}
+	addDefaultValuesToTemplate(&email)
+
+	return email
 }
 
 func accountLoginTemplate(firstName string) hermes.Email {
-	return addDefaultValuesToTemplate(hermes.Email{
+	email := hermes.Email{
 		Body: hermes.Body{
 			Name: firstName,
 			Intros: []string{
@@ -35,5 +37,8 @@ func accountLoginTemplate(firstName string) hermes.Email {
 				"Heb je hulp nodig, of een vraag? Antwoord gerust op deze email. We helpen je graag.",
 			},
 		},
-	})
+	}
+	addDefaultValuesToTemplate(&email)
+
+	return email
 }

@@ -11,6 +11,8 @@ import (
 
 const Year = time.Hour * 24 * 365
 
+var testUser = "john_doe@protonmail.com"
+
 func TestNew_Valid(t *testing.T) {
 	_, err := jwt.New("the secret", "user auth key", Year)
 	assert.NoError(t, err)
@@ -18,13 +20,13 @@ func TestNew_Valid(t *testing.T) {
 
 func TestNew_Invalid(t *testing.T) {
 	jwter, err := jwt.New("", "sub", Year)
-	assert.Nil(t, jwter)
+	assert.Empty(t, jwter)
 	assert.Error(t, err)
 	jwter, err = jwt.New("key", "", Year)
-	assert.Nil(t, jwter)
+	assert.Empty(t, jwter)
 	assert.Error(t, err)
 	jwter, err = jwt.New("key", "sub", 0)
-	assert.Nil(t, jwter)
+	assert.Empty(t, jwter)
 	assert.Error(t, err)
 }
 
@@ -37,7 +39,6 @@ func TestJwtUtil_CreateJWT(t *testing.T) {
 	assert.NotEmpty(t, token)
 }
 func TestJwtUtil_ValidateJWT_User(t *testing.T) {
-	testUser := "john_doe@gmail.com"
 	j, err := jwt.New("key", "user auth key", Year)
 	assert.NoError(t, err)
 
@@ -53,7 +54,6 @@ func TestJwtUtil_ValidateJWT_User(t *testing.T) {
 }
 
 func TestJwtUtil_ValidateJWT_ExpiredKey(t *testing.T) {
-	testUser := "john_doe@gmail.com"
 	j, err := jwt.New("key", "user auth key", -Year) // Note the minus before the year, so it expired one year ago
 	assert.NoError(t, err)
 
@@ -69,7 +69,6 @@ func TestJwtUtil_ValidateJWT_ExpiredKey(t *testing.T) {
 }
 
 func TestJwtUtil_ValidateJWT_Subject(t *testing.T) {
-	testUser := "john_doe@gmail.com"
 	jOne, err := jwt.New("key", "test_one", Year)
 	assert.NoError(t, err)
 	jTwo, err := jwt.New("key", "test_two", Year)
@@ -87,7 +86,6 @@ func TestJwtUtil_ValidateJWT_Subject(t *testing.T) {
 }
 
 func TestJwtUtil_ValidateJWT_DifferentSecrets(t *testing.T) {
-	testUser := "john_doe@gmail.com"
 	jOne, err := jwt.New("key1", "subject", Year)
 	assert.NoError(t, err)
 	jTwo, err := jwt.New("key2", "subject", Year)

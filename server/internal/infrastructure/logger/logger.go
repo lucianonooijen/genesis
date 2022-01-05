@@ -52,7 +52,7 @@ var configProd = zap.Config{
 	InitialFields:    nil,
 }
 
-// Config returns the correct logging configuration for the given environment
+// Config returns the correct logging configuration for the given environment.
 func Config(isDev bool) zap.Config {
 	// DEVELOPMENT
 	if isDev {
@@ -63,9 +63,10 @@ func Config(isDev bool) zap.Config {
 	return configProd
 }
 
-// New returns a *zap.Logger for the given environment
+// New returns a *zap.Logger for the given environment.
 func New(isDev bool) (*zap.Logger, error) {
 	config := Config(isDev)
 	logger, err := config.Build()
+
 	return logger, err
 }

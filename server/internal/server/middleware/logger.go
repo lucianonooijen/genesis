@@ -16,14 +16,13 @@ const (
 	MaxRequestTimeBeforeLoggingError = 1000
 )
 
-// TODO: Use the intrastructure logger?
-// TODO: Use Sentry's ConfigureScope to set the current user in middleware
-// TODO: Add custom logging fields, f.e. the LogFields
+// TODO: Add https://github.com/plimble/zap-sentry
 
-// GinLogger is Gin middleware to log request metadata and save Sentry data
-func GinLogger(logger *zap.Logger) gin.HandlerFunc {
-	var timeFormat = "02/Jan/2006:15:04:05 -0700"
+// GinLogger is Gin middleware to log request metadata and save Sentry data.
+func GinLogger(logger *zap.Logger) gin.HandlerFunc { // nolint:funlen // can't be shorter without increasing cognitive load
+	timeFormat := "02/Jan/2006:15:04:05 -0700"
 	httpLog := logger.Named("http_logger")
+
 	return func(c *gin.Context) {
 		method := c.Request.Method
 		path := c.Request.URL.Path
@@ -37,11 +36,12 @@ func GinLogger(logger *zap.Logger) gin.HandlerFunc {
 		})
 
 		c.Next() // Start handling request
+
 		stop := time.Since(start)
-		latency := int(math.Ceil(float64(stop.Nanoseconds()) / 1000000.0))
+		latency := int(math.Ceil(float64(stop.Nanoseconds()) / 1000000.0)) // nolint:gomnd // we have divine permission to do this
 		status := c.Writer.Status()
 
-		// Log the request data
+		// Generate Zap fields
 		reqData := []zap.Field{
 			zap.Int("status_code", status),
 			zap.Int("latency", latency),
@@ -52,6 +52,8 @@ func GinLogger(logger *zap.Logger) gin.HandlerFunc {
 			zap.String("user_agent", c.Request.UserAgent()),
 			zap.String("timestamp", time.Now().Format(timeFormat)),
 		}
+
+		// Log breadcrumb to Sentry
 		sentry.AddBreadcrumb(&sentry.Breadcrumb{
 			Level: sentry.LevelInfo,
 			Data: map[string]interface{}{
@@ -71,15 +73,17 @@ func GinLogger(logger *zap.Logger) gin.HandlerFunc {
 			err := c.Errors.ByType(gin.ErrorTypePrivate).String()
 			httpLog.Error(err, reqData...)
 			sentry.CaptureException(errors.New(err)) // TODO: Maybe remove?
+
 			return
 		}
 
 		msg := fmt.Sprintf("%d response sent for %s %s", status, method, path)
 
 		// Log server errors
-		if status > 499 {
+		if status > 499 { // nolint:gomnd // use for http code limits are ok
 			httpLog.Error(msg, reqData...)
 			sentry.CaptureException(errors.New(msg)) // TODO: Add traces for Sentry and create a more useful/actionable error
+
 			return
 		}
 
@@ -88,17 +92,20 @@ func GinLogger(logger *zap.Logger) gin.HandlerFunc {
 			requestLatencyError := fmt.Sprintf("response sent, but marked as error due to request latency being too long, the latency of %dms exceeded the threshold of %dms", latency, MaxRequestTimeBeforeLoggingError)
 			httpLog.Warn(requestLatencyError, reqData...)
 			sentry.CaptureException(errors.New(requestLatencyError))
+
 			return
 		}
 
 		// Log 4xx responses as warnings
-		if status > 399 { // Check for < 500 not needed because of the > 499 check and return above
+		// Check for < 500 not needed because of the > 499 check and return above
+		if status > 399 { // nolint:gomnd // use for http code limits are ok
 			httpLog.Warn(msg, reqData...)
 			sentry.AddBreadcrumb(&sentry.Breadcrumb{
 				Category: "response_sent",
 				Message:  msg,
 				Level:    sentry.LevelWarning,
 			})
+
 			return
 		}
 

@@ -7,7 +7,7 @@ import (
 	"git.bytecode.nl/bytecode/genesis/internal/entities"
 )
 
-// CreateUser returns a 200 status code if everything is fine
+// CreateUser returns a 200 status code if everything is fine.
 func (h Handlers) CreateUser(c *gin.Context) {
 	var reqBody entities.NewUserRequest
 	if failed := h.extractBody(c, &reqBody); failed {
@@ -19,5 +19,6 @@ func (h Handlers) CreateUser(c *gin.Context) {
 		h.handleDomainError(c, err)
 		return
 	}
+
 	h.sendCreated(c, res)
 }

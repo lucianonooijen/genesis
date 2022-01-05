@@ -1,6 +1,6 @@
 package responses
 
-// ErrorBody is the JSON body that will be returned for non-2XX responses
+// ErrorBody is the JSON body that will be returned for non-2XX responses.
 type ErrorBody struct {
 	// Title is the human-readable error
 	Title string `json:"title,omitempty"`

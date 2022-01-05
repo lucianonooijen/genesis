@@ -7,7 +7,6 @@ import (
 	"git.bytecode.nl/bytecode/genesis/internal/server/handlers"
 )
 
-// Registers routes to the Gin RouterGroup, in an ExpressJS-like fashion
 func registerRoutes(r *gin.RouterGroup, h handlers.Handlers) {
 	// TODO: Use Embed.FS for this
 	// https://github.com/gin-contrib/static/issues/19

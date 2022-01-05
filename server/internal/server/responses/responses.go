@@ -8,10 +8,10 @@ import (
 	"git.bytecode.nl/bytecode/genesis/internal/constants"
 )
 
-// Responses contains methods for returning data in the correct format
+// Responses contains methods for returning data in the correct format.
 type Responses struct{}
 
-// New returns a Responses instance
+// New returns a Responses instance.
 func New() Responses {
 	return Responses{}
 }
@@ -20,13 +20,13 @@ func setResponseHeaders(c *gin.Context) {
 	c.Header("X-API-Version", constants.APIVersion)
 }
 
-// Success sends 2XX responses
+// Success sends 2XX responses.
 func (r Responses) Success(c *gin.Context, code SuccessCode, data interface{}) {
 	setResponseHeaders(c)
 	c.JSON(int(code), data)
 }
 
-// ClientError returns a client error
+// ClientError returns a client error.
 func (r Responses) ClientError(c *gin.Context, code ClientErrorCode, errTitle, errDetail string, err error) {
 	setResponseHeaders(c)
 	c.JSON(int(code), ErrorBody{
@@ -37,7 +37,7 @@ func (r Responses) ClientError(c *gin.Context, code ClientErrorCode, errTitle, e
 	})
 }
 
-// ServerError sends 500 responses
+// ServerError sends 500 responses.
 func (r Responses) ServerError(c *gin.Context, err error) {
 	setResponseHeaders(c)
 	c.JSON(http.StatusInternalServerError, ErrorBody{
@@ -48,7 +48,7 @@ func (r Responses) ServerError(c *gin.Context, err error) {
 	})
 }
 
-// NotImplemented sends a http.StatusNotImplemented response
+// NotImplemented sends a http.StatusNotImplemented response.
 func (r Responses) NotImplemented(c *gin.Context) {
 	setResponseHeaders(c)
 	c.JSON(http.StatusNotImplemented, ErrorBody{

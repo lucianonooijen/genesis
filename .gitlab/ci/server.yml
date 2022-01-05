@@ -1,19 +1,4 @@
 ##########################
-# CI CONFIG
-##########################
-image: alpine:3.9
-stages:
-  - test_lint
-  - build
-  - security
-
-variables:
-    DOCKER_AUTH_CONFIG: '{ "auths": { "https://index.docker.io/v1/": { "auth": "$DOCKER_AUTH" } }}'
-
-include:
-  - local: '.gitlab/ci/*.yml'
-
-##########################
 # BASE CONFIG
 ##########################
 .server_base: &server_base
@@ -21,6 +6,7 @@ include:
   before_script:
     - cd server
     - make bootstrap
+    - golangci-lint --version # Check if is installed
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
     - if: '$CI_COMMIT_BRANCH == "master"'
@@ -37,7 +23,13 @@ test_lint_server:
   <<: *server_base
   stage: test_lint
   script:
-    - make ci
+    - golangci-lint run --sort-results
+    - go vet ./...
+    - golint ./...
+    - goimports -e -d -local git.bytecode.nl/bytecode/genesis .
+    - echo "Running tests with coverage"
+    - go test -coverprofile=coverage.txt -covermode count -v 2>&1 ./... | go-junit-report -set-exit-code > junit.xml
+    - gocover-cobertura < coverage.txt > cobertura.xml
   artifacts:
     reports:
       junit: server/junit.xml

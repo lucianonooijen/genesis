@@ -9,7 +9,7 @@
 * [Golint](golang.org/x/lint/golint)*
 * [Golds](https://github.com/go101/golds)*
 
-_*: required in your $PATH (`go get`-ted by `make bootstrap`)_
+_*: required in your $PATH (`go installed`-ed by `make bootstrap`), together with additional packages that are used in the ci and `make ci`_
 
 ## Installation
 

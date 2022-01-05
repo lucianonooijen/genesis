@@ -5,8 +5,8 @@ import PaddedEmptyLayout from "layouts/PaddedEmptyLayout/PaddedEmptyLayout";
 import { ButtonPrimary } from "components/Buttons/ButtonRegular/ButtonRegular";
 import { SubTitle, Title } from "components/Typography/Typography";
 import TextInput from "components/Input/TextInput/TextInput";
-import { InputFieldType } from "../../../components/Input/TextInput/TextInput.types";
-import AppStateContext from "../../../data/AppState/AppState";
+import { InputFieldType } from "components/Input/TextInput/TextInput.types";
+import AppStateContext from "data/AppState/AppState";
 
 const Login: React.FC<StackNavigationProps> = ({ navigation }) => {
     const { setIsLoggedIn } = useContext(AppStateContext);

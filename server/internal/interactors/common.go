@@ -12,7 +12,7 @@ import (
 	"git.bytecode.nl/bytecode/genesis/internal/infrastructure/passhash"
 )
 
-// Services contains all the shared services in the application
+// Services contains all the shared services in the application.
 type Services struct {
 	// Config
 	Config config.Config `validate:"required"`
@@ -21,7 +21,7 @@ type Services struct {
 	BaseLogger *zap.Logger   `validate:"required"`
 	JWT        jwt.Util      `validate:"required"`
 	PassHash   passhash.Util `validate:"required"`
-	DbConn     *sql.DB       `validate:"required"`
+	DBConn     *sql.DB       `validate:"required"`
 
 	// Data
 	Mailer   mailer.Mailer     `validate:"required"`

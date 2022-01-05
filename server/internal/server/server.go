@@ -19,20 +19,13 @@ import (
 	"git.bytecode.nl/bytecode/genesis/internal/server/middleware"
 )
 
-// GinServer is the Server instance struct
+// GinServer is the Server instance struct.
 type GinServer struct {
 	port   int
 	Router *gin.Engine
 }
 
-// Requirements are the requirements for creating a new Server instance
-type Requirements struct {
-	Debug  bool
-	Logger *zap.Logger `validate:"required"`
-	Port   int         `validate:"required"`
-}
-
-// Start the server instance
+// Start the server instance.
 func (s GinServer) Start() error {
 	return s.Router.Run(":" + strconv.Itoa(s.port))
 }
@@ -52,7 +45,7 @@ func New(services *interactors.Services) (GinServer, error) {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
-	gin.DefaultWriter = ioutil.Discard // Hacky way to don't get the "you are using Gin debug" error
+	gin.DefaultWriter = ioutil.Discard // Not so clean way to don't get the "you are using Gin debug" error // FIXME: Still get it
 	server := GinServer{
 		Router: gin.New(),
 		port:   port,
@@ -74,14 +67,14 @@ func New(services *interactors.Services) (GinServer, error) {
 	return server, nil
 }
 
-// Registers middleware
 func registerMiddleware(logger *zap.Logger, router *gin.Engine, devMode bool) {
 	if !devMode { // Run Sqreen in production
 		router.Use(sqgin.Middleware())
 	}
+
 	router.Use(gin.Recovery())
 	router.Use(middleware.GinLogger(logger))
-	// router.Use(middleware.ActivityTableLog(r.SaveActivity))
+
 	config := cors.DefaultConfig()
 	config.AllowAllOrigins = true
 	config.AllowHeaders = []string{ // TODO: Remove unused
@@ -90,14 +83,22 @@ func registerMiddleware(logger *zap.Logger, router *gin.Engine, devMode bool) {
 		"Content-Length",
 		"Accept-Encoding",
 		"X-CSRF-Token",
-		"accept", "origin",
+		"accept",
+		"origin",
 		"Cache-Control",
 		"Authorization"}
+
 	router.Use(cors.New(config))
-	router.SetTrustedProxies([]string{}) // TODO: Set this
-	// router.Use(middleware.EnsureKeysMap())
-	// router.Use(middleware.JwtAuth(r.User.CheckUserJwt))
+
+	if err := router.SetTrustedProxies([]string{}); err != nil { // TODO: Set this
+		logger.Fatal("could not set trusted proxies in Gin", zap.Error(err))
+	}
 }
+
+// TODO: Add to registerMiddleware end
+// nolint:gocritic
+// router.Use(middleware.EnsureKeysMap())
+// router.Use(middleware.JwtAuth(r.User.CheckUserJwt))
 
 func setGinRouteLogger(logger *zap.Logger) {
 	gin.DebugPrintRouteFunc = func(httpMethod, absolutePath, handlerName string, nuHandlers int) {
