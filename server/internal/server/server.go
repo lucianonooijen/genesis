@@ -2,7 +2,7 @@ package server
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 	"strconv"
 	"strings"
@@ -45,7 +45,7 @@ func New(services *interactors.Services) (GinServer, error) {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
-	gin.DefaultWriter = ioutil.Discard // Not so clean way to don't get the "you are using Gin debug" error // FIXME: Still get it
+	gin.DefaultWriter = io.Discard // Not so clean way to don't get the "you are using Gin debug" error // FIXME: Still get it
 	server := GinServer{
 		Router: gin.New(),
 		port:   port,
