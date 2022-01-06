@@ -19,4 +19,8 @@ func registerRoutes(r *gin.RouterGroup, h handlers.Handlers) {
 	// USER LOGIN AND REGISTER
 	r.POST("/user/register", h.CreateUser)
 	r.POST("/user/login", h.LoginUser)
+
+	// USER PASSWORD RESET
+	r.POST("/user/password-reset/start", h.PasswordResetStart)
+	r.POST("/user/password-reset/complete", h.PasswordResetComplete)
 }

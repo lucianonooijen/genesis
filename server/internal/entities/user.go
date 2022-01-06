@@ -1,5 +1,7 @@
 package entities
 
+import "github.com/google/uuid"
+
 // NewUserRequest contains the data for creating a new user.
 type NewUserRequest struct {
 	Email     string `json:"email" validate:"required,email"`
@@ -16,4 +18,15 @@ type JwtResponse struct {
 type LoginRequest struct {
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required"`
+}
+
+// PasswordResetStartRequest contains the required data to reset the password for a user account.
+type PasswordResetStartRequest struct {
+	Email string `json:"email" validate:"required,email"`
+}
+
+// PasswordResetCompleteRequest contains the data to complete the password reset for a user account.
+type PasswordResetCompleteRequest struct {
+	ResetToken uuid.UUID `json:"resetToken" validate:"required"`
+	Password   string    `json:"password" validate:"required"`
 }

@@ -64,11 +64,11 @@ func (q *Queries) GetPasswordResetByUserId(ctx context.Context, userID int32) (P
 const markResetTokenUsed = `-- name: MarkResetTokenUsed :exec
 UPDATE password_forgot
 SET is_used = true
-WHERE user_id = $1
+WHERE reset_token = $1
 `
 
 // Marks a password_forgot entry used based on user_id
-func (q *Queries) MarkResetTokenUsed(ctx context.Context, userID int32) error {
-	_, err := q.db.ExecContext(ctx, markResetTokenUsed, userID)
+func (q *Queries) MarkResetTokenUsed(ctx context.Context, resetToken uuid.UUID) error {
+	_, err := q.db.ExecContext(ctx, markResetTokenUsed, resetToken)
 	return err
 }
