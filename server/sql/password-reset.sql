@@ -22,4 +22,4 @@ WHERE reset_token = $1;
 -- Marks a password_forgot entry used based on user_id
 UPDATE password_forgot
 SET is_used = true
-WHERE user_id = $1;
+WHERE reset_token = $1;

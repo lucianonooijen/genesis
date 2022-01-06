@@ -12,8 +12,10 @@ import (
 
 // CreateUser creates a user in the database, sends an email and returns a JWT.
 func CreateUser(s *interactors.Services, newUser entities.NewUserRequest) (*entities.JwtResponse, error) {
-	log := s.BaseLogger.Named("domains/user/CreateUser")
+	log := s.BaseLogger.Named("domains/user/CreateUser").With(zap.String("email", newUser.Email))
 	ctx := context.TODO()
+
+	log.Info("starting user creation")
 
 	// Hash password
 	log.Debug("hashing password")
@@ -55,29 +57,35 @@ func CreateUser(s *interactors.Services, newUser entities.NewUserRequest) (*enti
 	// Generate JWT
 	log.Debug("generating JWT")
 
-	jwt, err := s.JWT.CreateJWT(string(user.ID))
+	jwt, err := jwtForUser(s, &user)
 	if err != nil {
 		return nil, err
 	}
 
 	// Return
-	log.Debug("create user done")
+	log.Info("create user done")
 
 	return &entities.JwtResponse{JWT: jwt}, nil
 }
 
 // Login takes a login request and sends generated a JWT if the password matches the password hash in the database.
 func Login(s *interactors.Services, loginData entities.LoginRequest) (*entities.JwtResponse, error) {
-	log := s.BaseLogger.Named("domains/user/LoginUser")
+	log := s.BaseLogger.Named("domains/user/Login").With(zap.String("email", loginData.Email))
 	ctx := context.TODO()
 
+	log.Info("starting login procedure")
+
 	// Fetch user from DB
+	log.Debug("fetching user")
+
 	user, err := s.Database.GetUserByEmail(ctx, loginData.Email)
 	if err != nil {
 		return nil, err
 	}
 
 	// Check password hash
+	log.Debug("checking password hash")
+
 	err = s.PassHash.ComparePassToHash(loginData.Password, user.PasswordHash)
 	if err != nil {
 		return nil, err
@@ -86,13 +94,13 @@ func Login(s *interactors.Services, loginData entities.LoginRequest) (*entities.
 	// Generate JWT
 	log.Debug("generating JWT")
 
-	jwt, err := s.JWT.CreateJWT(string(user.ID))
+	jwt, err := jwtForUser(s, &user)
 	if err != nil {
 		return nil, err
 	}
 
 	// Return data
-	log.Debug("create user done")
+	log.Info("create user done")
 
 	return &entities.JwtResponse{JWT: jwt}, nil
 }

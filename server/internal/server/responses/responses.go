@@ -29,12 +29,18 @@ func (r Responses) Success(c *gin.Context, code SuccessCode, data interface{}) {
 // ClientError returns a client error.
 func (r Responses) ClientError(c *gin.Context, code ClientErrorCode, errTitle, errDetail string, err error) {
 	setResponseHeaders(c)
-	c.JSON(int(code), ErrorBody{
-		Title:    errTitle,
-		Detail:   errDetail,
-		RawError: err.Error(),
-		Status:   int(code),
-	})
+
+	errorBody := ErrorBody{
+		Title:  errTitle,
+		Detail: errDetail,
+		Status: int(code),
+	}
+
+	if err != nil {
+		errorBody.RawError = err.Error()
+	}
+
+	c.JSON(int(code), errorBody)
 }
 
 // ServerError sends 500 responses.

@@ -36,8 +36,7 @@ func createValidationError(err error) error {
 func (h Handlers) extractBody(c *gin.Context, data interface{}) (failed bool) {
 	// Bind the request body
 	if err := binding.JSON.Bind(c.Request, data); err != nil {
-		r.ClientError(c, s.BadRequest, "Invalid post body", err.Error(), nil)
-		h.sendInvalidPostBody(c, err)
+		r.ClientError(c, s.BadRequest, "Invalid post body, cannot extract payload", err.Error(), nil)
 		c.Abort()
 
 		return true
@@ -47,7 +46,7 @@ func (h Handlers) extractBody(c *gin.Context, data interface{}) (failed bool) {
 	validate := validator.New()
 	if err := validate.Struct(data); err != nil {
 		// When error is found, create user friendly error with the incorrect fields and send 400 response
-		h.sendInvalidPostBody(c, createValidationError(err))
+		r.ClientError(c, s.BadRequest, "Post body validation failed", createValidationError(err).Error(), err)
 		c.Abort()
 
 		return true

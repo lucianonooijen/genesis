@@ -10,6 +10,7 @@ import (
 	"github.com/lib/pq"
 	"golang.org/x/crypto/bcrypt"
 
+	"git.bytecode.nl/bytecode/genesis/internal/domains/user"
 	"git.bytecode.nl/bytecode/genesis/internal/server/responses"
 )
 
@@ -34,7 +35,19 @@ func (h Handlers) handleDomainError(c *gin.Context, err error) {
 
 	// Bcrypt errors
 	if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) {
-		r.ClientError(c, responses.StatusCodes.UnauthorizedRequest, "Password and password hash mismatch", "incorrect password: hashed password is not the hash of the given password\"", err)
+		r.ClientError(c, responses.StatusCodes.UnauthorizedRequest, "Password and password hash mismatch", "incorrect password: hashed password is not the hash of the given password", err)
+		return
+	}
+
+	// Reset token: is used
+	if errors.Is(err, user.ErrPasswordResetIsUsed) {
+		r.ClientError(c, responses.StatusCodes.ForbiddenRequest, "Password reset code has already been used", "Password reset codes can only be used once, the given code has already been used. You can request a new code.", err)
+		return
+	}
+
+	// Reset token: is expired
+	if errors.Is(err, user.ErrPasswordResetExpired) {
+		r.ClientError(c, responses.StatusCodes.ForbiddenRequest, "Password reset code has expired", "Password reset codes are only valid for a short amount of time, the given code has expired. You can request a new code.", err)
 		return
 	}
 
