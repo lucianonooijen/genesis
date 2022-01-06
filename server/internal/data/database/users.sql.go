@@ -69,10 +69,17 @@ func (q *Queries) GetUserByID(ctx context.Context, id int32) (User, error) {
 const updateUserPassword = `-- name: UpdateUserPassword :exec
 UPDATE users
 SET password_hash = $1, password_uuid = uuid_generate_v4()
-WHERE id = $1
+WHERE id = $2
 `
 
-func (q *Queries) UpdateUserPassword(ctx context.Context, passwordHash string) error {
-	_, err := q.db.ExecContext(ctx, updateUserPassword, passwordHash)
+type UpdateUserPasswordParams struct {
+	PasswordHash string `json:"passwordHash"`
+	ID           int32  `json:"id"`
+}
+
+// Update password_hash for user based on id.
+// Also resets the password_uuid to invalidate existing JWTs
+func (q *Queries) UpdateUserPassword(ctx context.Context, arg UpdateUserPasswordParams) error {
+	_, err := q.db.ExecContext(ctx, updateUserPassword, arg.PasswordHash, arg.ID)
 	return err
 }

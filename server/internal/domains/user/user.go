@@ -11,7 +11,7 @@ import (
 )
 
 // CreateUser creates a user in the database, sends an email and returns a JWT.
-func CreateUser(s *interactors.Services, newUser entities.NewUserRequest) (*entities.NewUserResponse, error) {
+func CreateUser(s *interactors.Services, newUser entities.NewUserRequest) (*entities.JwtResponse, error) {
 	log := s.BaseLogger.Named("domains/user/CreateUser")
 	ctx := context.TODO()
 
@@ -63,5 +63,36 @@ func CreateUser(s *interactors.Services, newUser entities.NewUserRequest) (*enti
 	// Return
 	log.Debug("create user done")
 
-	return &entities.NewUserResponse{JWT: jwt}, nil
+	return &entities.JwtResponse{JWT: jwt}, nil
+}
+
+// Login takes a login request and sends generated a JWT if the password matches the password hash in the database.
+func Login(s *interactors.Services, loginData entities.LoginRequest) (*entities.JwtResponse, error) {
+	log := s.BaseLogger.Named("domains/user/LoginUser")
+	ctx := context.TODO()
+
+	// Fetch user from DB
+	user, err := s.Database.GetUserByEmail(ctx, loginData.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	// Check password hash
+	err = s.PassHash.ComparePassToHash(loginData.Password, user.PasswordHash)
+	if err != nil {
+		return nil, err
+	}
+
+	// Generate JWT
+	log.Debug("generating JWT")
+
+	jwt, err := s.JWT.CreateJWT(string(user.ID))
+	if err != nil {
+		return nil, err
+	}
+
+	// Return data
+	log.Debug("create user done")
+
+	return &entities.JwtResponse{JWT: jwt}, nil
 }

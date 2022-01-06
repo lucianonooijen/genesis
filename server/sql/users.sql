@@ -14,6 +14,8 @@ SELECT * FROM users
 WHERE email = $1;
 
 -- name: UpdateUserPassword :exec
+-- Update password_hash for user based on id.
+-- Also resets the password_uuid to invalidate existing JWTs
 UPDATE users
 SET password_hash = $1, password_uuid = uuid_generate_v4()
-WHERE id = $1;
+WHERE id = $2;
