@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 	"time"
@@ -108,7 +108,7 @@ func (m *Mailer) sendEmail(toMail, toName, subject, htmlContents string) error {
 		}
 	}()
 
-	body, _ := ioutil.ReadAll(res.Body)
+	body, _ := io.ReadAll(res.Body)
 	m.logger.Debug("received email request response", zap.ByteString("response", body))
 
 	if res.StatusCode < 200 || res.StatusCode > 299 {
