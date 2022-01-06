@@ -2,8 +2,12 @@ package handlers
 
 import "github.com/gin-gonic/gin"
 
-// Status returns a 200 status code if everything is fine
+// Status returns a 200 status code if everything is fine, first pings database to see if there is connection.
 func (h Handlers) Status(c *gin.Context) {
-	// TODO: Check DB connection before sending 200
+	pingErr := h.services.DBConn.Ping()
+	if pingErr != nil {
+		h.sendServerError(c, pingErr)
+	}
+
 	h.sendSuccess(c, nil)
 }

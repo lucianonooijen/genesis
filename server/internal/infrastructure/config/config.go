@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Config is the application configuration
+// Config is the application configuration.
 type Config struct {
 	// Application configuration
 	IsDevMode      bool   `mapstructure:"development"` // Not marked required as it would fail when `false` is given as value TODO: Add to docs
@@ -15,7 +15,7 @@ type Config struct {
 	ServerPort     int    `mapstructure:"api_port" validate:"required"`
 	JWTSecret      string `mapstructure:"jwt_secret" validate:"required"`
 
-	// Database configuration
+	// DBConn configuration
 	DatabaseHost string `mapstructure:"db_host" validate:"required"`
 	DatabasePort int    `mapstructure:"db_port" validate:"required"`
 	DatabaseName string `mapstructure:"db_name" validate:"required"`
@@ -58,15 +58,18 @@ func LoadConfig() (Config, error) {
 	// Validate config
 	validate := validator.New()
 	err := validate.Struct(config)
+
 	return config, err
 }
 
-// DatabaseConnectionString returns database connection string for connection to PostgreSQL
-func (c Config) DatabaseConnectionString() string {
+// DatabaseConnectionString returns database connection string for connection to PostgreSQL.
+func (c *Config) DatabaseConnectionString() string {
 	connStr := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s",
 		c.DatabaseHost, c.DatabasePort, c.DatabaseUser, c.DatabasePass, c.DatabaseName)
+
 	if !c.DatabaseSSL {
 		connStr += " sslmode=disable"
 	}
+
 	return connStr
 }

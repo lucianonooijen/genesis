@@ -11,3 +11,7 @@ tmp/
 /platform-backend
 /server
 
+# Coverage and testing output
+cobertura.xml
+coverage.txt
+junit.xml

@@ -15,7 +15,7 @@ const tutorialData: TutorialPropPageData[] = [
         text: "The Industrial Revolution and its consequences have been a disaster for the human race.",
     },
     {
-        id: "tutorial_1",
+        id: "tutorial_3",
         image: imageThree,
         title: "Example page three",
         text: "The Industrial Revolution and its consequences have been a disaster for the human race.",

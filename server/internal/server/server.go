@@ -2,106 +2,108 @@ package server
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 	"strconv"
 	"strings"
 
-	"git.bytecode.nl/bytecode/genesis/internal/constants"
+	"go.uber.org/zap"
 
-	"git.bytecode.nl/bytecode/genesis/internal/utils/logger"
-
-	"git.bytecode.nl/bytecode/genesis/internal/server/handlers"
-	"git.bytecode.nl/bytecode/genesis/internal/server/middleware"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
 	"github.com/sqreen/go-agent/sdk/middleware/sqgin"
+
+	"git.bytecode.nl/bytecode/genesis/internal/constants"
+	"git.bytecode.nl/bytecode/genesis/internal/interactors"
+	"git.bytecode.nl/bytecode/genesis/internal/server/handlers"
+	"git.bytecode.nl/bytecode/genesis/internal/server/middleware"
 )
 
-var log = logger.New("server_init")
-
-// GinServer is the Server instance struct
+// GinServer is the Server instance struct.
 type GinServer struct {
 	port   int
 	Router *gin.Engine
 }
 
-// Requirements are the requirements for creating a new Server instance
-type Requirements struct {
-	Debug bool
-	Port  int `validate:"required"`
-}
-
-// Start the server instance
+// Start the server instance.
 func (s GinServer) Start() error {
 	return s.Router.Run(":" + strconv.Itoa(s.port))
 }
 
 // New creates a new Server instance with middleware and handlers added.
 // Use Server.Start() to run the server.
-func New(r Requirements) (GinServer, error) {
-	validate := validator.New()
-	err := validate.Struct(r)
-	if err != nil {
-		return GinServer{}, err
-	}
+func New(services *interactors.Services) (GinServer, error) {
+	debug := services.Config.IsDevMode
+	port := services.Config.ServerPort
+	logger := services.BaseLogger.Named("gin_init")
 
-	if r.Debug {
-		log.Debug("Detected debug mode for Gin")
+	if debug {
+		logger.Debug("Detected debug mode for Gin")
 		gin.SetMode(gin.DebugMode)
 	} else {
-		log.Debug("Detected production mode for Gin")
+		logger.Debug("Detected production mode for Gin")
 		gin.SetMode(gin.ReleaseMode)
 	}
 
-	gin.DefaultWriter = ioutil.Discard // Hacky way to don't get the "you are using Gin debug" error
+	gin.DefaultWriter = io.Discard // Not so clean way to don't get the "you are using Gin debug" error // FIXME: Still get it
 	server := GinServer{
 		Router: gin.New(),
-		port:   r.Port,
+		port:   port,
 	}
 	gin.DefaultWriter = os.Stdout // Reset to the default writer
 
-	registerMiddleware(server.Router, r.Debug)
+	registerMiddleware(services.BaseLogger, server.Router, debug)
 
-	initializedHandlers, err := handlers.New()
+	initializedHandlers, err := handlers.New(services)
 	if err != nil {
 		return server, err
 	}
 
-	setGinRouteLogger() // Print the Gin routes using our own logger
-	log.Debug("Registering routes")
+	setGinRouteLogger(logger) // Print the Gin routes using our own logger
+	logger.Debug("Registering routes")
 	registerRoutes(server.Router.Group(constants.BasePathAPI), initializedHandlers)
-	log.Debug("Routes registered")
+	logger.Debug("Routes registered")
+
 	return server, nil
 }
 
-// Registers middleware
-func registerMiddleware(router *gin.Engine, devMode bool) {
+func registerMiddleware(logger *zap.Logger, router *gin.Engine, devMode bool) {
 	if !devMode { // Run Sqreen in production
 		router.Use(sqgin.Middleware())
 	}
+
 	router.Use(gin.Recovery())
-	router.Use(middleware.GinLogger())
-	//router.Use(middleware.ActivityTableLog(r.SaveActivity))
+	router.Use(middleware.GinLogger(logger))
+
 	config := cors.DefaultConfig()
 	config.AllowAllOrigins = true
 	config.AllowHeaders = []string{ // TODO: Remove unused
 		"Access-Control-Allow-Headers",
-		"Content-Type", "Content-Length",
-		"Accept-Encoding", "X-CSRF-Token",
-		"accept", "origin",
+		"Content-Type",
+		"Content-Length",
+		"Accept-Encoding",
+		"X-CSRF-Token",
+		"accept",
+		"origin",
 		"Cache-Control",
 		"Authorization"}
+
 	router.Use(cors.New(config))
-	//router.Use(middleware.EnsureKeysMap())
-	//router.Use(middleware.JwtAuth(r.User.CheckUserJwt))
+
+	if err := router.SetTrustedProxies([]string{}); err != nil { // TODO: Set this
+		logger.Fatal("could not set trusted proxies in Gin", zap.Error(err))
+	}
 }
 
-func setGinRouteLogger() {
+// TODO: Add to registerMiddleware end
+// nolint:gocritic
+// router.Use(middleware.EnsureKeysMap())
+// router.Use(middleware.JwtAuth(r.User.CheckUserJwt))
+
+func setGinRouteLogger(logger *zap.Logger) {
 	gin.DebugPrintRouteFunc = func(httpMethod, absolutePath, handlerName string, nuHandlers int) {
 		handlerShort := strings.ReplaceAll(handlerName, "git.bytecode.nl/bytecode/genesis/internal/server/handlers.", "") // TODO: cleaner
 		handlerShort = strings.ReplaceAll(handlerShort, "github.com/gin-gonic/", "")                                      // TODO: cleaner
-		log.Debug(fmt.Sprintf("Route registered: %-6s %-25s --> %s (%d handlers)", httpMethod, absolutePath, handlerShort, nuHandlers))
+		logger.Debug(fmt.Sprintf("Route registered: %-6s %-25s --> %s (%d handlers)", httpMethod, absolutePath, handlerShort, nuHandlers))
 	}
 }

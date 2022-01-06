@@ -1,70 +1,83 @@
-help: # Shows all commands
-	@echo 'All Makefile commands'
-	@cat Makefile | grep -v '^\W' | grep -v '^\.' | grep -v -e '^$$'
+help: ## Shows all commands
+	@echo 'All Makefile commands:'
+	@grep -h -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 .PHONY: bootstrap
-bootstrap: # Installs Go packages and sets defaults
-	@echo "Installing Go packages with GO111MODULE=off..."
-	@GO111MODULE=off go get -u golang.org/x/tools/cmd/goimports
-	@GO111MODULE=off go get -u github.com/cosmtrek/air
-	@GO111MODULE=off go get -u go101.org/golds
-	@GO111MODULE=off go get -u golang.org/x/lint/golint
-	@echo "Packages installed. Copying files..."
+bootstrap: ## Installs Go packages and sets defaults
+	@echo "Installing Go packages using 'go install'"
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+	go install golang.org/x/tools/cmd/goimports@latest
+	go install github.com/cosmtrek/air@latest
+	go install go101.org/golds@latest
+	go install golang.org/x/lint/golint@latest
+	go install github.com/kyleconroy/sqlc/cmd/sqlc@latest
+	go install github.com/jstemmer/go-junit-report@latest
+	go install github.com/t-yuki/gocover-cobertura@latest
+
+
+.PHONY: bootstrap-files
+bootstrap-files: ## Copies all of the files
+	@echo "Copying files..."
 	cp .env.example .env
 	cp sqreen.yaml.example sqreen.yaml
 
 .PHONY: dev
-dev: # Runs the Gin HTTP server
+dev: ## Runs the Gin HTTP server
 	air
 
 .PHONY: build
-build: # Runs the Golang build for production, including the Sqreen intrumentation
+build: ## Runs the Golang build for production, including the Sqreen intrumentation TODO: Improve setup
 	./bin/build
 
+.PHONY: sql
+sql: ## Checks SQL for syntax and type errors, then generates Go code for ./SQL/ files
+	@sqlc compile
+	@sqlc generate
+	@sqlc compile
+
 .PHONY: test
-test: # Runs the unit tests
+test: ## Runs the unit tests
 	go test ./...
 
-.PHONY: lint
-lint: # Code style formatting and linting check for the project
-	goimports -w .
+.PHONY: fmt
+fmt: ## Code style formatting and linting check for the project
+	goimports -w -local git.bytecode.nl/bytecode/genesis .
 	go fmt ./...
 	go vet ./...
 	golint ./...
+	@echo "Checking linting:"
+	golangci-lint run --sort-results
 
 .PHONY: docs
-docs: # Runs documentation website
+docs: ## Runs documentation website
 	golds .
 
 .PHONY: ci
-ci: # Runs the CI tasks
-	@echo "Installing Go packages with GO111MODULE=off..." # TODO: don't do here
-	@GO111MODULE=off go get -u golang.org/x/tools/cmd/goimports
-	@GO111MODULE=off go get -u golang.org/x/lint/golint
+ci: ## Runs the CI tasks
 	@echo "Checking if golangci-lint is installed"
 	@golangci-lint --version
-	@echo "Running golangci-lint"
-	@golangci-lint run
-	@echo "Running go vet"
-	@go vet ./...
-	@echo "Running golint"
-	@golint ./...
-	@echo "Running goimports checks (displaying changes, does not fail CI)"
-	@goimports -e -d .
+	@echo "Running linting and static code analysis"
+	golangci-lint run --sort-results
+	go vet ./...
+	golint ./...
+	goimports -e -d -local git.bytecode.nl/bytecode/genesis .
+	@echo "Running tests with coverage"
+	go test -coverprofile=coverage.txt -covermode count -v 2>&1 ./... | go-junit-report -set-exit-code > junit.xml
+	gocover-cobertura < coverage.txt > cobertura.xml
 
 .PHONY: migrateup
-migrateup: # Runs the database migrations up
+migrateup: ## Runs the database migrations up
 	go run . migrate -d up --verbose
 
 .PHONY: migratedown
-migratedown: # Runs the database migrations down
+migratedown: ## Runs the database migrations down
 	go run . migrate -d down --verbose
 
-.PHONY: newmigration
-newmigration: # Asks for the new migration name and creates migration files
+.PHONY: migration
+migration: ## Asks for the new migration name and creates migration files
 	./bin/create_migration
 
 .PHONY: newdb
-newdb: # Migrates db down and up - WARNING: ALL DB DATA IS DELETED
+newdb: ## Migrates db down and up - WARNING: ALL DB DATA IS DELETED
 	make migratedown
 	make migrateup

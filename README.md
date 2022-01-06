@@ -26,6 +26,8 @@ _Bytecode Digital Agency's Project Scaffolding, with the name taken from the Anc
 * git@git.bytecode.nl:bytecode/genesis.git
 * https://bytecode.nl
 * https://placekitten.com/400/400
+* genesis_server
+* development@genesis.bytecode.dev
 
 ### FolderNames
 * app/android/app/src/debug/java/com/genesis
