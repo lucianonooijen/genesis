@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 
-export const ButtonContainer = styled.View<{disabled?: boolean}>`
+export const ButtonContainer = styled.View<{ disabled?: boolean }>`
     margin: 0;
     padding: 5px 10px;
     text-align: center;

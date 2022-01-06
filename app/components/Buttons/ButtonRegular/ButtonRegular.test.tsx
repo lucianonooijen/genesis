@@ -1,6 +1,6 @@
 import React from "react";
-import {fireEvent, render} from "@testing-library/react-native";
-import {ButtonPrimary} from "./ButtonRegular";
+import { fireEvent, render } from "@testing-library/react-native";
+import { ButtonPrimary } from "./ButtonRegular";
 
 describe("ButtonRegular", () => {
     it("should render and show the title", () => {
@@ -13,25 +13,27 @@ describe("ButtonRegular", () => {
 
     it("should call onPress when pressed and the button is enabled", () => {
         const onPress = jest.fn();
+        const title = "ExampleTitle";
         const r = render(
             <ButtonPrimary title="ExampleTitle" onPress={onPress} />,
         );
-        const touchableOpacity = r.getByTestId("button-touchableopacity");
+        const touchableOpacity = r.getByA11yLabel(title);
         expect(touchableOpacity).toBeTruthy();
-        expect(onPress.mock.calls.length).toBe(0);
+        expect(onPress).toBeCalledTimes(0);
         fireEvent.press(touchableOpacity);
-        expect(onPress.mock.calls.length).toBe(1);
+        expect(onPress).toBeCalledTimes(1);
     });
 
     it("should not call onPress when pressed and the button is disabled", () => {
         const onPress = jest.fn();
+        const title = "ExampleTitle";
         const r = render(
             <ButtonPrimary title="ExampleTitle" onPress={onPress} disabled />,
         );
-        const touchableOpacity = r.getByTestId("button-touchableopacity");
+        const touchableOpacity = r.getByA11yLabel(title);
         expect(touchableOpacity).toBeTruthy();
-        expect(onPress.mock.calls.length).toBe(0);
+        expect(onPress).toBeCalledTimes(0);
         fireEvent.press(touchableOpacity);
-        expect(onPress.mock.calls.length).toBe(0);
+        expect(onPress).toBeCalledTimes(0);
     });
 });
