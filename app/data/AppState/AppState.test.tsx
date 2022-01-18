@@ -45,11 +45,13 @@ describe("AppStateContextProviderTest", () => {
         const appState: AppState = {
             isLoading: false,
             hasSeenTutorial: true,
-            isLoggedIn: true,
+            jwt: "tester",
 
             setIsLoading: jest.fn(),
             setHasSeenTutorial: jest.fn(),
-            setIsLoggedIn: jest.fn(),
+            setJwt: jest.fn(),
+
+            reset: jest.fn(),
         };
 
         const Child = () => {

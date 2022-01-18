@@ -1,22 +1,33 @@
 import React, { useContext, useState } from "react";
-import { StackNavigationProps } from "types/Navigation";
+import { passwordResetComplete } from "@genesis/api";
 import PaddedEmptyLayout from "layouts/PaddedEmptyLayout/PaddedEmptyLayout";
 import { ButtonPrimary } from "components/Buttons/ButtonRegular/ButtonRegular";
 import { SubTitle, Title } from "components/Typography/Typography";
-import TextInput from "../../../components/Input/TextInput/TextInput";
-import { InputFieldType } from "../../../components/Input/TextInput/TextInput.types";
-import AppStateContext from "../../../data/AppState/AppState";
+import TextInput from "components/Input/TextInput/TextInput";
+import { InputFieldType } from "components/Input/TextInput/TextInput.types";
+import AppStateContext from "data/AppState/AppState";
+import { getApiConfig } from "data/api/api";
+import { PasswordForgotCompleteProps } from "./PasswordForgotComplete.types";
 
-const PasswordForgotComplete: React.FC<StackNavigationProps> = () => {
-    const { setIsLoggedIn } = useContext(AppStateContext);
+const PasswordForgotComplete: React.FC<PasswordForgotCompleteProps> = ({
+    apiCall = passwordResetComplete,
+}) => {
+    const appState = useContext(AppStateContext);
     const [resetCode, setResetCode] = useState("");
     const [password, setPassword] = useState("");
     const canSubmit = resetCode && password;
-    const submit = () => {
-        console.log("password reset complete:");
-        console.log(`resetCode: ${resetCode}`);
-        console.log(`password: ${password}`);
-        setIsLoggedIn(true);
+
+    const submit = async () => {
+        const config = getApiConfig(appState);
+        try {
+            const res = await apiCall(config, {
+                resetToken: resetCode,
+                password,
+            });
+            appState.setJwt(res.jwt);
+        } catch (e) {
+            console.warn(e); // eslint-disable-line no-console
+        }
     };
 
     return (
@@ -28,7 +39,7 @@ const PasswordForgotComplete: React.FC<StackNavigationProps> = () => {
             </SubTitle>
             <TextInput label="Reset code" onChange={setResetCode} />
             <TextInput
-                type={InputFieldType.Email}
+                type={InputFieldType.Password}
                 label="Password"
                 onChange={setPassword}
             />
