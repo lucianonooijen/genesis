@@ -21,7 +21,10 @@ describe("PasswordForgotComplete", () => {
 
         const r = render(
             <AppStateContextProviderTest appState={appState}>
-                <PasswordForgotComplete navigation={nav} apiCall={apiCall} />
+                <PasswordForgotComplete
+                    navigation={nav}
+                    passwordResetCompleteApiCall={apiCall}
+                />
             </AppStateContextProviderTest>,
         );
 

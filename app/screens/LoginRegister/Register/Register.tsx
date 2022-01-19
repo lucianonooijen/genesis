@@ -12,7 +12,7 @@ import { RegisterProps } from "./Register.types";
 
 const Register: React.FC<RegisterProps> = ({
     navigation,
-    apiCall = register,
+    registerApiCall = register,
 }) => {
     const appState = useContext(AppStateContext);
     const [name, setName] = useState("");
@@ -23,7 +23,7 @@ const Register: React.FC<RegisterProps> = ({
     const submit = async () => {
         const config = getApiConfig(appState);
         try {
-            const res = await apiCall(config, {
+            const res = await registerApiCall(config, {
                 email,
                 password,
                 firstName: name,

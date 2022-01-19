@@ -10,7 +10,7 @@ import { getApiConfig } from "data/api/api";
 import { PasswordForgotCompleteProps } from "./PasswordForgotComplete.types";
 
 const PasswordForgotComplete: React.FC<PasswordForgotCompleteProps> = ({
-    apiCall = passwordResetComplete,
+    passwordResetCompleteApiCall = passwordResetComplete,
 }) => {
     const appState = useContext(AppStateContext);
     const [resetCode, setResetCode] = useState("");
@@ -20,7 +20,7 @@ const PasswordForgotComplete: React.FC<PasswordForgotCompleteProps> = ({
     const submit = async () => {
         const config = getApiConfig(appState);
         try {
-            const res = await apiCall(config, {
+            const res = await passwordResetCompleteApiCall(config, {
                 resetToken: resetCode,
                 password,
             });

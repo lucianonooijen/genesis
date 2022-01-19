@@ -11,7 +11,10 @@ describe("PasswordForgotStart", () => {
     it("should only password reset start after filling in account details", async () => {
         const nav = useMockNavigation();
         const r = render(
-            <PasswordForgotStart navigation={nav} apiCall={jest.fn()} />,
+            <PasswordForgotStart
+                navigation={nav}
+                passwordResetStartApiCall={jest.fn()}
+            />,
         );
 
         // Expect button to be disabled and not call navigate

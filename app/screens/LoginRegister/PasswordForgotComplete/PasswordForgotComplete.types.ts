@@ -4,5 +4,8 @@ import { PasswordResetCompleteRequest } from "@genesis/api/types/PasswordReset";
 import { JwtResponse } from "@genesis/api/types/Jwt";
 
 export interface PasswordForgotCompleteProps extends StackNavigationProps {
-    apiCall?: PostApiCall<PasswordResetCompleteRequest, JwtResponse>;
+    passwordResetCompleteApiCall?: PostApiCall<
+        PasswordResetCompleteRequest,
+        JwtResponse
+    >;
 }

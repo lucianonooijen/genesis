@@ -10,7 +10,7 @@ import AppStateContext from "data/AppState/AppState";
 import { getApiConfig } from "data/api/api";
 import { LoginProps } from "./Login.types";
 
-const Login: React.FC<LoginProps> = ({ navigation, apiCall = login }) => {
+const Login: React.FC<LoginProps> = ({ navigation, loginApiCall = login }) => {
     const appState = useContext(AppStateContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -19,7 +19,7 @@ const Login: React.FC<LoginProps> = ({ navigation, apiCall = login }) => {
     const submit = async () => {
         const config = getApiConfig(appState);
         try {
-            const res = await apiCall(config, { email, password });
+            const res = await loginApiCall(config, { email, password });
             appState.setJwt(res.jwt);
         } catch (e) {
             console.warn(e); // eslint-disable-line no-console

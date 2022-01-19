@@ -24,7 +24,7 @@ describe("Login", () => {
 
         const r = render(
             <AppStateContextProviderTest appState={appState}>
-                <Login navigation={nav} apiCall={apiCall} />
+                <Login navigation={nav} loginApiCall={apiCall} />
             </AppStateContextProviderTest>,
         );
 

@@ -4,5 +4,5 @@ import { RegisterRequest } from "@genesis/api/types/Register";
 import { JwtResponse } from "@genesis/api/types/Jwt";
 
 export interface RegisterProps extends StackNavigationProps {
-    apiCall?: PostApiCall<RegisterRequest, JwtResponse>;
+    registerApiCall?: PostApiCall<RegisterRequest, JwtResponse>;
 }

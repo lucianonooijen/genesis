@@ -21,7 +21,7 @@ describe("Register", () => {
 
         const r = render(
             <AppStateContextProviderTest appState={appState}>
-                <Register navigation={nav} apiCall={apiCall} />
+                <Register navigation={nav} registerApiCall={apiCall} />
             </AppStateContextProviderTest>,
         );
 

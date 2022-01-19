@@ -4,5 +4,5 @@ import { LoginRequest } from "@genesis/api/types/Login";
 import { JwtResponse } from "@genesis/api/types/Jwt";
 
 export interface LoginProps extends StackNavigationProps {
-    apiCall?: PostApiCall<LoginRequest, JwtResponse>;
+    loginApiCall?: PostApiCall<LoginRequest, JwtResponse>;
 }

@@ -12,7 +12,7 @@ import { PasswordForgotStartProps } from "./PasswordForgotStart.types";
 
 const PasswordForgotStart: React.FC<PasswordForgotStartProps> = ({
     navigation,
-    apiCall = passwordResetStart,
+    passwordResetStartApiCall = passwordResetStart,
 }) => {
     const appState = useContext(AppStateContext);
     const [email, setEmail] = useState("");
@@ -20,7 +20,7 @@ const PasswordForgotStart: React.FC<PasswordForgotStartProps> = ({
     const submit = async () => {
         const config = getApiConfig(appState);
         try {
-            await apiCall(config, { email });
+            await passwordResetStartApiCall(config, { email });
             navigation.navigate(LoginRegisterScreens.PasswordForgotComplete);
         } catch (e) {
             console.warn(e); // eslint-disable-line no-console
