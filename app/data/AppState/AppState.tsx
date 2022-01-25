@@ -3,21 +3,25 @@ import React, { useEffect, useState } from "react";
 export interface AppState {
     isLoading: boolean;
     hasSeenTutorial: boolean;
-    isLoggedIn: boolean;
+    jwt: string | undefined;
 
     setIsLoading: (loading: boolean) => void;
     setHasSeenTutorial: (hasSeenTutorial: boolean) => void;
-    setIsLoggedIn: (isLoggedIn: boolean) => void;
+    setJwt: (isLoggedIn: string | undefined) => void;
+
+    reset: () => void;
 }
 
 const initialAppState: AppState = {
     isLoading: true,
     hasSeenTutorial: false,
-    isLoggedIn: false,
+    jwt: undefined,
 
     setIsLoading: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
     setHasSeenTutorial: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
-    setIsLoggedIn: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+    setJwt: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+
+    reset: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
 };
 
 const AppStateContext = React.createContext<AppState>(initialAppState);
@@ -39,10 +43,18 @@ const AppStateContextProvider: React.FC = ({ children }) => {
         }));
     };
 
-    const setIsLoggedIn = (isLoggedIn: boolean) => {
+    const setJwt = (jwt: string | undefined) => {
         setAppState(currentState => ({
             ...currentState,
-            isLoggedIn,
+            jwt,
+        }));
+    };
+
+    const reset = () => {
+        setAppState(currentState => ({
+            ...currentState,
+            jwt: initialAppState.jwt,
+            hasSeenTutorial: initialAppState.hasSeenTutorial,
         }));
     };
 
@@ -59,7 +71,8 @@ const AppStateContextProvider: React.FC = ({ children }) => {
             ...currentState,
             setIsLoading,
             setHasSeenTutorial,
-            setIsLoggedIn,
+            setJwt,
+            reset,
         }));
     }, []);
 

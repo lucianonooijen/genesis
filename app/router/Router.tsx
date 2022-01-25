@@ -32,7 +32,7 @@ const Router: React.FC<RouterProps> = ({ appState }) => {
                 }}
             >
                 {tutorialStack(appState.hasSeenTutorial)}
-                {loginRegisterStack(appState.isLoggedIn)}
+                {loginRegisterStack(appState.jwt)}
                 <Stack.Screen name={MainScreens.Home} component={Home} />
             </Stack.Navigator>
         </NavigationContainer>
@@ -63,8 +63,8 @@ const tutorialStack = (hasSeenTutorial: boolean) => {
     );
 };
 
-const loginRegisterStack = (isLoggedIn: boolean) => {
-    if (isLoggedIn) {
+const loginRegisterStack = (jwt: string | undefined) => {
+    if (jwt) {
         return null;
     }
     return (
