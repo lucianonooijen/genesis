@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"git.bytecode.nl/bytecode/genesis/internal/constants"
+	"git.bytecode.nl/bytecode/genesis/server/internal/constants"
 )
 
 // Responses contains methods for returning data in the correct format.

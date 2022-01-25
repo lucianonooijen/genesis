@@ -7,14 +7,14 @@ import (
 
 	"github.com/go-playground/validator/v10"
 
-	"git.bytecode.nl/bytecode/genesis/internal/constants"
-	"git.bytecode.nl/bytecode/genesis/internal/data/database"
-	"git.bytecode.nl/bytecode/genesis/internal/data/mailer"
-	"git.bytecode.nl/bytecode/genesis/internal/infrastructure/config"
-	"git.bytecode.nl/bytecode/genesis/internal/infrastructure/jwt"
-	"git.bytecode.nl/bytecode/genesis/internal/infrastructure/logger"
-	"git.bytecode.nl/bytecode/genesis/internal/infrastructure/passhash"
-	"git.bytecode.nl/bytecode/genesis/internal/interactors"
+	"git.bytecode.nl/bytecode/genesis/server/internal/constants"
+	"git.bytecode.nl/bytecode/genesis/server/internal/data/database"
+	"git.bytecode.nl/bytecode/genesis/server/internal/data/mailer"
+	"git.bytecode.nl/bytecode/genesis/server/internal/infrastructure/config"
+	"git.bytecode.nl/bytecode/genesis/server/internal/infrastructure/jwt"
+	"git.bytecode.nl/bytecode/genesis/server/internal/infrastructure/logger"
+	"git.bytecode.nl/bytecode/genesis/server/internal/infrastructure/passhash"
+	"git.bytecode.nl/bytecode/genesis/server/internal/interactors"
 )
 
 // nolint:wsl // with cuddles is better readable here

@@ -41,7 +41,7 @@ test: ## Runs the unit tests
 
 .PHONY: fmt
 fmt: ## Code style formatting and linting check for the project
-	goimports -w -local git.bytecode.nl/bytecode/genesis .
+	goimports -w -local git.bytecode.nl/bytecode/genesis/server .
 	go fmt ./...
 	go vet ./...
 	golint ./...
@@ -60,7 +60,7 @@ ci: ## Runs the CI tasks
 	golangci-lint run --sort-results
 	go vet ./...
 	golint ./...
-	goimports -e -d -local git.bytecode.nl/bytecode/genesis .
+	goimports -e -d -local git.bytecode.nl/bytecode/genesis/server .
 	@echo "Running tests with coverage"
 	go test -coverprofile=coverage.txt -covermode count -v 2>&1 ./... | go-junit-report -set-exit-code > junit.xml
 	gocover-cobertura < coverage.txt > cobertura.xml

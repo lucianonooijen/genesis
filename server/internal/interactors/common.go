@@ -5,11 +5,11 @@ import (
 
 	"go.uber.org/zap"
 
-	"git.bytecode.nl/bytecode/genesis/internal/data/database"
-	"git.bytecode.nl/bytecode/genesis/internal/data/mailer"
-	"git.bytecode.nl/bytecode/genesis/internal/infrastructure/config"
-	"git.bytecode.nl/bytecode/genesis/internal/infrastructure/jwt"
-	"git.bytecode.nl/bytecode/genesis/internal/infrastructure/passhash"
+	"git.bytecode.nl/bytecode/genesis/server/internal/data/database"
+	"git.bytecode.nl/bytecode/genesis/server/internal/data/mailer"
+	"git.bytecode.nl/bytecode/genesis/server/internal/infrastructure/config"
+	"git.bytecode.nl/bytecode/genesis/server/internal/infrastructure/jwt"
+	"git.bytecode.nl/bytecode/genesis/server/internal/infrastructure/passhash"
 )
 
 // Services contains all the shared services in the application.

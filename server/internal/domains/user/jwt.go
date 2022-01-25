@@ -1,8 +1,8 @@
 package user
 
 import (
-	"git.bytecode.nl/bytecode/genesis/internal/data/database"
-	"git.bytecode.nl/bytecode/genesis/internal/interactors"
+	"git.bytecode.nl/bytecode/genesis/server/internal/data/database"
+	"git.bytecode.nl/bytecode/genesis/server/internal/interactors"
 )
 
 func jwtForUser(s *interactors.Services, user *database.User) (string, error) {

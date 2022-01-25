@@ -27,7 +27,7 @@ linters-settings:
       - HACK
       - UNSAFE
   goimports:
-    local-prefixes: git.bytecode.nl/bytecode/genesis
+    local-prefixes: git.bytecode.nl/bytecode/genesis/server
 
 linters:
   disable-all: false

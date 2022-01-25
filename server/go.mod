@@ -1,4 +1,4 @@
-module git.bytecode.nl/bytecode/genesis
+module git.bytecode.nl/bytecode/genesis/server
 
 go 1.17
 

@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 
-	"git.bytecode.nl/bytecode/genesis/internal/interactors"
-	"git.bytecode.nl/bytecode/genesis/internal/server/responses"
+	"git.bytecode.nl/bytecode/genesis/server/internal/interactors"
+	"git.bytecode.nl/bytecode/genesis/server/internal/server/responses"
 )
 
 // Handlers contains Gin request handlers as methods.

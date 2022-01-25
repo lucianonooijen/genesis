@@ -3,7 +3,7 @@ package passhash_test
 import (
 	"testing"
 
-	"git.bytecode.nl/bytecode/genesis/internal/infrastructure/passhash"
+	"git.bytecode.nl/bytecode/genesis/server/internal/infrastructure/passhash"
 
 	"github.com/stretchr/testify/assert"
 )
