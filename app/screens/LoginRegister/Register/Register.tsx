@@ -6,6 +6,7 @@ import { ButtonPrimary } from "components/Buttons/ButtonRegular/ButtonRegular";
 import { SubTitle, Title } from "components/Typography/Typography";
 import TextInput from "components/Input/TextInput/TextInput";
 import { InputFieldType } from "components/Input/TextInput/TextInput.types";
+import ErrorBanner from "components/ErrorBanner/ErrorBanner";
 import AppStateContext from "data/AppState/AppState";
 import { getApiConfig } from "data/api/api";
 import { RegisterProps } from "./Register.types";
@@ -15,12 +16,14 @@ const Register: React.FC<RegisterProps> = ({
     registerApiCall = register,
 }) => {
     const appState = useContext(AppStateContext);
+    const [error, setError] = useState<Error | null>(null);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const canSubmitForm = name && email && password;
 
     const submit = async () => {
+        setError(null);
         const config = getApiConfig(appState);
         try {
             const res = await registerApiCall(config, {
@@ -30,12 +33,13 @@ const Register: React.FC<RegisterProps> = ({
             });
             appState.setJwt(res.jwt);
         } catch (e) {
-            console.warn(e); // eslint-disable-line no-console
+            setError(e as Error);
         }
     };
 
     return (
         <PaddedEmptyLayout>
+            <ErrorBanner error={error} />
             <Title>Register</Title>
             <SubTitle>Create an account using the form below</SubTitle>
             <TextInput label="Name" onChange={setName} />
