@@ -13,10 +13,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sqreen/go-agent/sdk/middleware/sqgin"
 
-	"git.bytecode.nl/bytecode/genesis/internal/constants"
-	"git.bytecode.nl/bytecode/genesis/internal/interactors"
-	"git.bytecode.nl/bytecode/genesis/internal/server/handlers"
-	"git.bytecode.nl/bytecode/genesis/internal/server/middleware"
+	"git.bytecode.nl/bytecode/genesis/server/internal/constants"
+	"git.bytecode.nl/bytecode/genesis/server/internal/interactors"
+	"git.bytecode.nl/bytecode/genesis/server/internal/server/handlers"
+	"git.bytecode.nl/bytecode/genesis/server/internal/server/middleware"
 )
 
 // GinServer is the Server instance struct.
@@ -102,8 +102,8 @@ func registerMiddleware(logger *zap.Logger, router *gin.Engine, devMode bool) {
 
 func setGinRouteLogger(logger *zap.Logger) {
 	gin.DebugPrintRouteFunc = func(httpMethod, absolutePath, handlerName string, nuHandlers int) {
-		handlerShort := strings.ReplaceAll(handlerName, "git.bytecode.nl/bytecode/genesis/internal/server/handlers.", "") // TODO: cleaner
-		handlerShort = strings.ReplaceAll(handlerShort, "github.com/gin-gonic/", "")                                      // TODO: cleaner
+		handlerShort := strings.ReplaceAll(handlerName, "git.bytecode.nl/bytecode/genesis/server/internal/server/handlers.", "") // TODO: cleaner
+		handlerShort = strings.ReplaceAll(handlerShort, "github.com/gin-gonic/", "")                                             // TODO: cleaner
 		logger.Debug(fmt.Sprintf("Route registered: %-6s %-25s --> %s (%d handlers)", httpMethod, absolutePath, handlerShort, nuHandlers))
 	}
 }

@@ -18,7 +18,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package main
 
 import (
-	"git.bytecode.nl/bytecode/genesis/internal/cmd"
+	"git.bytecode.nl/bytecode/genesis/server/internal/cmd"
 )
 
 func main() {

@@ -3,8 +3,8 @@ package handlers
 import (
 	"github.com/gin-gonic/gin"
 
-	"git.bytecode.nl/bytecode/genesis/internal/domains/user"
-	"git.bytecode.nl/bytecode/genesis/internal/entities"
+	"git.bytecode.nl/bytecode/genesis/server/internal/domains/user"
+	"git.bytecode.nl/bytecode/genesis/server/internal/entities"
 )
 
 // CreateUser returns a 200 status code if everything is fine.

@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"git.bytecode.nl/bytecode/genesis/internal/infrastructure/jwt"
+	"git.bytecode.nl/bytecode/genesis/server/internal/infrastructure/jwt"
 
 	"github.com/stretchr/testify/assert"
 )

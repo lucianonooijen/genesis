@@ -5,9 +5,9 @@ import (
 
 	"go.uber.org/zap"
 
-	"git.bytecode.nl/bytecode/genesis/internal/data/database"
-	"git.bytecode.nl/bytecode/genesis/internal/entities"
-	"git.bytecode.nl/bytecode/genesis/internal/interactors"
+	"git.bytecode.nl/bytecode/genesis/server/internal/data/database"
+	"git.bytecode.nl/bytecode/genesis/server/internal/entities"
+	"git.bytecode.nl/bytecode/genesis/server/internal/interactors"
 )
 
 // CreateUser creates a user in the database, sends an email and returns a JWT.

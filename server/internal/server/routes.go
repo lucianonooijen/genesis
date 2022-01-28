@@ -3,8 +3,8 @@ package server
 import (
 	"github.com/gin-gonic/gin"
 
-	"git.bytecode.nl/bytecode/genesis/internal/constants"
-	"git.bytecode.nl/bytecode/genesis/internal/server/handlers"
+	"git.bytecode.nl/bytecode/genesis/server/internal/constants"
+	"git.bytecode.nl/bytecode/genesis/server/internal/server/handlers"
 )
 
 func registerRoutes(r *gin.RouterGroup, h handlers.Handlers) {

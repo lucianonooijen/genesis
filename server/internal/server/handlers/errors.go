@@ -10,8 +10,8 @@ import (
 	"github.com/lib/pq"
 	"golang.org/x/crypto/bcrypt"
 
-	"git.bytecode.nl/bytecode/genesis/internal/domains/user"
-	"git.bytecode.nl/bytecode/genesis/internal/server/responses"
+	"git.bytecode.nl/bytecode/genesis/server/internal/domains/user"
+	"git.bytecode.nl/bytecode/genesis/server/internal/server/responses"
 )
 
 func (h Handlers) handleDomainError(c *gin.Context, err error) {

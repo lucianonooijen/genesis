@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"git.bytecode.nl/bytecode/genesis/internal/infrastructure/migrator"
+	"git.bytecode.nl/bytecode/genesis/server/internal/infrastructure/migrator"
 
 	"github.com/spf13/cobra"
 )

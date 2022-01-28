@@ -1,50 +1,16 @@
 # Genesis
 
-_Bytecode Digital Agency's Project Scaffolding, with the name taken from the Ancient Greek 'γένεσις', meaning origin, generation, source, beginning. Ἐν ἀρχῇ ἦν ὁ ρεπος._
-
 ## Project directory structure
 
 * `/app`: mobile application
-* `/packagves`: Typescript packages used throughout the project
-  * `/api`: the api sdk connectiong the app to the server
+  * `/packages`: Typescript packages used throughout the project
+      * `/api`: the api sdk connecting the app to the server
+      * `/entities`: entities for Typescript code
 * `/server`: backend application (api exposed)
 * `/docs`: documentation for the application as a whole
 * `/bin`: scripts for project-wide actions
 * `/.gitlab`: GitLab related configurations
 
-## Stuff that should be replaced in Scaffold step
-
-### Variables in code
-
-* Genesis
-* genesis
-* @genesis/app
-* @genesis/api
-* com.genesis
-* GenesisTests
-* git.bytecode.nl/bytecode/genesis
-* git@git.bytecode.nl:bytecode/genesis.git
-* https://bytecode.nl
-* https://placekitten.com/400/400
-* genesis_server
-* development@genesis.bytecode.dev
-
-### FolderNames
-* app/android/app/src/debug/java/com/genesis
-* app/android/app/src/main/java/com/genesis
-* app/ios/Genesis
-
-## Files
-
-* `/app/ios/Genesis.xcodeproj`
-* `/app/ios/Genesis.xcodeproj/xcshareddata/xcschemes/Genesis.xcscheme`
-* `/server/static/logo.png`
-
----
-
-_Project documentation below_
-
-# Genesis
 
 ## Requirements
 

@@ -3,7 +3,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 
-	"git.bytecode.nl/bytecode/genesis/internal/server"
+	"git.bytecode.nl/bytecode/genesis/server/internal/server"
 )
 
 var serverCmd = &cobra.Command{

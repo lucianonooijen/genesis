@@ -41,5 +41,5 @@ go get -v github.com/sqreen/go-agent/sdk/sqreen-instrumentation-tool
 echo "Building..."
 go build \
     -a -toolexec $(go env GOPATH)/bin/sqreen-instrumentation-tool \
-    -ldflags "-X git.bytecode.nl/bytecode/genesis/server/internal/http/responses.ServerVersion=$SERVER_VERSION" \
+    -ldflags "-X git.bytecode.nl/bytecode/genesis/server/server/internal/http/responses.ServerVersion=$SERVER_VERSION" \
     -o server
