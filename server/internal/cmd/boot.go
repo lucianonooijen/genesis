@@ -49,8 +49,8 @@ func loadServices() *interactors.Services {
 
 	// JWT
 	logMain.Debug("Building JWT instance for users")
-	oneYear := time.Hour * 24 * 365                                          // nolint:gomnd // 24*365 speaks for itself
-	services.JWT, err = jwt.New(services.Config.JWTSecret, "users", oneYear) // make JWTs valid for one year
+	oneYear := time.Hour * 24 * 365                                                            // nolint:gomnd // 24*365 speaks for itself
+	services.JWT, err = jwt.New(services.Config.JWTSecret, constants.JwtSubjectUsers, oneYear) // make JWTs valid for one year
 	panicOnErr(err)
 
 	// Password hasher

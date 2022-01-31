@@ -5,6 +5,8 @@ package database
 
 import (
 	"context"
+
+	"github.com/google/uuid"
 )
 
 const createUser = `-- name: CreateUser :exec
@@ -23,6 +25,17 @@ type CreateUserParams struct {
 // Inserts new user into database
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) error {
 	_, err := q.db.ExecContext(ctx, createUser, arg.Email, arg.PasswordHash, arg.FirstName)
+	return err
+}
+
+const deleteUser = `-- name: DeleteUser :exec
+DELETE FROM users
+WHERE id = $1
+`
+
+// Deletes the user profile
+func (q *Queries) DeleteUser(ctx context.Context, id int32) error {
+	_, err := q.db.ExecContext(ctx, deleteUser, id)
 	return err
 }
 
@@ -66,6 +79,40 @@ func (q *Queries) GetUserByID(ctx context.Context, id int32) (User, error) {
 	return i, err
 }
 
+const getUserByUuid = `-- name: GetUserByUuid :one
+SELECT id, user_uuid, password_hash, password_uuid, email, first_name, created_at FROM users
+WHERE user_uuid = $1
+`
+
+func (q *Queries) GetUserByUuid(ctx context.Context, userUuid uuid.UUID) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUserByUuid, userUuid)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.UserUuid,
+		&i.PasswordHash,
+		&i.PasswordUuid,
+		&i.Email,
+		&i.FirstName,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const getUserProfileByID = `-- name: GetUserProfileByID :one
+SELECT first_name
+FROM users
+WHERE id = $1
+`
+
+// Gets the user profile based on user profile id
+func (q *Queries) GetUserProfileByID(ctx context.Context, id int32) (string, error) {
+	row := q.db.QueryRowContext(ctx, getUserProfileByID, id)
+	var first_name string
+	err := row.Scan(&first_name)
+	return first_name, err
+}
+
 const updateUserPassword = `-- name: UpdateUserPassword :exec
 UPDATE users
 SET password_hash = $1, password_uuid = uuid_generate_v4()
@@ -81,5 +128,22 @@ type UpdateUserPasswordParams struct {
 // Also resets the password_uuid to invalidate existing JWTs
 func (q *Queries) UpdateUserPassword(ctx context.Context, arg UpdateUserPasswordParams) error {
 	_, err := q.db.ExecContext(ctx, updateUserPassword, arg.PasswordHash, arg.ID)
+	return err
+}
+
+const updateUserProfile = `-- name: UpdateUserProfile :exec
+UPDATE users
+SET first_name = $1
+WHERE id = $2
+`
+
+type UpdateUserProfileParams struct {
+	FirstName string `json:"firstName"`
+	ID        int32  `json:"id"`
+}
+
+// Updates user profile
+func (q *Queries) UpdateUserProfile(ctx context.Context, arg UpdateUserProfileParams) error {
+	_, err := q.db.ExecContext(ctx, updateUserProfile, arg.FirstName, arg.ID)
 	return err
 }

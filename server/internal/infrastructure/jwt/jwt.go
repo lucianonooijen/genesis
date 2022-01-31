@@ -34,7 +34,7 @@ func New(jwtSecret, subject string, validity time.Duration) (Util, error) {
 func (jwt Util) CreateJWT(userUniqueIdentifyer string) (token string, err error) {
 	claims := &jwtLib.StandardClaims{
 		Audience:  userUniqueIdentifyer,
-		Issuer:    userUniqueIdentifyer,
+		Issuer:    "genesis_v1", // if this value is changed, all tokens are invalidated
 		Subject:   jwt.subject,
 		ExpiresAt: time.Now().Add(jwt.validity).Unix(),
 	}

@@ -30,3 +30,13 @@ type PasswordResetCompleteRequest struct {
 	ResetToken uuid.UUID `json:"resetToken" validate:"required"`
 	Password   string    `json:"password" validate:"required"`
 }
+
+// UserProfile contains the profile for a user.
+type UserProfile struct {
+	FirstName string `json:"firstName" validate:"required,alphanum"`
+}
+
+// DeleteAccountRequest is the data required to delete the user's account.
+type DeleteAccountRequest struct {
+	Password string `json:"password" validate:"required"`
+}

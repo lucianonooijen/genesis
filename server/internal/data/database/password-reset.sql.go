@@ -27,6 +27,17 @@ func (q *Queries) AddPasswordForgotForUser(ctx context.Context, userID int32) er
 	return err
 }
 
+const deletePasswordForgotByUserId = `-- name: DeletePasswordForgotByUserId :exec
+DELETE FROM password_forgot
+WHERE user_id = $1
+`
+
+// Deletes password_forgot for user
+func (q *Queries) DeletePasswordForgotByUserId(ctx context.Context, userID int32) error {
+	_, err := q.db.ExecContext(ctx, deletePasswordForgotByUserId, userID)
+	return err
+}
+
 const getPasswordResetByResetToken = `-- name: GetPasswordResetByResetToken :one
 SELECT user_id, reset_token, valid_until, is_used FROM password_forgot
 WHERE reset_token = $1

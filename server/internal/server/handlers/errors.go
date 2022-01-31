@@ -21,7 +21,7 @@ func (h Handlers) handleDomainError(c *gin.Context, err error) {
 		return
 	}
 
-	// Postgres errors in separate handler
+	// Postgres errors
 	if pqErr, ok := err.(*pq.Error); ok {
 		handlePostgresError(c, pqErr)
 		return
