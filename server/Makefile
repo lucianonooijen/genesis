@@ -57,7 +57,7 @@ ci: ## Runs the CI tasks
 	@echo "Checking if golangci-lint is installed"
 	@golangci-lint --version
 	@echo "Running linting and static code analysis"
-	golangci-lint run --sort-results
+	golangci-lint run --sort-results --timeout 1h
 	go vet ./...
 	golint ./...
 	goimports -e -d -local git.bytecode.nl/bytecode/genesis/server .

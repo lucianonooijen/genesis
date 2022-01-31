@@ -1,26 +1,25 @@
 import React from "react";
 import { render } from "@testing-library/react-native";
-import Home from "./Home";
+import Account from "./Account";
 import {
     initialUserProfileState,
     UserProfileState,
     UserProfileStateContextProviderTest,
 } from "../../data/UserProfileState/UserProfileState";
 
-describe("Home", () => {
+describe("Account", () => {
     it("should render without throwing", () => {
         const userProfileState: UserProfileState = {
             ...initialUserProfileState,
             profile: { firstName: "Ted" },
             hasLoaded: true,
         };
-        const r = render(
+        render(
             <UserProfileStateContextProviderTest
                 userProfileState={userProfileState}
             >
-                <Home />
+                <Account />
             </UserProfileStateContextProviderTest>,
         );
-        r.getByText(/Ted/);
     });
 });
