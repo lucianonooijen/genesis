@@ -1,6 +1,7 @@
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 // Tutorial screens
 import {
@@ -18,10 +19,12 @@ import PasswordForgotComplete from "screens/LoginRegister/PasswordForgotComplete
 
 // Main screens
 import Home from "screens/Home/Home";
+import Account from "screens/Account/Account";
 import { RouterProps } from "./Router.types";
 import { LoginRegisterScreens, MainScreens, TutorialScreens } from "./types";
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 const Router: React.FC<RouterProps> = ({ appState }) => {
     return (
@@ -33,7 +36,7 @@ const Router: React.FC<RouterProps> = ({ appState }) => {
             >
                 {tutorialStack(appState.hasSeenTutorial)}
                 {loginRegisterStack(appState.jwt)}
-                <Stack.Screen name={MainScreens.Home} component={Home} />
+                <Stack.Screen name={MainScreens.Home} component={MainTabs} />
             </Stack.Navigator>
         </NavigationContainer>
     );
@@ -89,3 +92,10 @@ const loginRegisterStack = (jwt: string | undefined) => {
         </>
     );
 };
+
+const MainTabs = () => (
+    <Tab.Navigator>
+        <Tab.Screen name="Home" component={Home} />
+        <Tab.Screen name="Account" component={Account} />
+    </Tab.Navigator>
+);

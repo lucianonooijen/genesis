@@ -1,13 +1,25 @@
-import generatePostApiCall from "./internal/postapicall";
-import { RegisterRequest } from "./types/Register";
-import { PostEndpoints } from "./internal/endpoints";
+import { DeleteAccountRequest, UserProfile } from "@genesis/api/types/Profile";
+import generatePostApiCall from "./internal/apicall-post";
+import generateGetApiCall from "./internal/apicall-get";
+import generatePutApiCall from "./internal/apicall-put";
+import generateDeleteApiCall from "./internal/apicall-delete";
 import {
+    DeleteEndpoints,
+    GetEndpoints,
+    PostEndpoints,
+    PutEndpoints,
+} from "./internal/endpoints";
+
+import {
+    deleteRequestDecoder,
     jwtResponseDecoder,
     loginRequestDecoder,
     passwordResetCompleteRequestDecoder,
     passwordResetStartRequestDecoder,
     registerRequestDecoder,
+    userProfileDecoder,
 } from "./internal/decoders";
+import { RegisterRequest } from "./types/Register";
 import { LoginRequest } from "./types/Login";
 import { JwtResponse } from "./types/Jwt";
 import {
@@ -42,4 +54,23 @@ export const passwordResetComplete = generatePostApiCall<
     false,
     passwordResetCompleteRequestDecoder,
     jwtResponseDecoder,
+);
+
+export const profileGet = generateGetApiCall<UserProfile>(
+    GetEndpoints.UserProfile,
+    true,
+    userProfileDecoder,
+);
+
+export const profileUpdate = generatePutApiCall<UserProfile, UserProfile>(
+    PutEndpoints.UserProfile,
+    true,
+    userProfileDecoder,
+    userProfileDecoder,
+);
+
+export const accountDelete = generateDeleteApiCall<DeleteAccountRequest, null>(
+    DeleteEndpoints.UserProfile,
+    true,
+    deleteRequestDecoder,
 );

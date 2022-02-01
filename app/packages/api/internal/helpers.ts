@@ -7,7 +7,7 @@ import ApiConfig from "../types/Config";
 export const generateApiHeaders = (config: ApiConfig): AxiosRequestHeaders => {
     if (config.jwt) {
         return {
-            Authentication: `Bearer ${config.jwt}`,
+            Authorization: `Bearer ${config.jwt}`,
         };
     }
     return {};

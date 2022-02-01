@@ -45,6 +45,12 @@ export const passwordResetCompleteRequestDecoder = object({
     resetToken: string,
     password: string,
 });
+export const userProfileDecoder = object({
+    firstName: string,
+});
+export const deleteRequestDecoder = object({
+    password: string,
+});
 export const registerRequestDecoder = object({
     email: string,
     password: string,

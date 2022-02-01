@@ -23,4 +23,9 @@ func registerRoutes(r *gin.RouterGroup, h handlers.Handlers) {
 	// USER PASSWORD RESET
 	r.POST("/user/password-reset/start", h.PasswordResetStart)
 	r.POST("/user/password-reset/complete", h.PasswordResetComplete)
+
+	// USER PROFILE
+	r.GET("/user/profile", checkLoggedInAsUser, h.GetUserProfile)
+	r.PUT("/user/profile", checkLoggedInAsUser, h.UpdateUserProfile)
+	r.DELETE("/user/profile", checkLoggedInAsUser, h.DeleteAccount)
 }

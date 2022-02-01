@@ -4,6 +4,7 @@ import { useContext } from "react";
 import AppStateContext, {
     AppStateContextProvider,
 } from "./data/AppState/AppState";
+import { UserProfileStateContextProvider } from "./data/UserProfileState/UserProfileState";
 
 const App = () => {
     const appState = useContext(AppStateContext);
@@ -13,7 +14,9 @@ const App = () => {
 
 const ConnectedApp = () => (
     <AppStateContextProvider>
-        <App />
+        <UserProfileStateContextProvider>
+            <App />
+        </UserProfileStateContextProvider>
     </AppStateContextProvider>
 );
 

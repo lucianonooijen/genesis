@@ -1,28 +1,26 @@
 import axios from "axios";
 import { Decoder } from "decoders";
-import { PostApiCall } from "@genesis/api/types";
+import { GetApiCall } from "@genesis/api/types";
 import { generateApiHeaders, jsonCheck, throwIfResponseError } from "./helpers";
 
-const generatePostApiCall =
-    <Req, Res>(
+const generateGetApiCall =
+    <Res>(
         endpoint: string,
         isAuthenticated: boolean,
-        reqDecoder: Decoder<Req>,
         resDecoder?: Decoder<Res>,
-    ): PostApiCall<Req, Res> =>
-    async (apiConfig, reqBody) => {
+    ): GetApiCall<Res> =>
+    async apiConfig => {
         // Check JWT and request body
         if (isAuthenticated && !apiConfig.jwt) {
             throw new Error(
                 "Endpoint requires JWT to be present in API config",
             );
         }
-        jsonCheck(reqBody, reqDecoder);
 
         // Make API call
         const callUrl = `${apiConfig.baseUrl}/${endpoint}`;
-        console.log(`API call to ${callUrl}`); // eslint-disable-line no-console
-        const res = await axios.post(callUrl, reqBody, {
+        console.log(`[API] GET call to ${callUrl}`); // eslint-disable-line no-console
+        const res = await axios.get(callUrl, {
             headers: generateApiHeaders(apiConfig),
             validateStatus: () => true, // this prevents Axios from throwing errors on non-2xx codes, we handle it ourselves
         });
@@ -40,4 +38,4 @@ const generatePostApiCall =
         return resData;
     };
 
-export default generatePostApiCall;
+export default generateGetApiCall;

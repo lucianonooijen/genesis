@@ -23,3 +23,8 @@ WHERE reset_token = $1;
 UPDATE password_forgot
 SET is_used = true
 WHERE reset_token = $1;
+
+-- name: DeletePasswordForgotByUserId :exec
+-- Deletes password_forgot for user
+DELETE FROM password_forgot
+WHERE user_id = $1;
