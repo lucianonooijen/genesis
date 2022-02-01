@@ -5,16 +5,24 @@
   image: node:16-alpine
   stage: release
   before_script:
+    - apk add git
     - yarn install --network-timeout 1000000
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
       - node_modules/
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master"'
-      when: manual
-      allow_failure: true
+
   needs: [] # FIXME: remove
+
+##########################
+# COMMIT LINT
+##########################
+semantic_release:
+  extends: .release_base
+  script:
+    - yarn run semantic-release
+  rules:
+    - if: "$CI_COMMIT_BRANCH" # do not run for tags
 
 ##########################
 # SEMANTIC RELEASE
@@ -23,3 +31,7 @@ semantic_release:
   extends: .release_base
   script:
     - yarn run semantic-release
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      when: manual
+      allow_failure: true
