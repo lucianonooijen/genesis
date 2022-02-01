@@ -6,7 +6,6 @@
   before_script:
     - cd server
     - make bootstrap
-    - golangci-lint --version # Check if is installed
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
     - if: '$CI_COMMIT_BRANCH == "master"'
@@ -23,13 +22,7 @@ test_lint_server:
   <<: *server_base
   stage: test_lint
   script:
-    - golangci-lint run --sort-results
-    - go vet ./...
-    - golint ./...
-    - goimports -e -d -local git.bytecode.nl/bytecode/genesis .
-    - echo "Running tests with coverage"
-    - go test -coverprofile=coverage.txt -covermode count -v 2>&1 ./... | go-junit-report -set-exit-code > junit.xml
-    - gocover-cobertura < coverage.txt > cobertura.xml
+    - make ci
   artifacts:
     reports:
       junit: server/junit.xml

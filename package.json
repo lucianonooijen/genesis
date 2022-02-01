@@ -2,7 +2,7 @@
   "name": "genesis",
   "version": "0.0.1",
   "description": "Genesis project release management by Bytecode",
-  "repository": "git@git.bytecode.nl:bytecode/genesis.git",
+  "repository": "https://git.bytecode.nl/bytecode/genesis.git",
   "author": "Bytecode Digital Agency <info@bytecide.nl>",
   "license": "GPL-3.0-only",
   "private": true,

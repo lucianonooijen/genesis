@@ -16,10 +16,10 @@ module.exports = {
         }],
         "@semantic-release/release-notes-generator",
         "@semantic-release/changelog",
-        "@semantic-release/gitlab",
-        ["@semantic-release/git", {
-            message: "release: ${nextRelease.version}\n\n${nextRelease.notes}",
-            assets: ["CHANGELOG.md"]
-        }]
+        // "@semantic-release/gitlab",
+        // ["@semantic-release/git", {
+        //     message: "release: ${nextRelease.version}\n\n${nextRelease.notes}",
+        //     assets: ["CHANGELOG.md"]
+        // }]
     ]
 }
