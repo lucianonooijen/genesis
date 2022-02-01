@@ -3,10 +3,30 @@
 package database
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
 )
+
+type MobilePlatform string
+
+const (
+	MobilePlatformAndroid MobilePlatform = "Android"
+	MobilePlatformIOS     MobilePlatform = "iOS"
+)
+
+func (e *MobilePlatform) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = MobilePlatform(s)
+	case string:
+		*e = MobilePlatform(s)
+	default:
+		return fmt.Errorf("unsupported scan type for MobilePlatform: %T", src)
+	}
+	return nil
+}
 
 type PasswordForgot struct {
 	UserID     int32     `json:"userID"`
@@ -23,4 +43,10 @@ type User struct {
 	Email        string    `json:"email"`
 	FirstName    string    `json:"firstName"`
 	CreatedAt    time.Time `json:"createdAt"`
+}
+
+type UserPushToken struct {
+	Userid   int32          `json:"userid"`
+	Platform MobilePlatform `json:"platform"`
+	Token    string         `json:"token"`
 }

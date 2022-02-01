@@ -28,4 +28,7 @@ func registerRoutes(r *gin.RouterGroup, h handlers.Handlers) {
 	r.GET("/user/profile", checkLoggedInAsUser, h.GetUserProfile)
 	r.PUT("/user/profile", checkLoggedInAsUser, h.UpdateUserProfile)
 	r.DELETE("/user/profile", checkLoggedInAsUser, h.DeleteAccount)
+
+	// PUSH NOTIFICATIONS
+	r.POST("/user/push-notifications", checkLoggedInAsUser, h.RegisterPushNotificationToken)
 }

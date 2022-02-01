@@ -1,6 +1,7 @@
 package config
 
 import (
+	b64 "encoding/base64"
 	"fmt"
 
 	"github.com/go-playground/validator/v10"
@@ -31,6 +32,15 @@ type Config struct {
 	EmailSenderName  string `mapstructure:"email_sender_name" validate:"required"`
 	EmailSenderEmail string `mapstructure:"email_sender_email" validate:"required"`
 	SendinblueAPIKey string `mapstructure:"sendinblue_api_key" validate:"required"`
+
+	// Push notifications and data for connecting to Apple and Google services,
+	// APNS = Apple, FCM = Google
+	ApnsTopic            string `mapstructure:"apns_topic" validate:"required"` // Bundle identifyer
+	ApnsTeamID           string `mapstructure:"apns_team_id" validate:"required"`
+	ApnsKeyID            string `mapstructure:"apns_key_id" validate:"required"`
+	ApnsKeyBase64        string `mapstructure:"apns_key_base64" validate:"required"`
+	FcmChannelID         string `mapstructure:"fcm_channel_id" validate:"required"`
+	FcmCredentialsBase64 string `mapstructure:"fcm_credentials_base64" validate:"required"`
 }
 
 // LoadConfig reads in config file and ENV variables if set.
@@ -72,4 +82,14 @@ func (c *Config) DatabaseConnectionString() string {
 	}
 
 	return connStr
+}
+
+// ApnsKeyDecoded decodes ApnsKeyBase64.
+func (c *Config) ApnsKeyDecoded() ([]byte, error) {
+	return b64.StdEncoding.DecodeString(c.ApnsKeyBase64)
+}
+
+// FcmCredentialsDecoded decodes FcmCredentialsBase64.
+func (c *Config) FcmCredentialsDecoded() ([]byte, error) {
+	return b64.StdEncoding.DecodeString(c.FcmCredentialsBase64)
 }
