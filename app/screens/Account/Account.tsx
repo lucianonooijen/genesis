@@ -2,15 +2,16 @@ import React, { useContext, useEffect, useState } from "react";
 import { Text } from "react-native";
 import RNRestart from "react-native-restart";
 import { accountDelete, profileGet, profileUpdate } from "@genesis/api";
+import PaddedEmptyLayout from "layouts/PaddedEmptyLayout/PaddedEmptyLayout";
 import UserProfileStateContext from "data/UserProfileState/UserProfileState";
 import AppStateContext from "data/AppState/AppState";
+import { generateLoadUserProfileStateEffect } from "data/api/profile";
 import { getApiConfig } from "data/api/api";
 import ErrorBanner from "components/ErrorBanner/ErrorBanner";
 import { InputFieldType } from "components/Input/TextInput/TextInput.types";
 import TextInput from "components/Input/TextInput/TextInput";
+import { ButtonPrimary } from "components/Buttons/ButtonRegular/ButtonRegular";
 import { AccountProps } from "./Account.types";
-import { ButtonPrimary } from "../../components/Buttons/ButtonRegular/ButtonRegular";
-import PaddedEmptyLayout from "../../layouts/PaddedEmptyLayout/PaddedEmptyLayout";
 
 const Account: React.FC<AccountProps> = ({
     getUserProfile = profileGet,
@@ -19,23 +20,18 @@ const Account: React.FC<AccountProps> = ({
 }) => {
     const userProfileState = useContext(UserProfileStateContext);
     const appState = useContext(AppStateContext);
+    const apiConfig = getApiConfig(appState);
 
     // If the userProfileState has not loaded, load it
-    useEffect(() => {
-        const load = async () => {
-            if (!userProfileState.hasLoaded) {
-                try {
-                    const profile = await getUserProfile(
-                        getApiConfig(appState),
-                    );
-                    userProfileState.setProfile(profile);
-                } catch (e) {
-                    console.error(e); // eslint-disable-line no-console
-                }
-            }
-        };
-        load();
-    }, [appState, getUserProfile, userProfileState]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(
+        generateLoadUserProfileStateEffect(
+            userProfileState,
+            apiConfig,
+            getUserProfile,
+        ),
+        [appState, getUserProfile, userProfileState],
+    );
 
     const [error, setError] = useState<Error | null>(null);
     const [firstName, setFirstName] = useState("");
@@ -43,7 +39,7 @@ const Account: React.FC<AccountProps> = ({
 
     const updateProfile = async () => {
         try {
-            const profile = await updateUserProfile(getApiConfig(appState), {
+            const profile = await updateUserProfile(apiConfig, {
                 firstName,
             });
             userProfileState.setProfile(profile);
@@ -54,7 +50,7 @@ const Account: React.FC<AccountProps> = ({
 
     const deleteProfile = async () => {
         try {
-            await deleteAccount(getApiConfig(appState), { password });
+            await deleteAccount(apiConfig, { password });
             setError(new Error("Account has been deleted, resetting the app"));
             setTimeout(RNRestart.Restart, 1000);
         } catch (e) {

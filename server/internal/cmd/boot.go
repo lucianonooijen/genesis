@@ -48,9 +48,10 @@ func loadServices() *interactors.Services {
 	}
 
 	// JWT
+	// TODO: make a refresh system and new login on expired token in app, so the JWTs can have a validity of month max for security reasons
 	logMain.Debug("Building JWT instance for users")
-	oneYear := time.Hour * 24 * 365                                                            // nolint:gomnd // 24*365 speaks for itself
-	services.JWT, err = jwt.New(services.Config.JWTSecret, constants.JwtSubjectUsers, oneYear) // make JWTs valid for one year
+	century := time.Hour * 24 * 365 * 100                                                      // nolint:gomnd // 24*365*100 speaks for itself
+	services.JWT, err = jwt.New(services.Config.JWTSecret, constants.JwtSubjectUsers, century) // make JWTs valid for one year
 	panicOnErr(err)
 
 	// Password hasher

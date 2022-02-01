@@ -8,6 +8,9 @@ import (
 	jwtLib "github.com/dgrijalva/jwt-go"
 )
 
+// Issuer is the issuer used for JWTs.
+const Issuer = "genesis_v1" // if this value is changed, all tokens are invalidated
+
 // Util contains methods for creating and validating JSON Web Tokens (jwt).
 type Util struct {
 	jwtSecret []byte        `validate:"required,min=10"`
@@ -34,7 +37,7 @@ func New(jwtSecret, subject string, validity time.Duration) (Util, error) {
 func (jwt Util) CreateJWT(userUniqueIdentifyer string) (token string, err error) {
 	claims := &jwtLib.StandardClaims{
 		Audience:  userUniqueIdentifyer,
-		Issuer:    "genesis_v1", // if this value is changed, all tokens are invalidated
+		Issuer:    Issuer,
 		Subject:   jwt.subject,
 		ExpiresAt: time.Now().Add(jwt.validity).Unix(),
 	}

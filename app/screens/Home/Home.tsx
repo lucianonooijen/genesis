@@ -5,27 +5,23 @@ import UserProfileStateContext from "data/UserProfileState/UserProfileState";
 import AppStateContext from "data/AppState/AppState";
 import { getApiConfig } from "data/api/api";
 import { HomeProps } from "./Home.types";
+import { generateLoadUserProfileStateEffect } from "../../data/api/profile";
 
 const Home: React.FC<HomeProps> = ({ getUserProfile = profileGet }) => {
     const userProfileState = useContext(UserProfileStateContext);
     const appState = useContext(AppStateContext);
+    const apiConfig = getApiConfig(appState);
 
     // If the userProfileState has not loaded, load it
-    useEffect(() => {
-        const load = async () => {
-            if (!userProfileState.hasLoaded) {
-                try {
-                    const profile = await getUserProfile(
-                        getApiConfig(appState),
-                    );
-                    userProfileState.setProfile(profile);
-                } catch (e) {
-                    console.error(e); // eslint-disable-line no-console
-                }
-            }
-        };
-        load();
-    }, [appState, getUserProfile, userProfileState]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(
+        generateLoadUserProfileStateEffect(
+            userProfileState,
+            apiConfig,
+            getUserProfile,
+        ),
+        [appState, getUserProfile, userProfileState],
+    );
 
     return (
         <View
