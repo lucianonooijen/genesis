@@ -1,0 +1,22 @@
+{
+  "name": "genesis",
+  "version": "0.0.1",
+  "description": "Genesis project release management by Bytecode",
+  "repository": "git@git.bytecode.nl:bytecode/genesis.git",
+  "author": "Bytecode Digital Agency <info@bytecide.nl>",
+  "license": "GPL-3.0-only",
+  "private": true,
+  "scripts": {
+    "commitlint": "commitlint --from $(git rev-parse origin/master)"
+  },
+  "devDependencies": {
+    "@commitlint/config-conventional": "^16.0.0",
+    "@semantic-release/changelog": "^6.0.1",
+    "@semantic-release/commit-analyzer": "^9.0.2",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/gitlab": "^7.0.4",
+    "@semantic-release/release-notes-generator": "^10.0.3",
+    "commitlint": "^16.1.0",
+    "semantic-release": "^19.0.2"
+  }
+}
