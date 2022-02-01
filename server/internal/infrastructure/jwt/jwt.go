@@ -16,9 +16,9 @@ type Util struct {
 }
 
 // New creates a Util instance and returns it if argument validation succeeds.
-func New(jwtSecret, subject string, validity time.Duration) (Util, error) {
+func New(jwtSecret, subject string, validity time.Duration) (*Util, error) {
 	if jwtSecret == "" || subject == "" || validity == 0 {
-		return Util{}, errors.New("arguments cannot be default values")
+		return nil, errors.New("arguments cannot be default values")
 	}
 
 	jwtUtil := Util{
@@ -27,7 +27,7 @@ func New(jwtSecret, subject string, validity time.Duration) (Util, error) {
 		validity:  validity,
 	}
 
-	return jwtUtil, nil
+	return &jwtUtil, nil
 }
 
 // CreateJWT creates a JWT for a user string.

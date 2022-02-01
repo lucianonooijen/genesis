@@ -10,6 +10,7 @@ import (
 	"git.bytecode.nl/bytecode/genesis/server/internal/constants"
 	"git.bytecode.nl/bytecode/genesis/server/internal/data/database"
 	"git.bytecode.nl/bytecode/genesis/server/internal/data/mailer"
+	"git.bytecode.nl/bytecode/genesis/server/internal/data/pushnotifications"
 	"git.bytecode.nl/bytecode/genesis/server/internal/infrastructure/config"
 	"git.bytecode.nl/bytecode/genesis/server/internal/infrastructure/jwt"
 	"git.bytecode.nl/bytecode/genesis/server/internal/infrastructure/logger"
@@ -64,6 +65,11 @@ func loadServices() *interactors.Services {
 	// Mailer
 	logMain.Debug("Building mailer instance")
 	services.Mailer, err = mailer.New(logBase, services.Config.EmailSenderEmail, services.Config.EmailSenderName, services.Config.SendinblueAPIKey, staticFileURLBase)
+	panicOnErr(err)
+
+	// Push notification instance
+	logMain.Debug("Building push notification service instance")
+	services.PushNotifications, err = pushnotifications.New(&services.Config, logBase)
 	panicOnErr(err)
 
 	// Database instance

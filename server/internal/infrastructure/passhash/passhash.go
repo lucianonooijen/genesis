@@ -10,8 +10,8 @@ type Util struct {
 }
 
 // New returns a PasswordHasher instance.
-func New() Util {
-	return Util{
+func New() *Util {
+	return &Util{
 		cost: bcrypt.DefaultCost,
 	}
 }

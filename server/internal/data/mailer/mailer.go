@@ -24,9 +24,9 @@ type Mailer struct {
 }
 
 // New returns a new Mailer instance as a interactors.Instance.
-func New(loggerBase *zap.Logger, fromEmail, fromName, apiKey, staticFileURLBase string) (Mailer, error) {
+func New(loggerBase *zap.Logger, fromEmail, fromName, apiKey, staticFileURLBase string) (*Mailer, error) {
 	if fromEmail == "" || fromName == "" || apiKey == "" || staticFileURLBase == "" {
-		return Mailer{}, errors.New("arguments cannot have default values")
+		return nil, errors.New("arguments cannot have default values")
 	}
 
 	mailer := Mailer{
@@ -46,7 +46,7 @@ func New(loggerBase *zap.Logger, fromEmail, fromName, apiKey, staticFileURLBase 
 		},
 	}
 
-	return mailer, nil
+	return &mailer, nil
 }
 
 /**
