@@ -21,7 +21,11 @@ semantic_release:
   script:
     - yarn run semantic-release
   rules:
-    - if: "$CI_COMMIT_BRANCH" # do not run for tags
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: $CI_COMMIT_TAG
+      when: never
 
 ##########################
 # SEMANTIC RELEASE
