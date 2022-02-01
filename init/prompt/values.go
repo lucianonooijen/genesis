@@ -24,6 +24,11 @@ var replaceValuesBase = []ReplaceValue{
 		ReplaceOrder: 98,
 	},
 	{
+		OldValue:     "registry.digitalocean.com/dawny/genesis-server",
+		Description:  "Docker registry for server",
+		ReplaceOrder: 6,
+	},
+	{
 		OldValue:     "git.bytecode.nl/bytecode/genesis/server",
 		Description:  "Golang module name for server",
 		ReplaceOrder: 5,
