@@ -19,7 +19,7 @@ var replaceValuesBase = []ReplaceValue{
 		ReplaceOrder: 98,
 	},
 	{
-		OldValue:     "com.genesis",
+		OldValue:     "nl.bytecode.genesis",
 		Description:  "Android package name",
 		ReplaceOrder: 98,
 	},

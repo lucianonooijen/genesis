@@ -40,3 +40,21 @@ semantic_release:
       allow_failure: true
       # The combination `when: manual` and `allow_failure: true` allow this step to be manual without blocking
       # the pipeline. See https://docs.gitlab.com/ee/ci/yaml/README.html#rulesallow_failure
+
+##########################
+# EAS RELEASE FOR APP
+##########################
+app_release:
+  image: node:16-alpine
+  stage: release
+  before_script:
+    - cd app
+    - apk add --no-cache bash git
+  script:
+    - npx eas-cli build --platform all --non-interactive --no-wait
+#  only:
+#    - tags
+  rules: # FIXME: dev
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - app/**/*
