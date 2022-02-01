@@ -1,0 +1,106 @@
+#!/usr/bin/env node
+
+const replace = require('replace-in-file');
+
+const from = process.argv[2].replace("v", "")
+const to = process.argv[3].replace("v", "")
+
+if (!from) {
+    console.error("from not defined")
+    process.exit(1)
+}
+if (!to) {
+    console.error("to not defined")
+    process.exit(1)
+}
+
+console.log(`replacing version from ${from} to ${to}`)
+
+/*
+ * Javascript step
+ */
+
+const resJs = replace.sync({
+    files: [
+        "./package.json",
+        "./app/package.json"
+    ],
+    from: new RegExp(`"version": "${from}",`, "g"),
+    to: `"version": "${to}",`,
+})
+
+console.log("done replacing JS/JSON files:")
+console.table(resJs)
+
+/*
+ * Golang step
+ */
+
+const resGo = replace.sync({
+    files: [
+        "./server/internal/constants/version.go"
+    ],
+    from: new RegExp(`APIVersion = "${from}"`, "g"),
+    to: `APIVersion = "${to}"`,
+})
+
+console.log("done replacing Go files:")
+console.table(resGo)
+
+/*
+ * Gradle/Android step
+ */
+
+const resAndroidVersionName = replace.sync({
+    files: [
+        "./app/android/app/build.gradle"
+    ],
+    from: new RegExp(`versionName "${from}"`, "g"),
+    to: `versionName "${to}"`,
+})
+
+console.log("done replacing Android versionName:")
+console.table(resAndroidVersionName)
+
+const versionBumper = match => {
+    const versionRegex = /[0-9]+/g
+    const versionOld = parseInt(versionRegex.exec(match)[0], 10)
+    const versionNew = versionOld + 1
+    return match.replace(versionOld, versionNew)
+}
+const resAndroidVersionCode = replace.sync({
+    files: [
+        "./app/android/app/build.gradle"
+    ],
+    from: /^\s+versionCode [0-9]+/gm,
+    to: versionBumper,
+})
+
+console.log("done replacing Android versionCode:")
+console.table(resAndroidVersionCode)
+
+/*
+ * iOS step
+ */
+
+const resIosVersionName = replace.sync({
+    files: [
+        "./app/ios/genesis/Info.plist"
+    ],
+    from: new RegExp(`<string>${from}</string>`, "g"),
+    to: `<string>${to}</string>`,
+})
+
+console.log("done replacing iOS versionName:")
+console.table(resIosVersionName)
+
+const resIosVersionCode = replace.sync({
+    files: [
+        "./app/ios/genesis/Info.plist"
+    ],
+    from: /<key>CFBundleVersion<\/key>\n\s+<string>[0-9]+<\/string>/gm,
+    to: versionBumper,
+})
+
+console.log("done replacing iOS versionCode:")
+console.table(resIosVersionCode)

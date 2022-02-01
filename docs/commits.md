@@ -2,6 +2,8 @@
 
 Commit names are used to automatically generate changelogs. Therefore, commit titles must conform to a specific format.
 
+The tool used for checking the commits is [commitlint](https://commitlint.js.org/).
+
 The format used is:
 
 ```

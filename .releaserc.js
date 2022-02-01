@@ -16,6 +16,9 @@ module.exports = {
         }],
         "@semantic-release/release-notes-generator",
         "@semantic-release/changelog",
+        ["@semantic-release/exec", {
+            "prepareCmd": "./bin/update-version ${lastRelease.version} ${nextRelease.version}"
+        }],
         "@semantic-release/gitlab",
         ["@semantic-release/git", {
             message: "release: ${nextRelease.version}\n\n${nextRelease.notes}",
