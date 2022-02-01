@@ -2,12 +2,13 @@
   "name": "genesis",
   "version": "0.0.1",
   "description": "Genesis project release management by Bytecode",
-  "repository": "https://git.bytecode.nl/bytecode/genesis.git",
+  "repository": "git@git.bytecode.nl:bytecode/genesis.git",
   "author": "Bytecode Digital Agency <info@bytecide.nl>",
   "license": "GPL-3.0-only",
   "private": true,
   "scripts": {
-    "commitlint": "commitlint --from $(git rev-parse origin/master)"
+    "commitlint": "commitlint --from $(git rev-parse origin/master)",
+    "semantic-release": "semantic-release"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^16.0.0",

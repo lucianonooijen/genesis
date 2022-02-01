@@ -6,6 +6,7 @@ stages:
   - test_lint
   - build
   - security
+  - release
 
 variables:
     DOCKER_AUTH_CONFIG: '{ "auths": { "https://index.docker.io/v1/": { "auth": "$DOCKER_AUTH" } }}'

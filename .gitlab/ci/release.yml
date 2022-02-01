@@ -1,0 +1,26 @@
+##########################
+# BASE CONFIG
+##########################
+.release_base: &release_base
+  image: node:12-alpine
+  stage: release
+  before_script:
+    - yarn install --network-timeout 1000000
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      when: manual
+      allow_failure: true
+  needs: [] # FIXME: remove
+
+##########################
+# SEMANTIC RELEASE
+##########################
+semantic_release:
+  extends: .release_base
+  script:
+    - yarn run semantic-release
