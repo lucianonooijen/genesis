@@ -2,7 +2,7 @@
 # BASE CONFIG
 ##########################
 .app_base: &app_base
-  image: node:12-alpine
+  image: node:16-alpine
   before_script:
     - cd app
     - apk add git
