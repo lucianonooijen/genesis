@@ -38,3 +38,5 @@ The possible scopes are:
 - docs
 - init
 - server
+
+These are defined in `.commitlintrc.yaml` in the root of the repository. In `.releaserc.js` you can configure what types correspond to what type of release (major/minor/patch).
