@@ -38,6 +38,10 @@ export const loginRequestDecoder = object({
     email: string,
     password: string,
 });
+export const registerTokenRequestDecoder = object({
+    platform: string,
+    token: string,
+});
 export const passwordResetStartRequestDecoder = object({
     email: string,
 });
@@ -48,7 +52,7 @@ export const passwordResetCompleteRequestDecoder = object({
 export const userProfileDecoder = object({
     firstName: string,
 });
-export const deleteRequestDecoder = object({
+export const deleteAccountRequestDecoder = object({
     password: string,
 });
 export const registerRequestDecoder = object({

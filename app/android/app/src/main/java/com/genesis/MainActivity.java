@@ -1,4 +1,4 @@
-package com.genesis;
+package nl.bytecode.genesis;
 
 import com.facebook.react.ReactActivity;
 

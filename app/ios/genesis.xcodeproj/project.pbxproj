@@ -40,6 +40,7 @@
 		203370A2AE5A1882CCDEE222 /* Pods-genesis-genesisTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-genesis-genesisTests.release.xcconfig"; path = "Target Support Files/Pods-genesis-genesisTests/Pods-genesis-genesisTests.release.xcconfig"; sourceTree = "<group>"; };
 		801CA6CAEC1E7045F2659425 /* libPods-genesis.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-genesis.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = genesis/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		9015174427AA7A3B00AE275B /* genesis.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = genesis.entitlements; path = genesis/genesis.entitlements; sourceTree = "<group>"; };
 		90E66C5B73BD94E3C645887E /* Pods-genesis.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-genesis.debug.xcconfig"; path = "Target Support Files/Pods-genesis/Pods-genesis.debug.xcconfig"; sourceTree = "<group>"; };
 		BA9E533E5ABB26A394C8108D /* Pods-genesis-genesisTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-genesis-genesisTests.debug.xcconfig"; path = "Target Support Files/Pods-genesis-genesisTests/Pods-genesis-genesisTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D9F949944DD1C6EB4312A260 /* libPods-genesis-genesisTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-genesis-genesisTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -86,6 +87,7 @@
 		13B07FAE1A68108700A75B9A /* genesis */ = {
 			isa = PBXGroup;
 			children = (
+				9015174427AA7A3B00AE275B /* genesis.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -114,7 +116,6 @@
 				BA9E533E5ABB26A394C8108D /* Pods-genesis-genesisTests.debug.xcconfig */,
 				203370A2AE5A1882CCDEE222 /* Pods-genesis-genesisTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -484,7 +485,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = genesis/genesis.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = JS5JAXY9DB;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = genesis/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -496,7 +499,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = nl.bytecode.genesis;
 				PRODUCT_NAME = genesis;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -510,7 +513,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = genesis/genesis.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = JS5JAXY9DB;
 				INFOPLIST_FILE = genesis/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -521,7 +526,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = nl.bytecode.genesis;
 				PRODUCT_NAME = genesis;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

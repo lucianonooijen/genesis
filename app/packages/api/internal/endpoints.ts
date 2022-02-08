@@ -7,6 +7,7 @@ export enum PostEndpoints {
     Login = "user/login",
     PassResetStart = "user/password-reset/start",
     PassResetComplete = "user/password-reset/complete",
+    PushNotifications = "user/push-notifications",
 }
 
 export enum PutEndpoints {
