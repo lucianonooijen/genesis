@@ -20,17 +20,18 @@ _Bytecode Digital Agency's Project Scaffolding, with the name taken from the Anc
 * genesis
 * @genesis/app
 * @genesis/api
-* com.genesis
+* nl.bytecode.genesis
 * GenesisTests
 * git.bytecode.nl/bytecode/genesis/server
 * https://bytecode.nl
 * https://placekitten.com/400/400
 * development@genesis.bytecode.dev
+* registry.digitalocean.com/dawny/genesis-server
 
 ### FolderNames
 * app/android/app/src/debug/java/com/genesis
 * app/android/app/src/main/java/com/genesis
-* app/ios/Genesis
+* app/ios/Genesis (and other directories in app/ios)
 
 ## Files
 

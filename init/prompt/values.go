@@ -19,9 +19,14 @@ var replaceValuesBase = []ReplaceValue{
 		ReplaceOrder: 98,
 	},
 	{
-		OldValue:     "com.genesis",
+		OldValue:     "nl.bytecode.genesis",
 		Description:  "Android package name",
 		ReplaceOrder: 98,
+	},
+	{
+		OldValue:     "registry.digitalocean.com/dawny/genesis-server",
+		Description:  "Docker registry for server",
+		ReplaceOrder: 6,
 	},
 	{
 		OldValue:     "git.bytecode.nl/bytecode/genesis/server",
