@@ -11,6 +11,7 @@ _Bytecode Digital Agency's Project Scaffolding, with the name taken from the Anc
 * Run `go run .` and answer the questions
 * Replace `/server/static/logo.png` manually
 * Commit your changes to the Git repository
+* There might be some variables that need to be changed by hand later, for example in `app/ios/genesis.xcodeproj/project.pbxproj`: `DEVELOPMENT_TEAM = JS5JAXY9DB;`
 
 ## Stuff that should be replaced in Scaffold step
 
