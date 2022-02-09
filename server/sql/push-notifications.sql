@@ -1,6 +1,6 @@
 -- name: GetPushTokensForUser :many
 -- Gives all push notification tokens for given user
-SELECT platform, token
+SELECT *
 FROM user_push_tokens
 WHERE userid = $1;
 

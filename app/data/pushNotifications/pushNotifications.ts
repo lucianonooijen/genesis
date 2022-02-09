@@ -4,6 +4,16 @@ import { appStateStorage } from "data/asyncStorage/asyncStorage";
 import { pushNotificationRegisterToken } from "@genesis/api";
 import { getApiConfigWithJWT } from "data/api/api";
 
+const tokenOsToServerOs = (tokenOs: string): string => {
+    if (tokenOs === "ios") {
+        return "iOS"
+    }
+    if (tokenOs === "android") {
+        return "Android"
+    }
+    return tokenOs
+}
+
 export const configurePushNotifications = () => {
     PushNotification.configure({
         async onRegister(tokenObject) {
@@ -11,7 +21,7 @@ export const configurePushNotifications = () => {
                 if (appState.jwt) {
                     const apiConfig = getApiConfigWithJWT(appState.jwt);
                     pushNotificationRegisterToken(apiConfig, {
-                        platform: tokenObject.os,
+                        platform: tokenOsToServerOs(tokenObject.os),
                         token: tokenObject.token,
                     });
                 }

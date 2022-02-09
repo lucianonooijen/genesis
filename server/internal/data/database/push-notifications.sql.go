@@ -26,27 +26,22 @@ func (q *Queries) AddUserPushToken(ctx context.Context, arg AddUserPushTokenPara
 }
 
 const getPushTokensForUser = `-- name: GetPushTokensForUser :many
-SELECT platform, token
+SELECT userid, platform, token
 FROM user_push_tokens
 WHERE userid = $1
 `
 
-type GetPushTokensForUserRow struct {
-	Platform MobilePlatform `json:"platform"`
-	Token    string         `json:"token"`
-}
-
 // Gives all push notification tokens for given user
-func (q *Queries) GetPushTokensForUser(ctx context.Context, userid int32) ([]GetPushTokensForUserRow, error) {
+func (q *Queries) GetPushTokensForUser(ctx context.Context, userid int32) ([]UserPushToken, error) {
 	rows, err := q.db.QueryContext(ctx, getPushTokensForUser, userid)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetPushTokensForUserRow
+	var items []UserPushToken
 	for rows.Next() {
-		var i GetPushTokensForUserRow
-		if err := rows.Scan(&i.Platform, &i.Token); err != nil {
+		var i UserPushToken
+		if err := rows.Scan(&i.Userid, &i.Platform, &i.Token); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
