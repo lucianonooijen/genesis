@@ -7,7 +7,7 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "ci": "yarn run typecheck && yarn run lint && yarn run test --ci --coverage --coverageReporters=text",
-    "test": "jest",
+    "test": "JEST=true jest",
     "test:ci": "JEST=true jest --coverage --silent --ci --coverageReporters=text --coverageReporters=cobertura --testResultsProcessor=jest-junit",
     "lint": "eslint .",
     "lint:fix": "yarn run lint --fix",

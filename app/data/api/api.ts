@@ -6,10 +6,19 @@ import config from "../../config";
 export const generateApiConfig = (
     appConfig: AppConfig,
     appState: AppState,
-): ApiConfig => ({
-    baseUrl: appConfig.baseUrl,
-    jwt: appState.jwt,
-});
+): ApiConfig => {
+    const apiConfig = {
+        baseUrl: appConfig.baseUrl,
+        jwt: appState.jwt || undefined,
+    };
+
+    if (!process.env.JEST) {
+        // eslint-disable-next-line no-console
+        console.log(`using api config: ${JSON.stringify(apiConfig)}`);
+    }
+
+    return apiConfig;
+};
 
 export const getApiConfig = (appState: AppState): ApiConfig =>
     generateApiConfig(config, appState);

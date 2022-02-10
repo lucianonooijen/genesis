@@ -1,7 +1,7 @@
 import AppConfig from "./types/AppConfig";
 
 const config: AppConfig = {
-    baseUrl: "http://localhost:5000/v1",
+    baseUrl: "http://192.168.1.73:5000/v1",
 };
 
 export default config;

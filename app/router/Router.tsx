@@ -66,7 +66,7 @@ const tutorialStack = (hasSeenTutorial: boolean) => {
     );
 };
 
-const loginRegisterStack = (jwt: string | undefined) => {
+const loginRegisterStack = (jwt: string | null) => {
     if (jwt) {
         return null;
     }

@@ -37,6 +37,7 @@ module.exports = {
         "react/function-component-definition": [1, { namedComponents: "arrow-function", unnamedComponents: "arrow-function" }], // Force arrow function
         "react/jsx-filename-extension": [1, { extensions: [".tsx", ".jsx"] }], // Force files to have .jsx or .tsx
         "react/prop-types": 0, // Done by using React.FC<PropsInterface>
+        "react/require-default-props": 0, // Otherwise you get false positives, as regular React ESLint rules doesn't fully get Typescript React code
         "@typescript-eslint/no-shadow": ["error"], //  For allowing headacheless Redux Action in props in TS code
         "@typescript-eslint/no-use-before-define": 0, // Allow sane file layouts
     },

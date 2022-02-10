@@ -6,13 +6,13 @@ import { getApiConfigWithJWT } from "data/api/api";
 
 const tokenOsToServerOs = (tokenOs: string): string => {
     if (tokenOs === "ios") {
-        return "iOS"
+        return "iOS";
     }
     if (tokenOs === "android") {
-        return "Android"
+        return "Android";
     }
-    return tokenOs
-}
+    return tokenOs;
+};
 
 export const configurePushNotifications = () => {
     PushNotification.configure({

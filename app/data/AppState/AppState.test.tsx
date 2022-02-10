@@ -3,27 +3,9 @@ import { render } from "@testing-library/react-native";
 import { View, Text } from "react-native";
 import AppStateContext, {
     AppState,
-    AppStateContextProvider,
     AppStateContextProviderTest,
     initialAppState,
 } from "./AppState";
-
-describe("AppStateContextProvider", () => {
-    it("should render the children", () => {
-        const Child = () => (
-            <View>
-                <Text>Example</Text>
-            </View>
-        );
-        const r = render(
-            <AppStateContextProvider>
-                <Child />
-            </AppStateContextProvider>,
-        );
-        const child = r.getByText(/Example/);
-        expect(child).toBeTruthy();
-    });
-});
 
 describe("AppStateContextProviderTest", () => {
     it("should render the children", () => {
@@ -48,6 +30,7 @@ describe("AppStateContextProviderTest", () => {
             jwt: "tester",
 
             setIsLoading: jest.fn(),
+            setFatalError: jest.fn(),
             setHasSeenTutorial: jest.fn(),
             setJwt: jest.fn(),
 

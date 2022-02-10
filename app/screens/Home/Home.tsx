@@ -29,6 +29,15 @@ const Home: React.FC<HomeProps> = ({ getUserProfile = profileGet }) => {
         requestPushPermissions(); // Note: must be done at a moment where an accurate JWT is set in local storage.
     };
 
+    const nuke = () => {
+        appState.reset();
+
+        appState.setFatalError(
+            "De schijt heeft de ventilator geraakt",
+            "OOPSIE WOOPSIE!! Uwu We make a fucky wucky!! A wittle fucko boingo! The code monkeys at our headquarters are working VEWY HAWD to fix this!",
+        );
+    };
+
     return (
         <View
             style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
@@ -38,6 +47,7 @@ const Home: React.FC<HomeProps> = ({ getUserProfile = profileGet }) => {
                 title="I want push notifications"
                 onPress={onPressPushNotifications}
             />
+            <ButtonPrimary title="Nuke app" onPress={nuke} />
         </View>
     );
 };
