@@ -1,6 +1,6 @@
-import * as React from "react";
+import React, { useContext } from "react";
+import { useNetInfo } from "@react-native-community/netinfo";
 import Router from "router/Router";
-import { useContext } from "react";
 import AppStateContext, {
     AppStateContextProvider,
 } from "data/AppState/AppState";
@@ -14,7 +14,18 @@ if (!process.env.JEST) {
 }
 
 export const App = () => {
+    const netInfo = useNetInfo();
     const appState = useContext(AppStateContext);
+
+    if (netInfo.isInternetReachable === false) {
+        // must check for === false, as it can also be null if the state is unknown
+        return (
+            <FatalError
+                title="Geen internetverbinding"
+                description="Genesis werkt alleen met internetverbinding. Verbind je telefoon met het internet om de app te gebruiken."
+            />
+        );
+    }
 
     if (appState.isLoading) {
         // TODO: Add loading animation or something
