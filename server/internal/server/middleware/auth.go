@@ -22,7 +22,7 @@ import (
 
 // JwtAuth is the Gin middleware function to check authentication and update the Gin context accordingly.
 func JwtAuth(loggerParent *zap.Logger, jwtHandlerUser user.HTTPJwtFunc) gin.HandlerFunc {
-	logger := loggerParent.Named("jwt_auth_middleware")
+	logger := loggerParent.Named("server/middleware/JwtAuth")
 	logStep := func(msg string) {
 		logger.Debug(msg)
 	}

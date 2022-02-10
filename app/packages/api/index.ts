@@ -1,4 +1,5 @@
 import { DeleteAccountRequest, UserProfile } from "@genesis/api/types/Profile";
+import ApiError from "@genesis/api/types/ApiError";
 import generatePostApiCall from "./internal/apicall-post";
 import generateGetApiCall from "./internal/apicall-get";
 import generatePutApiCall from "./internal/apicall-put";
@@ -28,6 +29,11 @@ import {
     PasswordResetStartRequest,
 } from "./types/PasswordReset";
 import { RegisterTokenRequest } from "./types/Notification";
+
+export const versionCheck = generateGetApiCall<null>(
+    GetEndpoints.VersionCheck,
+    false,
+);
 
 export const register = generatePostApiCall<RegisterRequest, JwtResponse>(
     PostEndpoints.CreateAccount,
@@ -81,3 +87,13 @@ export const accountDelete = generateDeleteApiCall<DeleteAccountRequest, null>(
     true,
     deleteAccountRequestDecoder,
 );
+
+export class GenesisApiError extends Error {
+    public err: ApiError;
+
+    constructor(err: ApiError) {
+        super(`Error ${err.status}: ${err.title}`);
+
+        this.err = err;
+    }
+}

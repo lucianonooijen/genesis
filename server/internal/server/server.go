@@ -87,11 +87,14 @@ func registerMiddleware(services *interactors.Services, router *gin.Engine, devM
 		"accept",
 		"origin",
 		"Cache-Control",
-		"Authorization"}
+		"Authorization",
+		"X-Genesis-App-Version",
+	}
 
 	router.Use(cors.New(config))
 	router.Use(middleware.EnsureKeysMap())
 	router.Use(middleware.JwtAuth(services.BaseLogger, user.GenerateUserJwtMiddleware(services)))
+	router.Use(middleware.VersionCheck(services.BaseLogger))
 
 	if err := router.SetTrustedProxies([]string{}); err != nil { // TODO: Set this
 		services.BaseLogger.Named("server/registerMiddleware").Fatal("could not set trusted proxies in Gin", zap.Error(err))

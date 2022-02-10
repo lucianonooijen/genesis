@@ -1,4 +1,5 @@
 export enum GetEndpoints {
+    VersionCheck = "app-version",
     UserProfile = "user/profile",
 }
 

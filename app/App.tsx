@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useNetInfo } from "@react-native-community/netinfo";
 import Router from "router/Router";
 import AppStateContext, {
@@ -6,7 +6,8 @@ import AppStateContext, {
 } from "data/AppState/AppState";
 import { UserProfileStateContextProvider } from "data/UserProfileState/UserProfileState";
 import { configurePushNotifications } from "data/pushNotifications/pushNotifications";
-import FatalError from "./screens/FatalError/FatalError";
+import { useAppVersionCheck } from "data/api/versioncheck";
+import FatalError from "screens/FatalError/FatalError";
 
 if (!process.env.JEST) {
     // DO NOT USE .configure() INSIDE A COMPONENT, EVEN App
@@ -16,6 +17,14 @@ if (!process.env.JEST) {
 export const App = () => {
     const netInfo = useNetInfo();
     const appState = useContext(AppStateContext);
+    const [hasCheckedVersion, versionError, checkVersion] =
+        useAppVersionCheck();
+
+    useEffect(() => {
+        if (!process.env.JEST) {
+            checkVersion();
+        }
+    }, [checkVersion]);
 
     if (netInfo.isInternetReachable === false) {
         // must check for === false, as it can also be null if the state is unknown
@@ -27,14 +36,27 @@ export const App = () => {
         );
     }
 
-    if (appState.isLoading) {
+    if (appState.isLoading || !hasCheckedVersion) {
         // TODO: Add loading animation or something
         return null;
     }
 
+    if (versionError) {
+        return (
+            <FatalError
+                title={versionError.title}
+                description={versionError.description}
+            />
+        );
+    }
+
     if (appState.fatalError) {
-        const fe = appState.fatalError;
-        return <FatalError title={fe.title} description={fe.description} />;
+        return (
+            <FatalError
+                title={appState.fatalError.title}
+                description={appState.fatalError.description}
+            />
+        );
     }
 
     return <Router appState={appState} />;

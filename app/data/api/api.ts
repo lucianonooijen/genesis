@@ -8,6 +8,7 @@ export const generateApiConfig = (
     appState: AppState,
 ): ApiConfig => {
     const apiConfig = {
+        appVersion: config.appVersion,
         baseUrl: appConfig.baseUrl,
         jwt: appState.jwt || undefined,
     };
@@ -24,6 +25,7 @@ export const getApiConfig = (appState: AppState): ApiConfig =>
     generateApiConfig(config, appState);
 
 export const getApiConfigWithJWT = (jwt: string): ApiConfig => ({
+    appVersion: config.appVersion,
     baseUrl: config.baseUrl,
     jwt,
 });

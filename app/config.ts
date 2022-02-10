@@ -1,7 +1,9 @@
+import packageJson from "./package.json";
 import AppConfig from "./types/AppConfig";
 
 const config: AppConfig = {
-    baseUrl: "http://192.168.1.73:5000/v1",
+    appVersion: packageJson.version,
+    baseUrl: "http://localhost:5000/v1",
 };
 
 export default config;

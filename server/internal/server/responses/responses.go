@@ -17,7 +17,7 @@ func New() Responses {
 }
 
 func setResponseHeaders(c *gin.Context) {
-	c.Header("X-API-Version", constants.APIVersion)
+	c.Header("X-Genesis-Server-Version", constants.APIVersion)
 }
 
 // Success sends 2XX responses.

@@ -15,6 +15,7 @@ type AvailableStatusCodes struct {
 	ForbiddenRequest    ClientErrorCode
 	NotFoundResponse    ClientErrorCode
 	Conflict            ClientErrorCode
+	MustUpgrade         ClientErrorCode
 	Success             SuccessCode
 	Created             SuccessCode
 	Accepted            SuccessCode
@@ -27,6 +28,7 @@ var StatusCodes = AvailableStatusCodes{
 	ForbiddenRequest:    ClientErrorCode(http.StatusForbidden),
 	NotFoundResponse:    ClientErrorCode(http.StatusNotFound),
 	Conflict:            ClientErrorCode(http.StatusConflict),
+	MustUpgrade:         ClientErrorCode(http.StatusUpgradeRequired),
 	Success:             SuccessCode(http.StatusOK),
 	Created:             SuccessCode(http.StatusCreated),
 	Accepted:            SuccessCode(http.StatusAccepted),
