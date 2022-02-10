@@ -1,6 +1,5 @@
-import * as React from "react";
+import React, { useContext } from "react";
 import Router from "router/Router";
-import { useContext } from "react";
 import AppStateContext, {
     AppStateContextProvider,
 } from "data/AppState/AppState";

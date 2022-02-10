@@ -8,4 +8,5 @@ module.exports = {
         "\\.(jpg|jpeg|png)$": "<rootDir>/__mocks__/imageMock.js",
         "data/pushNotifications/pushNotifications": "<rootDir>/__mocks__/mockPushNotifications.ts",
     },
+    transformIgnorePatterns: ['node_modules/(?!(react-native|@react-navigation|@react-native|react-native-swipe-gestures|react-native-modal-selector|react-native-modal-datetime-picker|react-native-modal|react-native-animatable)/)'],
 };

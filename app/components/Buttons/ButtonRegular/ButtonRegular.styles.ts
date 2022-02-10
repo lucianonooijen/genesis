@@ -11,7 +11,6 @@ export const ButtonContainer = styled.View<{ disabled?: boolean }>`
     flex-direction: row;
     justify-content: center;
     align-items: center;
-
 `;
 
 export const ButtonText = styled.Text`
