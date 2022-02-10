@@ -15,6 +15,13 @@
     "aegis": "decoder-generator generate --inputPath ./packages/api/types --outputFile packages/api/internal/decoders.ts && eslint packages/api/internal/decoders.ts --fix",
     "storybook": "yarn start-storybook"
   },
+  "config": {
+    "react-native-storybook-loader": {
+      "searchDir": ["./storybook/stories/"],
+      "pattern": "**/*.stories.tsx",
+      "outputFile": "./storybook/storyLoader.js"
+    }
+  },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.15.17",
     "@react-navigation/bottom-tabs": "^6.0.9",

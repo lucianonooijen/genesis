@@ -7,7 +7,8 @@ import {
 } from "@storybook/react-native";
 import { withKnobs } from "@storybook/addon-knobs";
 import { name as appName } from "../app.json";
-import * as stories from "./stories";
+import { loadStories } from "./storyLoader";
+
 import "./rn-addons";
 
 // enables knobs for all stories
@@ -16,7 +17,7 @@ addDecorator(withKnobs);
 // import stories
 configure(() => {
     /* eslint-disable no-unused-expressions */
-    stories;
+    loadStories();
 }, module);
 
 const StorybookUI = getStorybookUI({

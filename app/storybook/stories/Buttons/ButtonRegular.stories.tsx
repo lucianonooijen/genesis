@@ -13,7 +13,7 @@ const onPress = () =>
         { text: "OK", onPress: () => console.log("OK Pressed") },
     ]);
 
-storiesOf("Buttons", module)
+storiesOf("Buttons Regular", module)
     .addDecorator(story => <View>{story()}</View>)
     .add("Primary", () => (
         <ButtonPrimary title="Log in" onPress={onPress} disabled={false} />

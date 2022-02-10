@@ -1,1 +1,1 @@
-import "./Buttons/Buttons.stories";
+import "./Buttons/ButtonRegular.stories";
