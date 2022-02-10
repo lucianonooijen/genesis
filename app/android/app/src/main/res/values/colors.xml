@@ -1,0 +1,4 @@
+<resources>
+    <!-- Primary color for notifications here. -->
+    <color name="primary">#FFF</color>
+</resources>

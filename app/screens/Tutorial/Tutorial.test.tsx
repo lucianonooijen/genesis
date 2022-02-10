@@ -5,7 +5,7 @@ import {
     TutorialScreenTwo,
     TutorialScreenThree,
 } from "./Tutorial";
-import useMockNavigation from "../../test/mockNavigation";
+import useMockNavigation from "../../__mocks__/mockNavigation";
 
 describe("LandingPages", () => {
     it("should render TutorialScreenOne without throwing", () => {
