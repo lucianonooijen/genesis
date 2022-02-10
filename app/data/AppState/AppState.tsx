@@ -1,3 +1,4 @@
+import { appStateStorage } from "data/asyncStorage/asyncStorage";
 import React, { useEffect, useState } from "react";
 
 export interface AppState {
@@ -48,6 +49,7 @@ const AppStateContextProvider: React.FC = ({ children }) => {
             ...currentState,
             jwt,
         }));
+        appStateStorage.set({ jwt });
     };
 
     const reset = () => {

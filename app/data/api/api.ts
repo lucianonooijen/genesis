@@ -13,3 +13,8 @@ export const generateApiConfig = (
 
 export const getApiConfig = (appState: AppState): ApiConfig =>
     generateApiConfig(config, appState);
+
+export const getApiConfigWithJWT = (jwt: string): ApiConfig => ({
+    baseUrl: config.baseUrl,
+    jwt,
+});

@@ -1,6 +1,6 @@
 import React from "react";
 import { fireEvent, render } from "@testing-library/react-native";
-import useMockNavigation from "test/mockNavigation";
+import useMockNavigation from "__mocks__/mockNavigation";
 import LoginRegisterLanding from "./LoginRegisterLanding";
 import { LoginRegisterScreens } from "../../../router/types";
 

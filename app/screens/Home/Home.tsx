@@ -4,8 +4,10 @@ import { profileGet } from "@genesis/api";
 import UserProfileStateContext from "data/UserProfileState/UserProfileState";
 import AppStateContext from "data/AppState/AppState";
 import { getApiConfig } from "data/api/api";
+import { ButtonPrimary } from "components/Buttons/ButtonRegular/ButtonRegular";
+import { requestPushPermissions } from "data/pushNotifications/pushNotifications";
+import { generateLoadUserProfileStateEffect } from "data/api/profile";
 import { HomeProps } from "./Home.types";
-import { generateLoadUserProfileStateEffect } from "../../data/api/profile";
 
 const Home: React.FC<HomeProps> = ({ getUserProfile = profileGet }) => {
     const userProfileState = useContext(UserProfileStateContext);
@@ -23,11 +25,19 @@ const Home: React.FC<HomeProps> = ({ getUserProfile = profileGet }) => {
         [appState, getUserProfile, userProfileState],
     );
 
+    const onPressPushNotifications = () => {
+        requestPushPermissions(); // Note: must be done at a moment where an accurate JWT is set in local storage.
+    };
+
     return (
         <View
             style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
             <Text>Welcome to Home, {userProfileState.profile.firstName}</Text>
+            <ButtonPrimary
+                title="I want push notifications"
+                onPress={onPressPushNotifications}
+            />
         </View>
     );
 };

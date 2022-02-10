@@ -1,6 +1,6 @@
 import React from "react";
 import { fireEvent, render, waitFor } from "@testing-library/react-native";
-import useMockNavigation from "test/mockNavigation";
+import useMockNavigation from "__mocks__/mockNavigation";
 import PasswordForgotStart from "./PasswordForgotStart";
 
 describe("PasswordForgotStart", () => {

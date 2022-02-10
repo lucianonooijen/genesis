@@ -11,13 +11,14 @@ import {
 } from "./internal/endpoints";
 
 import {
-    deleteRequestDecoder,
+    deleteAccountRequestDecoder,
     jwtResponseDecoder,
     loginRequestDecoder,
     passwordResetCompleteRequestDecoder,
     passwordResetStartRequestDecoder,
     registerRequestDecoder,
     userProfileDecoder,
+    registerTokenRequestDecoder,
 } from "./internal/decoders";
 import { RegisterRequest } from "./types/Register";
 import { LoginRequest } from "./types/Login";
@@ -26,6 +27,7 @@ import {
     PasswordResetCompleteRequest,
     PasswordResetStartRequest,
 } from "./types/PasswordReset";
+import { RegisterTokenRequest } from "./types/Notification";
 
 export const register = generatePostApiCall<RegisterRequest, JwtResponse>(
     PostEndpoints.CreateAccount,
@@ -69,8 +71,13 @@ export const profileUpdate = generatePutApiCall<UserProfile, UserProfile>(
     userProfileDecoder,
 );
 
+export const pushNotificationRegisterToken = generatePostApiCall<
+    RegisterTokenRequest,
+    null
+>(PostEndpoints.PushNotifications, true, registerTokenRequestDecoder);
+
 export const accountDelete = generateDeleteApiCall<DeleteAccountRequest, null>(
     DeleteEndpoints.UserProfile,
     true,
-    deleteRequestDecoder,
+    deleteAccountRequestDecoder,
 );
