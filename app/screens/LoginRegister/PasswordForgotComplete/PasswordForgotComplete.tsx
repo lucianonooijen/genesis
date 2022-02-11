@@ -9,6 +9,10 @@ import { usePasswordValidation } from "components/Input/TextInput/TextInput.vali
 import ErrorBanner from "components/ErrorBanner/ErrorBanner";
 import AppStateContext from "data/AppState/AppState";
 import { getApiConfig } from "data/api/api";
+import {
+    logPasswordResetCompleteError,
+    logPasswordResetCompleteFinish,
+} from "data/analytics/analytics";
 import { PasswordForgotCompleteProps } from "./PasswordForgotComplete.types";
 
 const PasswordForgotComplete: React.FC<PasswordForgotCompleteProps> = ({
@@ -30,8 +34,10 @@ const PasswordForgotComplete: React.FC<PasswordForgotCompleteProps> = ({
                 resetToken: resetCode,
                 password,
             });
+            logPasswordResetCompleteFinish();
             appState.setJwt(res.jwt);
         } catch (e) {
+            logPasswordResetCompleteError(e);
             setError(e as Error);
         }
     };

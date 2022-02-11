@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { register } from "@genesis/api";
 import { LoginRegisterScreens } from "router/types";
 import PaddedEmptyLayout from "layouts/PaddedEmptyLayout/PaddedEmptyLayout";
@@ -9,6 +9,11 @@ import { InputFieldType } from "components/Input/TextInput/TextInput.types";
 import ErrorBanner from "components/ErrorBanner/ErrorBanner";
 import AppStateContext from "data/AppState/AppState";
 import { getApiConfig } from "data/api/api";
+import {
+    logRegisterComplete,
+    logRegisterError,
+    logRegisterOpen,
+} from "data/analytics/analytics";
 import {
     useEmailValidation,
     usePasswordValidation,
@@ -32,6 +37,8 @@ const Register: React.FC<RegisterProps> = ({
     const canSubmitForm =
         name && email && password && !emailError && !passwordError;
 
+    useEffect(logRegisterOpen, []);
+
     const submit = async () => {
         setError(null);
         const config = getApiConfig(appState);
@@ -42,7 +49,9 @@ const Register: React.FC<RegisterProps> = ({
                 firstName: name,
             });
             appState.setJwt(res.jwt);
+            logRegisterComplete(email);
         } catch (e) {
+            logRegisterError(e);
             setError(e as Error);
         }
     };

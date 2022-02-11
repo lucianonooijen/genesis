@@ -1,9 +1,10 @@
 import React, { useContext } from "react";
-import { StackNavigationProps } from "../../types/Navigation";
-import TutorialLayout from "../../layouts/TutorialLayout/TutorialLayout";
+import { StackNavigationProps } from "types/Navigation";
+import TutorialLayout from "layouts/TutorialLayout/TutorialLayout";
+import { TutorialScreens } from "router/types";
+import appState from "data/AppState/AppState";
+import { logTutorialComplete } from "data/analytics/analytics";
 import tutorialData from "./data";
-import { TutorialScreens } from "../../router/types";
-import appState from "../../data/AppState/AppState";
 
 export const TutorialScreenOne: React.FC<StackNavigationProps> = ({
     navigation,
@@ -30,7 +31,10 @@ export const TutorialScreenTwo: React.FC<StackNavigationProps> = ({
 export const TutorialScreenThree: React.FC<StackNavigationProps> = () => {
     const { setHasSeenTutorial } = useContext(appState);
     const pageDataBase = tutorialData[2];
-    const onPressContinue = () => setHasSeenTutorial(true);
+    const onPressContinue = () => {
+        setHasSeenTutorial(true);
+        logTutorialComplete();
+    };
     const pageData = { ...pageDataBase, onPressContinue };
 
     return <TutorialLayout pageData={pageData} />;

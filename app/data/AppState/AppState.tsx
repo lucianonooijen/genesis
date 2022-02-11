@@ -1,5 +1,9 @@
-import { appStateStorage } from "data/asyncStorage/asyncStorage";
 import React, { useEffect, useState } from "react";
+import { appStateStorage } from "data/asyncStorage/asyncStorage";
+import {
+    logGeneralAppReset,
+    logGeneralFatalError,
+} from "data/analytics/analytics";
 
 export interface AppState {
     isLoading: boolean;
@@ -55,6 +59,8 @@ const AppStateContextProvider: React.FC = ({ children }) => {
             ...currentState,
             fatalError: { title, description },
         }));
+
+        logGeneralFatalError(title, description);
     };
 
     const setJwt = (jwt: string | null) => {
@@ -74,6 +80,8 @@ const AppStateContextProvider: React.FC = ({ children }) => {
         }));
 
         appStateStorage.remove();
+
+        logGeneralAppReset();
     };
 
     useEffect(() => {

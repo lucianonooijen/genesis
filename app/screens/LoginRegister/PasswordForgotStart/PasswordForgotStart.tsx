@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { passwordResetStart } from "@genesis/api";
 import { LoginRegisterScreens } from "router/types";
 import PaddedEmptyLayout from "layouts/PaddedEmptyLayout/PaddedEmptyLayout";
@@ -10,6 +10,11 @@ import TextInput from "components/Input/TextInput/TextInput";
 import ErrorBanner from "components/ErrorBanner/ErrorBanner";
 import { getApiConfig } from "data/api/api";
 import AppStateContext from "data/AppState/AppState";
+import {
+    logPasswordResetOpen,
+    logPasswordResetStarted,
+    logPasswordResetStartError,
+} from "data/analytics/analytics";
 import { PasswordForgotStartProps } from "./PasswordForgotStart.types";
 
 const PasswordForgotStart: React.FC<PasswordForgotStartProps> = ({
@@ -21,13 +26,17 @@ const PasswordForgotStart: React.FC<PasswordForgotStartProps> = ({
     const [email, setEmail] = useState("");
     const [emailError, validateEmail] = useEmailValidation();
 
+    useEffect(logPasswordResetOpen, []);
+
     const submit = async () => {
         setError(null);
         const config = getApiConfig(appState);
         try {
             await passwordResetStartApiCall(config, { email });
+            logPasswordResetStarted(email);
             navigation.navigate(LoginRegisterScreens.PasswordForgotComplete);
         } catch (e) {
+            logPasswordResetStartError(email);
             setError(e as Error);
         }
     };
