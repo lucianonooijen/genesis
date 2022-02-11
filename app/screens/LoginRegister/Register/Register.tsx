@@ -9,6 +9,10 @@ import { InputFieldType } from "components/Input/TextInput/TextInput.types";
 import ErrorBanner from "components/ErrorBanner/ErrorBanner";
 import AppStateContext from "data/AppState/AppState";
 import { getApiConfig } from "data/api/api";
+import {
+    useEmailValidation,
+    usePasswordValidation,
+} from "components/Input/TextInput/TextInput.validation";
 import { RegisterProps } from "./Register.types";
 
 const Register: React.FC<RegisterProps> = ({
@@ -18,9 +22,15 @@ const Register: React.FC<RegisterProps> = ({
     const appState = useContext(AppStateContext);
     const [error, setError] = useState<Error | null>(null);
     const [name, setName] = useState("");
+
     const [email, setEmail] = useState("");
+    const [emailError, validateEmail] = useEmailValidation();
+
     const [password, setPassword] = useState("");
-    const canSubmitForm = name && email && password;
+    const [passwordError, validatePassword] = usePasswordValidation();
+
+    const canSubmitForm =
+        name && email && password && !emailError && !passwordError;
 
     const submit = async () => {
         setError(null);
@@ -47,11 +57,15 @@ const Register: React.FC<RegisterProps> = ({
                 type={InputFieldType.Email}
                 label="Email"
                 onChange={setEmail}
+                validatorFunc={validateEmail}
+                validationError={emailError}
             />
             <TextInput
                 type={InputFieldType.Password}
                 label="Password"
                 onChange={setPassword}
+                validatorFunc={validatePassword}
+                validationError={passwordError}
             />
             <ButtonPrimary
                 title="Register"

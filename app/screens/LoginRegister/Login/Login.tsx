@@ -10,13 +10,22 @@ import ErrorBanner from "components/ErrorBanner/ErrorBanner";
 import AppStateContext from "data/AppState/AppState";
 import { getApiConfig } from "data/api/api";
 import { LoginProps } from "./Login.types";
+import {
+    useEmailValidation,
+    usePasswordValidation,
+} from "../../../components/Input/TextInput/TextInput.validation";
 
 const Login: React.FC<LoginProps> = ({ navigation, loginApiCall = login }) => {
     const appState = useContext(AppStateContext);
     const [error, setError] = useState<Error | null>(null);
+
     const [email, setEmail] = useState("");
+    const [emailError, validateEmail] = useEmailValidation();
+
     const [password, setPassword] = useState("");
-    const canSubmitForm = email && password;
+    const [passwordError, validatePassword] = usePasswordValidation();
+
+    const canSubmitForm = email && password && !emailError && !passwordError;
 
     const submit = async () => {
         setError(null);
@@ -38,11 +47,15 @@ const Login: React.FC<LoginProps> = ({ navigation, loginApiCall = login }) => {
                 type={InputFieldType.Email}
                 label="Email"
                 onChange={setEmail}
+                validatorFunc={validateEmail}
+                validationError={emailError}
             />
             <TextInput
                 type={InputFieldType.Password}
                 label="Password"
                 onChange={setPassword}
+                validatorFunc={validatePassword}
+                validationError={passwordError}
             />
             <ButtonPrimary
                 title="Log in"

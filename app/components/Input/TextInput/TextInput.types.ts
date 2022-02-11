@@ -13,4 +13,6 @@ export default interface TextInputProps {
     initialValue?: string;
     onChange: (value: string) => void;
     testID?: string;
+    validatorFunc?: (value: string, reset?: boolean) => void;
+    validationError?: string;
 }

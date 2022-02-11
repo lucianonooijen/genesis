@@ -54,4 +54,33 @@ describe("TextInput", () => {
     it("should render with type set to Phone", () => {
         render(<TextInput onChange={() => {}} type={InputFieldType.Phone} />);
     });
+
+    it("should not render the error when there is none", () => {
+        const r = render(
+            <TextInput onChange={() => {}} type={InputFieldType.Email} />,
+        );
+        expect(() => r.getByTestId("textinput_error")).toThrow();
+    });
+
+    it("should not render the error when it's an emptry string", () => {
+        const r = render(
+            <TextInput
+                onChange={() => {}}
+                type={InputFieldType.Email}
+                validationError=""
+            />,
+        );
+        expect(() => r.getByTestId("textinput_error")).toThrow();
+    });
+
+    it("should render the error when it's truthy", () => {
+        const r = render(
+            <TextInput
+                onChange={() => {}}
+                type={InputFieldType.Email}
+                validationError="ErrorString"
+            />,
+        );
+        r.getByTestId("textinput_error");
+    });
 });

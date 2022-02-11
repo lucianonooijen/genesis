@@ -9,14 +9,25 @@ export const InputContainer = styled.View`
     margin: 20px 0;
 `;
 
-export const InputElement = styled.TextInput<{ withLabel?: boolean }>`
-    padding: ${props => (props.withLabel ? "0 0 6px" : "18px 0 6px")};
+// TODO: load from theme instead of local variable
+const errorColor = "#f00";
+
+export const InputElement = styled.TextInput<{ hasError: boolean }>`
+    padding: ${props => (props.hasError ? "18px 0 0;" : "18px 0 10px;")}
     font-size: 18px;
     border-bottom-width: 1px;
-    border-color: #e7e7e7;
+    border-color: ${props => (props.hasError ? errorColor : "#e7e7e7")};
     width: 100%;
 `;
 
-export const LabelText = styled(Label)`
-    color: #333;
+export const LabelText = styled(Label)<{ hasError: boolean }>`
+    color: ${props => (props.hasError ? errorColor : "#333")};
+`;
+
+export const ErrorText = styled(Label)<{ hasError: boolean }>`
+    color: ${errorColor};
+    font-size: 8px;
+    padding: 0;
+    margin: 0;
+    height: 10px;
 `;
