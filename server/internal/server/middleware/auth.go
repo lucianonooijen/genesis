@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/getsentry/sentry-go"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 
@@ -13,14 +14,8 @@ import (
 	"git.bytecode.nl/bytecode/genesis/server/internal/server/responses"
 )
 
-// TODO: Add to logStep closure:
-// sentry.AddBreadcrumb(&sentry.Breadcrumb{
-// 	Category: "auth_middleware",
-// 	Message:  msg,
-// 	Level:    sentry.LevelInfo,
-// })
-
 // JwtAuth is the Gin middleware function to check authentication and update the Gin context accordingly.
+// nolint:funlen // it's clearer to have this as a long function than to break it up
 func JwtAuth(loggerParent *zap.Logger, jwtHandlerUser user.HTTPJwtFunc) gin.HandlerFunc {
 	logger := loggerParent.Named("server/middleware/JwtAuth")
 	logStep := func(msg string) {
@@ -89,7 +84,17 @@ func JwtAuth(loggerParent *zap.Logger, jwtHandlerUser user.HTTPJwtFunc) gin.Hand
 			c.Keys[constants.GinContextKeyUser] = u
 			c.Keys[constants.GinContextKeyRole] = constants.JwtSubjectUsers
 
+			sentry.ConfigureScope(func(scope *sentry.Scope) {
+				scope.SetUser(sentry.User{
+					Email:     u.Email,
+					ID:        fmt.Sprintf("%d", u.ID),
+					IPAddress: c.ClientIP(),
+					Username:  u.UserUuid.String(),
+				})
+			})
+
 			logStep(fmt.Sprintf("enriched request with user id: %d (%s), email %s, name %s", u.ID, u.UserUuid, u.Email, u.FirstName))
+
 			c.Next()
 
 			return

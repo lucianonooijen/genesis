@@ -5,7 +5,11 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/TheZeroSlave/zapsentry"
+	"github.com/getsentry/sentry-go"
 	"github.com/go-playground/validator/v10"
+	"go.uber.org/zap/zapcore"
+	"go.uber.org/zap/zapio"
 
 	"git.bytecode.nl/bytecode/genesis/server/internal/constants"
 	"git.bytecode.nl/bytecode/genesis/server/internal/data/database"
@@ -18,7 +22,7 @@ import (
 	"git.bytecode.nl/bytecode/genesis/server/internal/interactors"
 )
 
-// nolint:wsl // with cuddles is better readable here
+// nolint:wsl,funlen // with cuddles is better readable here, also allow long function length because it's the init func
 func loadServices() *interactors.Services {
 	var (
 		services interactors.Services
@@ -37,6 +41,33 @@ func loadServices() *interactors.Services {
 	services.BaseLogger = logBase
 	logMain := logInstance.Named("main_init")
 	logMain.Info("Hello world. Config loaded, logger configured.")
+
+	// Sentry setup
+	logMain.Debug("setting up Sentry")
+	err = sentry.Init(sentry.ClientOptions{
+		Dsn:         services.Config.SentryDSN,
+		Debug:       services.Config.SentryEnvironment == "development",
+		Release:     constants.APIVersion,
+		Environment: services.Config.SentryEnvironment,
+		DebugWriter: &zapio.Writer{
+			Log:   logBase.Named("sentry"),
+			Level: zapcore.DebugLevel,
+		},
+	})
+	panicOnErr(err)
+
+	// Connect logger and Sentry
+	logMain.Debug("connecting Sentry to BaseLogger")
+	zapSentryConfig := zapsentry.Configuration{
+		Level:             zapcore.ErrorLevel, // when to send message to sentry
+		EnableBreadcrumbs: true,               // enable sending breadcrumbs to Sentry
+		DisableStacktrace: false,              // we want stacktrace
+		BreadcrumbLevel:   zapcore.InfoLevel,  // at what level should we sent breadcrumbs to sentry
+	}
+	core, err := zapsentry.NewCore(zapSentryConfig, zapsentry.NewSentryClientFromDSN(services.Config.SentryDSN))
+	panicOnErr(err)
+	services.BaseLogger = services.BaseLogger.With(zapsentry.NewScope())
+	services.BaseLogger = zapsentry.AttachCoreToLogger(core, services.BaseLogger)
 
 	// DBConn connection
 	logMain.Debug("opening database connection")

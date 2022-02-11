@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	sentrygin "github.com/getsentry/sentry-go/gin"
 	"go.uber.org/zap"
 
 	"github.com/gin-contrib/cors"
@@ -91,6 +92,7 @@ func registerMiddleware(services *interactors.Services, router *gin.Engine, devM
 		"X-Genesis-App-Version",
 	}
 
+	router.Use(sentrygin.New(sentrygin.Options{}))
 	router.Use(cors.New(config))
 	router.Use(middleware.EnsureKeysMap())
 	router.Use(middleware.JwtAuth(services.BaseLogger, user.GenerateUserJwtMiddleware(services)))
