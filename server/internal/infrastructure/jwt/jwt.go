@@ -6,6 +6,7 @@ import (
 	"time"
 
 	jwtLib "github.com/dgrijalva/jwt-go"
+	"github.com/google/uuid"
 )
 
 // Issuer is the issuer used for JWTs.
@@ -17,6 +18,10 @@ type Util struct {
 	subject   string        `validate:"required"`
 	validity  time.Duration `validate:"required"`
 }
+
+// ErrDifferentKeyID is the error given when the password uuid (key id) of a jwt is not the expected value.
+// This happens when a user has changed his/her password.
+var ErrDifferentKeyID = fmt.Errorf("jwt id is not the current password uuid of the user")
 
 // New creates a Util instance and returns it if argument validation succeeds.
 func New(jwtSecret, subject string, validity time.Duration) (*Util, error) {
@@ -34,10 +39,11 @@ func New(jwtSecret, subject string, validity time.Duration) (*Util, error) {
 }
 
 // CreateJWT creates a JWT for a user string.
-func (jwt Util) CreateJWT(userUniqueIdentifyer string) (token string, err error) {
+func (jwt Util) CreateJWT(userUniqueIdentifyer string, keyUUID uuid.UUID) (token string, err error) {
 	claims := &jwtLib.StandardClaims{
 		Audience:  userUniqueIdentifyer,
 		Issuer:    Issuer,
+		Id:        keyUUID.String(),
 		Subject:   jwt.subject,
 		ExpiresAt: time.Now().Add(jwt.validity).Unix(),
 	}
@@ -46,10 +52,8 @@ func (jwt Util) CreateJWT(userUniqueIdentifyer string) (token string, err error)
 	return tok.SignedString(jwt.jwtSecret)
 }
 
-// FIXME: Add JWT id check
-
 // ValidateJWT validates the JWT and returns the user string.
-func (jwt Util) ValidateJWT(token string) (user string, err error) {
+func (jwt Util) ValidateJWT(token string, currentUserPasswordUUID uuid.UUID) (user string, err error) {
 	tok, err := jwtLib.Parse(token, func(token *jwtLib.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwtLib.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
@@ -72,6 +76,18 @@ func (jwt Util) ValidateJWT(token string) (user string, err error) {
 
 		if subject != jwt.subject {
 			return "", fmt.Errorf("JWT subject (%s) does not match Util instance subject (%s)", subject, jwt.subject)
+		}
+
+		// Check the key id in case this JWT is invalidated
+		keyIDClaim := claims["jti"]
+
+		keyID, ok := keyIDClaim.(string)
+		if !ok {
+			return "", fmt.Errorf("cannot convert jti claim of '%s' to keyID string", keyID)
+		}
+
+		if keyID != currentUserPasswordUUID.String() {
+			return "", ErrDifferentKeyID
 		}
 
 		// Fetch the user from the JWT

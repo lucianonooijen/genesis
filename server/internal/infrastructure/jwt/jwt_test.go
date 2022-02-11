@@ -4,14 +4,16 @@ import (
 	"testing"
 	"time"
 
-	"git.bytecode.nl/bytecode/genesis/server/internal/infrastructure/jwt"
-
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+
+	"git.bytecode.nl/bytecode/genesis/server/internal/infrastructure/jwt"
 )
 
 const Year = time.Hour * 24 * 365
 
 var testUser = "john_doe@protonmail.com"
+var testUUID = uuid.New()
 
 func TestNew_Valid(t *testing.T) {
 	_, err := jwt.New("the secret", "user auth key", Year)
@@ -34,7 +36,7 @@ func TestJwtUtil_CreateJWT(t *testing.T) {
 	j, err := jwt.New("key", "user auth key", Year)
 	assert.NoError(t, err)
 
-	token, err := j.CreateJWT("user")
+	token, err := j.CreateJWT("user", testUUID)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, token)
 }
@@ -43,12 +45,12 @@ func TestJwtUtil_ValidateJWT_User(t *testing.T) {
 	assert.NoError(t, err)
 
 	// Create key
-	key, err := j.CreateJWT(testUser)
+	key, err := j.CreateJWT(testUser, testUUID)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, key)
 
 	// Get the user from the generated key and check if it's the testUser
-	user, err := j.ValidateJWT(key)
+	user, err := j.ValidateJWT(key, testUUID)
 	assert.NoError(t, err)
 	assert.Equal(t, testUser, user)
 }
@@ -58,12 +60,12 @@ func TestJwtUtil_ValidateJWT_ExpiredKey(t *testing.T) {
 	assert.NoError(t, err)
 
 	// Create key
-	key, err := j.CreateJWT(testUser)
+	key, err := j.CreateJWT(testUser, testUUID)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, key)
 
 	// Validate JWT key that should err because the key is expired
-	user, err := j.ValidateJWT(key)
+	user, err := j.ValidateJWT(key, testUUID)
 	assert.Error(t, err)
 	assert.NotEqual(t, testUser, user)
 }
@@ -75,12 +77,12 @@ func TestJwtUtil_ValidateJWT_Subject(t *testing.T) {
 	assert.NoError(t, err)
 
 	// Create key
-	key, err := jOne.CreateJWT(testUser)
+	key, err := jOne.CreateJWT(testUser, testUUID)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, key)
 
 	// Validate JWT key that should err because the key subject is expired
-	user, err := jTwo.ValidateJWT(key)
+	user, err := jTwo.ValidateJWT(key, testUUID)
 	assert.Error(t, err)
 	assert.NotEqual(t, testUser, user)
 }
@@ -92,12 +94,30 @@ func TestJwtUtil_ValidateJWT_DifferentSecrets(t *testing.T) {
 	assert.NoError(t, err)
 
 	// Create key
-	key, err := jOne.CreateJWT(testUser)
+	key, err := jOne.CreateJWT(testUser, testUUID)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, key)
 
 	// Validate JWT key that should err because the jwtSecret is not correct
-	user, err := jTwo.ValidateJWT(key)
+	user, err := jTwo.ValidateJWT(key, testUUID)
 	assert.Error(t, err)
 	assert.NotEqual(t, testUser, user)
+}
+
+func TestJwtUtil_ValidateJWT_ChangedKeyID(t *testing.T) {
+	testUUIDOne := uuid.New()
+	testUUIDTwo := uuid.New()
+	j, err := jwt.New("key", "user auth key", Year)
+	assert.NoError(t, err)
+
+	// Create key
+	key, err := j.CreateJWT(testUser, testUUIDOne)
+	assert.NoError(t, err)
+	assert.NotEmpty(t, key)
+
+	// Get the user from the generated key and check if it's the testUser
+	user, err := j.ValidateJWT(key, testUUIDTwo)
+	assert.Error(t, err)
+	assert.Equal(t, jwt.ErrDifferentKeyID, err)
+	assert.Empty(t, user)
 }

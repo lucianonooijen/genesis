@@ -9,11 +9,7 @@ import (
 	"git.bytecode.nl/bytecode/genesis/server/internal/infrastructure/jwt"
 )
 
-var (
-	testSubject = "this_is_a_subject"
-)
-
-func TestExtractSubject_Extract(t *testing.T) {
+func TestExtractAudience_Extract(t *testing.T) {
 	j, err := jwt.New("key1", testSubject, Year)
 	assert.NoError(t, err)
 
@@ -22,13 +18,13 @@ func TestExtractSubject_Extract(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotEmpty(t, key)
 
-	// Extract JWT and check if it's the test subject
-	sub, err := jwt.ExtractSubject(key)
+	// Extract JWT and check if it's the test audience
+	aud, err := jwt.ExtractAudience(key)
 	assert.NoError(t, err)
-	assert.Equal(t, testSubject, sub)
+	assert.Equal(t, testUser, aud)
 }
 
-func TestExtractSubject_NoValidateSignature(t *testing.T) {
+func TestExtractAudience_NoValidateSignature(t *testing.T) {
 	j, err := jwt.New("key1", testSubject, Year)
 	assert.NoError(t, err)
 
@@ -39,12 +35,12 @@ func TestExtractSubject_NoValidateSignature(t *testing.T) {
 
 	// Modify the key to invalidate the signature
 	keyParts := strings.Split(key, ".")
-	exampleSignature := "VKPicz1jQzeysLyvjPxAJAJYzc0zHFVuMqabop9ovXc"
+	exampleSignature := "VKPicz1jQzeysLyvjPxAJAJYzc0zHFVuMqabop9ovxc"
 	keyParts[2] = exampleSignature
 	keyWithInvalidSignature := strings.Join(keyParts, ".")
 
-	// Extract JWT and check if it's the test subject
-	sub, err := jwt.ExtractSubject(keyWithInvalidSignature)
+	// Extract JWT and check if it's the test audience
+	aud, err := jwt.ExtractAudience(keyWithInvalidSignature)
 	assert.NoError(t, err)
-	assert.Equal(t, testSubject, sub)
+	assert.Equal(t, testUser, aud)
 }

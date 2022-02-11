@@ -2,11 +2,13 @@ package user
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/google/uuid"
 	"go.uber.org/zap"
 
 	"git.bytecode.nl/bytecode/genesis/server/internal/data/database"
+	"git.bytecode.nl/bytecode/genesis/server/internal/infrastructure/jwt"
 	"git.bytecode.nl/bytecode/genesis/server/internal/interactors"
 )
 
@@ -16,26 +18,26 @@ type HTTPJwtFunc func(jwt string) (*database.User, error)
 func jwtForUser(s *interactors.Services, user *database.User) (string, error) {
 	uniqueUserIdentifier := user.UserUuid.String()
 
-	return s.JWT.CreateJWT(uniqueUserIdentifier)
+	return s.JWT.CreateJWT(uniqueUserIdentifier, user.PasswordUuid)
 }
 
 // GetUserByJwt validates the JWT and returns the user if it's valid.
-func GetUserByJwt(s *interactors.Services, jwt string) (*database.User, error) {
+func GetUserByJwt(s *interactors.Services, jwtString string) (*database.User, error) {
 	log := s.BaseLogger.Named("domains/user/GetUserByJwt")
-	log.Debug("validating jwt")
 
-	userUUIDString, err := s.JWT.ValidateJWT(jwt)
+	log.Debug("extracting audience (user uuid) from jwtString")
+
+	aud, err := jwt.ExtractAudience(jwtString)
 	if err != nil {
 		return nil, err
 	}
 
-	userUUID, err := uuid.Parse(userUUIDString)
+	log.Info("extracted user uuid from jwt", zap.String("user_uuid", aud))
+
+	userUUID, err := uuid.Parse(aud)
 	if err != nil {
 		return nil, err
 	}
-
-	log.Info("validated JWT, detected user uuid", zap.String("userUUIDString", userUUIDString))
-	log = log.With(zap.String("user_email", userUUIDString))
 
 	log.Debug("fetching user from database")
 
@@ -45,6 +47,17 @@ func GetUserByJwt(s *interactors.Services, jwt string) (*database.User, error) {
 	}
 
 	log.Debug("user fetched from database", zap.Int32("user_id", user.ID))
+
+	log.Debug("validating jwtString, including the jwt key id with the user password uuid")
+
+	userUUIDString, err := s.JWT.ValidateJWT(jwtString, user.PasswordUuid)
+	if err != nil {
+		return nil, err
+	}
+
+	if userUUIDString != aud {
+		return nil, fmt.Errorf("userUUIDString %s is not the same as the aud %s", userUUIDString, aud)
+	}
 
 	return &user, err
 }

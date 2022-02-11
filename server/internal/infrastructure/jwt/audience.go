@@ -7,12 +7,14 @@ import (
 	jwtLib "github.com/dgrijalva/jwt-go"
 )
 
-// ExtractSubject parses the JWT token and ONLY returns the subject.
+var noKeyFuncJwtLibErr = "no Keyfunc was provided."
+
+// ExtractAudience parses the JWT token and ONLY returns the audience.
 // Use this with caution, because the TOKEN SIGNATURE IS NOT VALIDATED!
-// This is useful in cases where you have multiple JWT verifying instances
-// and need to select which one base on the subject.
+// This is useful in cases where you need the audience to fetch data,
+// used to validate the JWT later on.
 // Never use this function for validating JWTs!
-func ExtractSubject(token string) (subject string, err error) {
+func ExtractAudience(token string) (audience string, err error) {
 	tok, err := jwtLib.Parse(token, nil)
 	if err != nil {
 		// This error is expected.
@@ -30,19 +32,19 @@ func ExtractSubject(token string) (subject string, err error) {
 		return "", fmt.Errorf("could not extract token claims")
 	}
 
-	subRaw := claims["sub"]
-	if subRaw == nil {
-		return "", fmt.Errorf("subject in map is nil")
+	audRaw := claims["aud"]
+	if audRaw == nil {
+		return "", fmt.Errorf("audience in map is nil")
 	}
 
-	sub, ok := subRaw.(string)
+	aud, ok := audRaw.(string)
 	if !ok {
-		return "", fmt.Errorf("subject could not be converted to string")
+		return "", fmt.Errorf("audience could not be converted to string")
 	}
 
-	if sub == "" {
-		return "", fmt.Errorf("subject is not set")
+	if aud == "" {
+		return "", fmt.Errorf("audience is not set")
 	}
 
-	return sub, nil
+	return aud, nil
 }
