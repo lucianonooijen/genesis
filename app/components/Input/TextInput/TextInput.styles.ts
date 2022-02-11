@@ -24,7 +24,7 @@ export const LabelText = styled(Label)<{ hasError: boolean }>`
     color: ${props => (props.hasError ? errorColor : "#333")};
 `;
 
-export const ErrorText = styled(Label)<{ hasError: boolean }>`
+export const ErrorText = styled(Label)`
     color: ${errorColor};
     font-size: 8px;
     padding: 0;
