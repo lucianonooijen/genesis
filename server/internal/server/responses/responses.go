@@ -17,7 +17,7 @@ func New() Responses {
 }
 
 func setResponseHeaders(c *gin.Context) {
-	c.Header("X-Genesis-Server-Version", constants.APIVersion)
+	c.Header(constants.GinHeaderNameServerVersion, constants.APIVersion)
 }
 
 // Success sends 2XX responses.
@@ -43,13 +43,24 @@ func (r Responses) ClientError(c *gin.Context, code ClientErrorCode, errTitle, e
 	c.JSON(int(code), errorBody)
 }
 
-// ServerError sends 500 responses.
-func (r Responses) ServerError(c *gin.Context, err error) {
+// InternalServerError sends 500 responses.
+func (r Responses) InternalServerError(c *gin.Context, err error) {
 	setResponseHeaders(c)
 	c.JSON(http.StatusInternalServerError, ErrorBody{
 		Title:    "Unexpected server side error",
 		Detail:   "There has been an unexpected server side error",
 		Status:   http.StatusInternalServerError,
+		RawError: err.Error(),
+	})
+}
+
+// BadGateway sends 502 responses.
+func (r Responses) BadGateway(c *gin.Context, err error) {
+	setResponseHeaders(c)
+	c.JSON(http.StatusBadGateway, ErrorBody{
+		Title:    "Bad gateway",
+		Detail:   "There has been an unexpected issue with service requests on our end",
+		Status:   http.StatusBadGateway,
 		RawError: err.Error(),
 	})
 }

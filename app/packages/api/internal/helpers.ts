@@ -8,13 +8,13 @@ import ApiConfig from "../types/Config";
 export const generateApiHeaders = (config: ApiConfig): AxiosRequestHeaders => {
     if (config.jwt) {
         return {
-            "X-Genesis-App-Version": config.appVersion,
+            "X-Genesis-Client-Version": config.appVersion,
             Authorization: `Bearer ${config.jwt}`,
         };
     }
 
     return {
-        "X-Genesis-App-Version": config.appVersion,
+        "X-Genesis-Client-Version": config.appVersion,
     };
 };
 

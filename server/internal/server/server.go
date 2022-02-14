@@ -89,11 +89,12 @@ func registerMiddleware(services *interactors.Services, router *gin.Engine, devM
 		"origin",
 		"Cache-Control",
 		"Authorization",
-		"X-Genesis-App-Version",
+		constants.GinHeaderNameClientVersion,
 	}
 
 	router.Use(sentrygin.New(sentrygin.Options{}))
 	router.Use(cors.New(config))
+	router.Use(middleware.CanaryProxy(services))
 	router.Use(middleware.EnsureKeysMap())
 	router.Use(middleware.JwtAuth(services.BaseLogger, user.GenerateUserJwtMiddleware(services)))
 	router.Use(middleware.VersionCheck(services.BaseLogger))

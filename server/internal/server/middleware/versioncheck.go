@@ -11,15 +11,15 @@ import (
 	"git.bytecode.nl/bytecode/genesis/server/internal/server/responses"
 )
 
-// VersionCheck is the middleware used to check if the "X-Genesis-App-Version" header exists, and if so, validate whether the client version is acceptable.
+// VersionCheck is the middleware used to check if the "X-Genesis-Client-Version" header exists, and if so, validate whether the client version is acceptable.
 func VersionCheck(loggerParent *zap.Logger) gin.HandlerFunc {
 	l := loggerParent.Named("server/middleware/VersionCheck")
 	res := responses.New()
 
 	return func(c *gin.Context) {
-		versionHeader := c.GetHeader("X-Genesis-App-Version")
+		versionHeader := c.GetHeader(constants.GinHeaderNameClientVersion)
 
-		log := l.With(zap.String("app_version", versionHeader))
+		log := l.With(zap.String("client_version", versionHeader))
 
 		if versionHeader == "" {
 			log.Debug("no version header found")
@@ -31,11 +31,11 @@ func VersionCheck(loggerParent *zap.Logger) gin.HandlerFunc {
 
 		log.Debug("version header is set")
 
-		shouldUpdate, err := checkAppVersionForForcedUpdate(versionHeader)
+		shouldUpdate, err := checkClientVersionForForcedUpdate(versionHeader)
 		if err != nil {
-			log.Error("unexpected error from checkAppVersionForForcedUpdate", zap.Error(err))
+			log.Error("unexpected error from checkClientVersionForForcedUpdate", zap.Error(err))
 
-			res.ServerError(c, err)
+			res.InternalServerError(c, err)
 
 			c.Abort()
 
@@ -43,7 +43,7 @@ func VersionCheck(loggerParent *zap.Logger) gin.HandlerFunc {
 		}
 
 		if !shouldUpdate {
-			log.Info("app version is ok, continuing")
+			log.Info("client version is ok, continuing")
 
 			c.Next()
 
@@ -61,8 +61,8 @@ func VersionCheck(loggerParent *zap.Logger) gin.HandlerFunc {
 	}
 }
 
-func checkAppVersionForForcedUpdate(appVersionString string) (bool, error) {
-	appVersion, err := version.NewVersion(appVersionString)
+func checkClientVersionForForcedUpdate(clientVersionString string) (bool, error) {
+	clientVersion, err := version.NewVersion(clientVersionString)
 	if err != nil {
 		return false, err
 	}
@@ -72,7 +72,7 @@ func checkAppVersionForForcedUpdate(appVersionString string) (bool, error) {
 		return false, err
 	}
 
-	shouldUpdate := appVersion.LessThan(minVersion)
+	shouldUpdate := clientVersion.LessThan(minVersion)
 
 	return shouldUpdate, nil
 }
