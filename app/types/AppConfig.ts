@@ -8,4 +8,5 @@ export default interface AppConfig {
         | "staging"
         | "production";
     sentryDsn: string;
+    amplitudeApiKey: string;
 }

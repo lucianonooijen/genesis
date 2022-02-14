@@ -15,6 +15,7 @@
     "aegis": "decoder-generator generate --inputPath ./packages/api/types --outputFile packages/api/internal/decoders.ts && eslint packages/api/internal/decoders.ts --fix"
   },
   "dependencies": {
+    "@amplitude/react-native": "^2.7.1",
     "@react-native-community/async-storage": "^1.12.1",
     "@react-native-community/netinfo": "^8.0.0",
     "@react-native-community/push-notification-ios": "^1.10.1",

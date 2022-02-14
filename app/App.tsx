@@ -8,6 +8,7 @@ import { UserProfileStateContextProvider } from "data/UserProfileState/UserProfi
 import { configurePushNotifications } from "data/pushNotifications/pushNotifications";
 import { useAppVersionCheck } from "data/api/versioncheck";
 import { logGeneralAppStart } from "data/analytics/analytics";
+import { initAnalytics } from "data/analytics/init";
 import FatalError from "screens/FatalError/FatalError";
 
 if (!process.env.JEST) {
@@ -28,6 +29,8 @@ export const App = () => {
     }, [checkVersion]);
 
     useEffect(logGeneralAppStart, []);
+
+    useEffect(initAnalytics, []);
 
     if (netInfo.isInternetReachable === false) {
         // must check for === false, as it can also be null if the state is unknown

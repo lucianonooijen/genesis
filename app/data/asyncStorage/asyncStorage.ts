@@ -2,6 +2,7 @@
 
 import AsyncStorage from "@react-native-community/async-storage";
 import { AppStateStorage } from "./asyncStorage.types";
+import { loadAmplitudeUserDataFromJWT } from "../analytics/init";
 
 enum AsyncStorageKey {
     Jwt = "jwt",
@@ -68,6 +69,8 @@ export const appStateStorage: AppStateStorage = {
             AsyncStorageKey.HasSeenTutorial,
             boolToStorageString(hasSeenTutorial),
         );
+
+        loadAmplitudeUserDataFromJWT(); // notify Amplitude helper to load JWT to set user for tracking
 
         console.log("appStateStorage set, printing get for debug:");
         await appStateStorage.get(); // printing for debug

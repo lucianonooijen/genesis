@@ -1,4 +1,5 @@
 import * as Sentry from "@sentry/react-native";
+import { Amplitude } from "@amplitude/react-native";
 
 enum AnalyticsEvent {
     // General
@@ -39,15 +40,24 @@ enum AnalyticsEvent {
     ProfileDeleteComplete = "profile_delete_complete",
 }
 
-const logAnalyticsEvent = (type: AnalyticsEvent, data?: object) => {
+const logAnalyticsEvent = (
+    type: AnalyticsEvent,
+    data?: Record<string, unknown>,
+) => {
     // eslint-disable-next-line
     if (process.env.JEST) {
         return;
     }
 
-    // TODO: choose analytics platform and integrate here
+    const ampInstance = Amplitude.getInstance();
+
     // eslint-disable-next-line no-console
     console.log(`[ANALYTICS]: type=${type} - data=${JSON.stringify(data)}`);
+
+    ampInstance.logEvent(type, data).catch(e =>
+        // eslint-disable-next-line no-console
+        console.warn(`[ANALYTICS]: error sending event to Amplitude: ${e}`),
+    );
 
     Sentry.addBreadcrumb({
         type: "analytics",
