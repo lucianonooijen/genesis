@@ -3,6 +3,7 @@ import * as Sentry from "@sentry/react-native";
 import App from "./App";
 import { name as appName } from "./app.json";
 import config from "./config";
+// import Storybook from "./storybook";
 
 Sentry.init({
     dsn: config.sentryDsn,
@@ -16,3 +17,4 @@ Sentry.init({
 const SentrifiedApp = Sentry.wrap(App);
 
 AppRegistry.registerComponent(appName, () => SentrifiedApp);
+// AppRegistry.registerComponent(appName, () => Storybook);

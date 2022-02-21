@@ -32,8 +32,8 @@ export const App = () => {
 
     useEffect(initAnalytics, []);
 
+    // must check for === false, as it can also be null if the state is unknown
     if (netInfo.isInternetReachable === false) {
-        // must check for === false, as it can also be null if the state is unknown
         return (
             <FatalError
                 title="Geen internetverbinding"
