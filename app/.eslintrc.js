@@ -49,5 +49,13 @@ module.exports = {
                 "@typescript-eslint/no-empty-function": 0, // Allow `() => {}` in test files
             },
         },
+        {
+            files: ["*.stories.js", "*.stories.jsx", "*.stories.ts", "*.stories.tsx"], // All Stories files
+            rules: {
+                "import/no-extraneous-dependencies": ["error", { devDependencies: true }], // Stories files import devDependencies
+                "no-console": 0, // Allow `console` usage in Stories files
+                "@typescript-eslint/no-empty-function": 0, // Allow `() => {}` in Stories files
+            },
+        },
     ],
 }
