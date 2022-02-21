@@ -11,10 +11,11 @@ import (
 // Config is the application configuration.
 type Config struct {
 	// Application configuration
-	IsDevMode      bool   `mapstructure:"development"` // Not marked required as it would fail when `false` is given as value TODO: Add to docs
-	ServerHostname string `mapstructure:"api_hostname" validate:"required"`
-	ServerPort     int    `mapstructure:"api_port" validate:"required"`
-	JWTSecret      string `mapstructure:"jwt_secret" validate:"required"`
+	IsDevMode            bool   `mapstructure:"development"` // Not marked required as it would fail when `false` is given as value
+	ServerHostname       string `mapstructure:"api_hostname" validate:"required"`
+	ServerHostnameCanary string `mapstructure:"api_hostname_canary"`
+	ServerPort           int    `mapstructure:"api_port" validate:"required"`
+	JWTSecret            string `mapstructure:"jwt_secret" validate:"required"`
 
 	// DBConn configuration
 	DatabaseHost string `mapstructure:"db_host" validate:"required"`

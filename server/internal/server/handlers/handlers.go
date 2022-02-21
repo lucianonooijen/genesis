@@ -53,5 +53,5 @@ func (h Handlers) sendConflict(c *gin.Context, err error) { //nolint:unused // t
 	r.ClientError(c, s.Conflict, "Conflict", "There is a conflict with the current state with the given resource", err)
 }
 func (h Handlers) sendServerError(c *gin.Context, err error) { //nolint:unused // this will be used when adding new features
-	r.ServerError(c, err)
+	r.InternalServerError(c, err)
 }

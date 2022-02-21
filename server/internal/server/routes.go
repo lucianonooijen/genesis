@@ -13,8 +13,9 @@ func registerRoutes(r *gin.RouterGroup, h handlers.Handlers) {
 	// STATIC FILES
 	r.Static(constants.APIStaticPath, "./static")
 
-	// STATUS
+	// STATUS AND DUMMY ROUTES
 	r.GET("/status", h.Status)
+	r.GET("/app-version", h.Status)
 
 	// USER LOGIN AND REGISTER
 	r.POST("/user/register", h.CreateUser)

@@ -7,6 +7,14 @@ import UserProfileStateContext from "data/UserProfileState/UserProfileState";
 import AppStateContext from "data/AppState/AppState";
 import { generateLoadUserProfileStateEffect } from "data/api/profile";
 import { getApiConfig } from "data/api/api";
+import {
+    logProfileChangeProfileError,
+    logProfileChangeProfileFinish,
+    logProfileChangeProfileStart,
+    logProfileDeleteComplete,
+    logProfileDeleteError,
+    logProfileDeleteStart,
+} from "data/analytics/analytics";
 import ErrorBanner from "components/ErrorBanner/ErrorBanner";
 import { InputFieldType } from "components/Input/TextInput/TextInput.types";
 import TextInput from "components/Input/TextInput/TextInput";
@@ -38,22 +46,28 @@ const Account: React.FC<AccountProps> = ({
     const [password, setPassword] = useState("");
 
     const updateProfile = async () => {
+        logProfileChangeProfileStart();
         try {
             const profile = await updateUserProfile(apiConfig, {
                 firstName,
             });
+            logProfileChangeProfileFinish();
             userProfileState.setProfile(profile);
         } catch (e) {
+            logProfileChangeProfileError(e);
             setError(e as Error);
         }
     };
 
     const deleteProfile = async () => {
+        logProfileDeleteStart();
         try {
             await deleteAccount(apiConfig, { password });
             setError(new Error("Account has been deleted, resetting the app"));
+            logProfileDeleteComplete();
             setTimeout(RNRestart.Restart, 1000);
         } catch (e) {
+            logProfileDeleteError(e);
             setError(e as Error);
         }
     };

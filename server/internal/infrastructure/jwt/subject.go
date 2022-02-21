@@ -1,3 +1,4 @@
+// nolint:dupl // duplication in this case is cleaner than having a shared extractor (simpler)
 package jwt
 
 import (
@@ -15,7 +16,7 @@ func ExtractSubject(token string) (subject string, err error) {
 	tok, err := jwtLib.Parse(token, nil)
 	if err != nil {
 		// This error is expected.
-		if err.Error() != "no Keyfunc was provided." {
+		if err.Error() != noKeyFuncJwtLibErr {
 			return "", err
 		}
 	}

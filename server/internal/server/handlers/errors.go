@@ -52,7 +52,7 @@ func (h Handlers) handleDomainError(c *gin.Context, err error) {
 	}
 
 	// Default to server error (500)
-	r.ServerError(c, err)
+	r.InternalServerError(c, err)
 }
 
 func handlePostgresError(c *gin.Context, pqErr *pq.Error) {
@@ -64,7 +64,7 @@ func handlePostgresError(c *gin.Context, pqErr *pq.Error) {
 		r.ClientError(c, responses.StatusCodes.Conflict, "Duplicate entry in database", detail, formatErr)
 	case "invalid_text_representation":
 		err := fmt.Errorf("invalid input for enum type: %s (%s)", pqErr.Message, formatErr)
-		r.ServerError(c, err)
+		r.InternalServerError(c, err)
 	case "foreign_key_violation":
 		detail := fmt.Sprintf("Foreign key database error: fkey = %s, message = %s", pqErr.Constraint, pqErr.Message)
 		r.ClientError(c, responses.StatusCodes.BadRequest, "Invalid data", detail, formatErr)
@@ -72,6 +72,6 @@ func handlePostgresError(c *gin.Context, pqErr *pq.Error) {
 		detail := fmt.Sprintf("Input does not satisfy database data check: check_name = %s, message = %s", pqErr.Constraint, pqErr.Message)
 		r.ClientError(c, responses.StatusCodes.BadRequest, "Invalid data", detail, formatErr)
 	default:
-		r.ServerError(c, formatErr)
+		r.InternalServerError(c, formatErr)
 	}
 }

@@ -40,7 +40,7 @@ func checkLoggedInAsUser(c *gin.Context) {
 
 	_, ok := userFromKeys.(*database.User)
 	if !ok {
-		res.ServerError(c, fmt.Errorf("could not convert user data to user"))
+		res.InternalServerError(c, fmt.Errorf("could not convert user data to user"))
 
 		c.Abort()
 

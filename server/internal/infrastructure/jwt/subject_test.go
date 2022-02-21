@@ -18,7 +18,7 @@ func TestExtractSubject_Extract(t *testing.T) {
 	assert.NoError(t, err)
 
 	// Create key
-	key, err := j.CreateJWT(testUser)
+	key, err := j.CreateJWT(testUser, testUUID)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, key)
 
@@ -33,7 +33,7 @@ func TestExtractSubject_NoValidateSignature(t *testing.T) {
 	assert.NoError(t, err)
 
 	// Create key
-	key, err := j.CreateJWT(testUser)
+	key, err := j.CreateJWT(testUser, testUUID)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, key)
 

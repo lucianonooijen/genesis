@@ -2,15 +2,20 @@ import { AxiosRequestHeaders, AxiosResponse } from "axios";
 import { guard, Decoder } from "decoders";
 import { apiErrorDecoder } from "@genesis/api/internal/decoders";
 import ApiError from "@genesis/api/types/ApiError";
+import { GenesisApiError } from "@genesis/api";
 import ApiConfig from "../types/Config";
 
 export const generateApiHeaders = (config: ApiConfig): AxiosRequestHeaders => {
     if (config.jwt) {
         return {
+            "X-Genesis-Client-Version": config.appVersion,
             Authorization: `Bearer ${config.jwt}`,
         };
     }
-    return {};
+
+    return {
+        "X-Genesis-Client-Version": config.appVersion,
+    };
 };
 
 export const jsonCheck = <T>(data: T, decoder: Decoder<T>) => {
@@ -29,11 +34,6 @@ export const throwIfResponseError = (res: AxiosResponse) => {
 
         jsonCheck(err, apiErrorDecoder);
 
-        let errString = `Error ${err.status}: ${err.title}`;
-        if (err.detail) {
-            errString += ` (${err.detail})`;
-        }
-
-        throw new Error(errString);
+        throw new GenesisApiError(err);
     }
 };

@@ -46,8 +46,8 @@ const UserProfileStateContextProvider: React.FC = ({ children }) => {
 };
 
 const UserProfileStateContextProviderTest: React.FC<{
-    userProfileState: UserProfileState;
-}> = ({ userProfileState, children }) => {
+    userProfileState?: UserProfileState;
+}> = ({ userProfileState = initialUserProfileState, children }) => {
     return (
         <UserProfileStateContext.Provider value={userProfileState}>
             {children}

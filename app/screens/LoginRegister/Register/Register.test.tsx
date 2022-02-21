@@ -1,11 +1,11 @@
 import React from "react";
 import { fireEvent, render, waitFor } from "@testing-library/react-native";
 import useMockNavigation from "__mocks__/mockNavigation";
-import Register from "./Register";
 import {
     AppStateContextProviderTest,
     initialAppState,
-} from "../../../data/AppState/AppState";
+} from "data/AppState/AppState";
+import Register from "./Register";
 
 describe("Register", () => {
     it("should render without throwing", () => {

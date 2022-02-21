@@ -7,6 +7,7 @@ import { getApiConfig } from "data/api/api";
 import { ButtonPrimary } from "components/Buttons/ButtonRegular/ButtonRegular";
 import { requestPushPermissions } from "data/pushNotifications/pushNotifications";
 import { generateLoadUserProfileStateEffect } from "data/api/profile";
+import { logPushNotificationsRequest } from "data/analytics/analytics";
 import { HomeProps } from "./Home.types";
 
 const Home: React.FC<HomeProps> = ({ getUserProfile = profileGet }) => {
@@ -26,7 +27,17 @@ const Home: React.FC<HomeProps> = ({ getUserProfile = profileGet }) => {
     );
 
     const onPressPushNotifications = () => {
+        logPushNotificationsRequest();
         requestPushPermissions(); // Note: must be done at a moment where an accurate JWT is set in local storage.
+    };
+
+    const nuke = () => {
+        appState.reset();
+
+        appState.setFatalError(
+            "De schijt heeft de ventilator geraakt",
+            "OOPSIE WOOPSIE!! Uwu We make a fucky wucky!! A wittle fucko boingo! The code monkeys at our headquarters are working VEWY HAWD to fix this!",
+        );
     };
 
     return (
@@ -38,6 +49,7 @@ const Home: React.FC<HomeProps> = ({ getUserProfile = profileGet }) => {
                 title="I want push notifications"
                 onPress={onPressPushNotifications}
             />
+            <ButtonPrimary title="Nuke app" onPress={nuke} />
         </View>
     );
 };

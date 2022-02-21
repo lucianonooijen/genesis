@@ -14,7 +14,7 @@ func (h Handlers) CreateUser(c *gin.Context) {
 		return
 	}
 
-	res, err := user.CreateUser(h.services, reqBody) // FIXME sendDomainResult(interface{}, error) helper?
+	res, err := user.CreateUser(h.services, reqBody)
 	if err != nil {
 		h.handleDomainError(c, err)
 		return

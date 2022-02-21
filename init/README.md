@@ -13,6 +13,7 @@ _Bytecode Digital Agency's Project Scaffolding, with the name taken from the Anc
 * Commit your changes to the Git repository and push
 * There might be some variables that need to be changed by hand later, for example in `app/ios/genesis.xcodeproj/project.pbxproj`: `DEVELOPMENT_TEAM = JS5JAXY9DB;`
 * Follow instructions in `/docs` to set up the CI/CD and push notifications
+* Change the contents of `android/sentry.properties` and `ios/sentry.properties` to connect to Sentry
 
 ## Stuff that should be replaced in Scaffold step
 

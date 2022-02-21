@@ -1,24 +1,32 @@
-import { appStateStorage } from "data/asyncStorage/asyncStorage";
 import React, { useEffect, useState } from "react";
+import { appStateStorage } from "data/asyncStorage/asyncStorage";
+import {
+    logGeneralAppReset,
+    logGeneralFatalError,
+} from "data/analytics/analytics";
 
 export interface AppState {
     isLoading: boolean;
+    fatalError?: { title: string; description: string };
     hasSeenTutorial: boolean;
-    jwt: string | undefined;
+    jwt: string | null;
 
     setIsLoading: (loading: boolean) => void;
+    setFatalError: (title: string, description: string) => void;
     setHasSeenTutorial: (hasSeenTutorial: boolean) => void;
-    setJwt: (isLoggedIn: string | undefined) => void;
+    setJwt: (jwt: string | null) => void;
 
     reset: () => void;
 }
 
 const initialAppState: AppState = {
     isLoading: true,
+    fatalError: undefined,
     hasSeenTutorial: false,
-    jwt: undefined,
+    jwt: null,
 
     setIsLoading: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+    setFatalError: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
     setHasSeenTutorial: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
     setJwt: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
 
@@ -42,14 +50,26 @@ const AppStateContextProvider: React.FC = ({ children }) => {
             ...currentState,
             hasSeenTutorial,
         }));
+
+        appStateStorage.set({ hasSeenTutorial, jwt: appState.jwt });
     };
 
-    const setJwt = (jwt: string | undefined) => {
+    const setFatalError = (title: string, description: string) => {
+        setAppState(currentState => ({
+            ...currentState,
+            fatalError: { title, description },
+        }));
+
+        logGeneralFatalError(title, description);
+    };
+
+    const setJwt = (jwt: string | null) => {
         setAppState(currentState => ({
             ...currentState,
             jwt,
         }));
-        appStateStorage.set({ jwt });
+
+        appStateStorage.set({ jwt, hasSeenTutorial: appState.hasSeenTutorial });
     };
 
     const reset = () => {
@@ -58,24 +78,42 @@ const AppStateContextProvider: React.FC = ({ children }) => {
             jwt: initialAppState.jwt,
             hasSeenTutorial: initialAppState.hasSeenTutorial,
         }));
+
+        appStateStorage.remove();
+
+        logGeneralAppReset();
     };
 
-    // Load state from memory on load
     useEffect(() => {
         setIsLoading(true);
-        // TODO: Load this from AsyncStorage
-        setIsLoading(false);
-    }, []);
 
-    // Load setters into the state on load
-    useEffect(() => {
+        // Load setters into the state on load
         setAppState(currentState => ({
             ...currentState,
             setIsLoading,
             setHasSeenTutorial,
+            setFatalError,
             setJwt,
             reset,
         }));
+
+        // Load state from memory on load
+        appStateStorage
+            .get()
+            .then(diskState => {
+                setAppState(currentState => ({
+                    ...currentState,
+                    jwt: diskState.jwt,
+                    hasSeenTutorial: diskState.hasSeenTutorial,
+                    isLoading: false, // instead of `setIsLoading(false)`
+                }));
+            })
+            .catch(err => {
+                console.error(err); // eslint-disable-line no-console
+
+                setIsLoading(false);
+            });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -85,8 +123,8 @@ const AppStateContextProvider: React.FC = ({ children }) => {
     );
 };
 
-const AppStateContextProviderTest: React.FC<{ appState: AppState }> = ({
-    appState,
+const AppStateContextProviderTest: React.FC<{ appState?: AppState }> = ({
+    appState = initialAppState,
     children,
 }) => {
     return (

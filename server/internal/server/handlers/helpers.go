@@ -20,12 +20,12 @@ func extractUserFromRequest(c *gin.Context) (user *database.User, success bool) 
 	usr, ok := userFromKeys.(*database.User)
 
 	if !ok {
-		responses.New().ServerError(c, errDatabaseUserNotOk)
+		responses.New().InternalServerError(c, errDatabaseUserNotOk)
 		c.Abort()
 	}
 
 	if usr == nil {
-		responses.New().ServerError(c, errDatabaseUserNil)
+		responses.New().InternalServerError(c, errDatabaseUserNil)
 		c.Abort()
 	}
 

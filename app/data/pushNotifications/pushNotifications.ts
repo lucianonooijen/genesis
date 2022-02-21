@@ -1,7 +1,8 @@
 import PushNotification from "react-native-push-notification";
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
-import { appStateStorage } from "data/asyncStorage/asyncStorage";
 import { pushNotificationRegisterToken } from "@genesis/api";
+import { appStateStorage } from "data/asyncStorage/asyncStorage";
+import { logPushNotificationsSaveToken } from "data/analytics/analytics";
 import { getApiConfigWithJWT } from "data/api/api";
 
 const tokenOsToServerOs = (tokenOs: string): string => {
@@ -17,6 +18,7 @@ const tokenOsToServerOs = (tokenOs: string): string => {
 export const configurePushNotifications = () => {
     PushNotification.configure({
         async onRegister(tokenObject) {
+            logPushNotificationsSaveToken(tokenObject.token);
             appStateStorage.get().then(appState => {
                 if (appState.jwt) {
                     const apiConfig = getApiConfigWithJWT(appState.jwt);

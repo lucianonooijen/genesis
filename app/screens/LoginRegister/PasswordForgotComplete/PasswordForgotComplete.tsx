@@ -5,9 +5,14 @@ import { ButtonPrimary } from "components/Buttons/ButtonRegular/ButtonRegular";
 import { SubTitle, Title } from "components/Typography/Typography";
 import TextInput from "components/Input/TextInput/TextInput";
 import { InputFieldType } from "components/Input/TextInput/TextInput.types";
+import { usePasswordValidation } from "components/Input/TextInput/TextInput.validation";
 import ErrorBanner from "components/ErrorBanner/ErrorBanner";
 import AppStateContext from "data/AppState/AppState";
 import { getApiConfig } from "data/api/api";
+import {
+    logPasswordResetCompleteError,
+    logPasswordResetCompleteFinish,
+} from "data/analytics/analytics";
 import { PasswordForgotCompleteProps } from "./PasswordForgotComplete.types";
 
 const PasswordForgotComplete: React.FC<PasswordForgotCompleteProps> = ({
@@ -17,7 +22,9 @@ const PasswordForgotComplete: React.FC<PasswordForgotCompleteProps> = ({
     const [error, setError] = useState<Error | null>(null);
     const [resetCode, setResetCode] = useState("");
     const [password, setPassword] = useState("");
-    const canSubmit = resetCode && password;
+    const [passwordError, validatePassword] = usePasswordValidation();
+
+    const canSubmit = resetCode && password && !passwordError;
 
     const submit = async () => {
         setError(null);
@@ -27,8 +34,10 @@ const PasswordForgotComplete: React.FC<PasswordForgotCompleteProps> = ({
                 resetToken: resetCode,
                 password,
             });
+            logPasswordResetCompleteFinish();
             appState.setJwt(res.jwt);
         } catch (e) {
+            logPasswordResetCompleteError(e);
             setError(e as Error);
         }
     };
@@ -46,6 +55,8 @@ const PasswordForgotComplete: React.FC<PasswordForgotCompleteProps> = ({
                 type={InputFieldType.Password}
                 label="Password"
                 onChange={setPassword}
+                validatorFunc={validatePassword}
+                validationError={passwordError}
             />
             <ButtonPrimary
                 title="Save my new password"

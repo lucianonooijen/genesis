@@ -22,7 +22,7 @@ linters-settings:
       - sloppyReassign
   godox:
     keywords:
-#      - FIXME # FIXME: Enable (FIXME-ception?)
+      - FIXME
       - BUG
       - HACK
       - UNSAFE

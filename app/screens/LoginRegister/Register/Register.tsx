@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { register } from "@genesis/api";
 import { LoginRegisterScreens } from "router/types";
 import PaddedEmptyLayout from "layouts/PaddedEmptyLayout/PaddedEmptyLayout";
@@ -9,6 +9,15 @@ import { InputFieldType } from "components/Input/TextInput/TextInput.types";
 import ErrorBanner from "components/ErrorBanner/ErrorBanner";
 import AppStateContext from "data/AppState/AppState";
 import { getApiConfig } from "data/api/api";
+import {
+    logRegisterComplete,
+    logRegisterError,
+    logRegisterOpen,
+} from "data/analytics/analytics";
+import {
+    useEmailValidation,
+    usePasswordValidation,
+} from "components/Input/TextInput/TextInput.validation";
 import { RegisterProps } from "./Register.types";
 
 const Register: React.FC<RegisterProps> = ({
@@ -18,9 +27,17 @@ const Register: React.FC<RegisterProps> = ({
     const appState = useContext(AppStateContext);
     const [error, setError] = useState<Error | null>(null);
     const [name, setName] = useState("");
+
     const [email, setEmail] = useState("");
+    const [emailError, validateEmail] = useEmailValidation();
+
     const [password, setPassword] = useState("");
-    const canSubmitForm = name && email && password;
+    const [passwordError, validatePassword] = usePasswordValidation();
+
+    const canSubmitForm =
+        name && email && password && !emailError && !passwordError;
+
+    useEffect(logRegisterOpen, []);
 
     const submit = async () => {
         setError(null);
@@ -32,7 +49,9 @@ const Register: React.FC<RegisterProps> = ({
                 firstName: name,
             });
             appState.setJwt(res.jwt);
+            logRegisterComplete(email);
         } catch (e) {
+            logRegisterError(e);
             setError(e as Error);
         }
     };
@@ -47,11 +66,15 @@ const Register: React.FC<RegisterProps> = ({
                 type={InputFieldType.Email}
                 label="Email"
                 onChange={setEmail}
+                validatorFunc={validateEmail}
+                validationError={emailError}
             />
             <TextInput
                 type={InputFieldType.Password}
                 label="Password"
                 onChange={setPassword}
+                validatorFunc={validatePassword}
+                validationError={passwordError}
             />
             <ButtonPrimary
                 title="Register"

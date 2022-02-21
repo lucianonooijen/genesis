@@ -162,6 +162,12 @@ func PasswordResetComplete(s *interactors.Services, resetToken uuid.UUID, passwo
 		return nil, err
 	}
 
+	// Fetch user again to get updated password uuid
+	user, err = s.Database.GetUserByID(ctx, passReset.UserID)
+	if err != nil {
+		return nil, err
+	}
+
 	// Send confirmation email
 	log.Debug("sending password reset confirmation to user",
 		zap.String("email", user.Email),
