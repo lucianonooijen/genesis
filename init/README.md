@@ -30,6 +30,9 @@ _Bytecode Digital Agency's Project Scaffolding, with the name taken from the Anc
 * https://placekitten.com/400/400
 * development@genesis.bytecode.dev
 * registry.digitalocean.com/dawny/genesis-server
+* https://genesis.bytecode.nl
+* support@genesis.bytecode.nl
+* https://api.genesis.bytecode.nl
 
 ### FolderNames
 * app/android/app/src/debug/java/com/genesis

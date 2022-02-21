@@ -13,6 +13,7 @@ bootstrap: ## Installs Go packages and sets defaults
 	go install github.com/kyleconroy/sqlc/cmd/sqlc@latest
 	go install github.com/jstemmer/go-junit-report@latest
 	go install github.com/t-yuki/gocover-cobertura@latest
+	go install github.com/swaggo/swag/cmd/swag@latest
 
 
 .PHONY: bootstrap-files
@@ -28,6 +29,10 @@ dev: ## Runs the Gin HTTP server
 .PHONY: build
 build: ## Runs the Golang build for production, including the Sqreen intrumentation TODO: Improve setup
 	./bin/build
+
+.PHONY: swagger
+swagger: ## Generates Swagger documentation based on HTTP Handler comments
+	./bin/genswagger
 
 .PHONY: sql
 sql: ## Checks SQL for syntax and type errors, then generates Go code for ./SQL/ files

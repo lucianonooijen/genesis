@@ -8,6 +8,7 @@
 * [Goimports](https://godoc.org/golang.org/x/tools/cmd/goimports)*
 * [Golint](golang.org/x/lint/golint)*
 * [Golds](https://github.com/go101/golds)*
+* [Swaggo/Swag](https://github.com/swaggo/swag)*
 
 _*: required in your $PATH (`go installed`-ed by `make bootstrap`), together with additional packages that are used in the ci and `make ci`_
 

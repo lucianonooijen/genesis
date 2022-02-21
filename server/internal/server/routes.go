@@ -7,15 +7,18 @@ import (
 	"git.bytecode.nl/bytecode/genesis/server/internal/server/handlers"
 )
 
+// NOTE: All final handlers should have Swagger docs present,
+// see: https://github.com/swaggo/swag
+
 func registerRoutes(r *gin.RouterGroup, h handlers.Handlers) {
 	// TODO: Use Embed.FS for this
 	// https://github.com/gin-contrib/static/issues/19
 	// STATIC FILES
 	r.Static(constants.APIStaticPath, "./static")
 
-	// STATUS AND DUMMY ROUTES
+	// STATUS AND VERSION CHECK ROUTES
 	r.GET("/status", h.Status)
-	r.GET("/app-version", h.Status)
+	r.GET("/app-version", h.CheckAppVersion)
 
 	// USER LOGIN AND REGISTER
 	r.POST("/user/register", h.CreateUser)
