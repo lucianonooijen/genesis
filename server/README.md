@@ -23,7 +23,3 @@ _*: required in your $PATH (`go installed`-ed by `make bootstrap`), together wit
 To run the application, run `make dev`.
 
 For all commands, run `make` and all commands will show in your console.
-
-## Application architecture and import boundaries
-
-TODO

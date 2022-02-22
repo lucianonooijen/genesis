@@ -12,7 +12,6 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/sqreen/go-agent/sdk/middleware/sqgin"
 
 	"git.bytecode.nl/bytecode/genesis/server/internal/constants"
 	"git.bytecode.nl/bytecode/genesis/server/internal/domains/user"
@@ -74,10 +73,6 @@ func New(services *interactors.Services) (GinServer, error) {
 }
 
 func registerMiddleware(services *interactors.Services, router *gin.Engine, devMode bool) {
-	if !devMode { // Run Sqreen in production
-		router.Use(sqgin.Middleware())
-	}
-
 	router.Use(gin.Recovery())
 	router.Use(middleware.GinLogger(services.BaseLogger))
 

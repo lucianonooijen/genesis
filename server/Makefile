@@ -20,14 +20,13 @@ bootstrap: ## Installs Go packages and sets defaults
 bootstrap-files: ## Copies all of the files
 	@echo "Copying files..."
 	cp config.example.yml config.yml
-	cp sqreen.yaml.example sqreen.yaml
 
 .PHONY: dev
 dev: ## Runs the Gin HTTP server
 	air
 
 .PHONY: build
-build: ## Runs the Golang build for production, including the Sqreen intrumentation TODO: Improve setup
+build: ## Runs the Golang build for production
 	./bin/build
 
 .PHONY: swagger
@@ -72,11 +71,11 @@ ci: ## Runs the CI tasks
 
 .PHONY: migrateup
 migrateup: ## Runs the database migrations up
-	go run . migrate -d up --verbose
+	go run . migrate -d up
 
 .PHONY: migratedown
 migratedown: ## Runs the database migrations down
-	go run . migrate -d down --verbose
+	go run . migrate -d down
 
 .PHONY: migration
 migration: ## Asks for the new migration name and creates migration files
