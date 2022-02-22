@@ -1,20 +1,22 @@
 package server
 
 import (
+	"io/fs"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 
 	"git.bytecode.nl/bytecode/genesis/server/internal/constants"
 	"git.bytecode.nl/bytecode/genesis/server/internal/server/handlers"
+	"git.bytecode.nl/bytecode/genesis/server/static"
 )
 
 // NOTE: All final handlers should have Swagger docs present,
 // see: https://github.com/swaggo/swag
 
 func registerRoutes(r *gin.RouterGroup, h handlers.Handlers) {
-	// TODO: Use Embed.FS for this
-	// https://github.com/gin-contrib/static/issues/19
 	// STATIC FILES
-	r.Static(constants.APIStaticPath, "./static")
+	r.StaticFS(constants.APIStaticPath, mustFS())
 
 	// STATUS AND VERSION CHECK ROUTES
 	r.GET("/status", h.Status)
@@ -35,4 +37,14 @@ func registerRoutes(r *gin.RouterGroup, h handlers.Handlers) {
 
 	// PUSH NOTIFICATIONS
 	r.POST("/user/push-notifications", checkLoggedInAsUser, h.RegisterPushNotificationToken)
+}
+
+func mustFS() http.FileSystem {
+	sub, err := fs.Sub(static.FS, ".")
+
+	if err != nil {
+		panic(err)
+	}
+
+	return http.FS(sub)
 }
