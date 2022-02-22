@@ -4,10 +4,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	verbose = false
-)
-
 // rootCmd represents the base command when called without any subcommands.
 var rootCmd = &cobra.Command{
 	Use:   "genesisbackend",
@@ -24,10 +20,6 @@ func Execute() {
 }
 
 func init() { // nolint:gochecknoinits // needed for sane Cobra use
-	// Root flags
-	// TODO: implement verbose output
-	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "verbose output (not implemented yet)")
-
 	// Add commands
 	rootCmd.AddCommand(serverCmd)
 	rootCmd.AddCommand(migrateCmd)

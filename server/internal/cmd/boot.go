@@ -30,7 +30,6 @@ func loadServices() *interactors.Services {
 	)
 
 	// Config
-	// TODO: Change config to YAML
 	services.Config, err = config.LoadConfig()
 	panicOnErr(err)
 
