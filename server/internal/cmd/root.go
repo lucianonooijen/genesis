@@ -13,7 +13,7 @@ var rootCmd = &cobra.Command{
 	Use:   "genesisbackend",
 	Short: "The Genesis platform backend application",
 	Long: `The Genesis platform backend application including the REST API server and migrator.
-Application must be run with a 'migrations/' directory and '.env'-file in the same folder`,
+Application must be run with a 'migrations/' directory and 'config.yml'-file in the same folder (or environment variables set)`,
 }
 
 // Execute runs Cobra and starts/runs the correct application/jobs.

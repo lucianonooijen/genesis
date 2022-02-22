@@ -19,7 +19,7 @@ bootstrap: ## Installs Go packages and sets defaults
 .PHONY: bootstrap-files
 bootstrap-files: ## Copies all of the files
 	@echo "Copying files..."
-	cp .env.example .env
+	cp config.example.yml config.yml
 	cp sqreen.yaml.example sqreen.yaml
 
 .PHONY: dev

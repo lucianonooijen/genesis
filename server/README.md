@@ -14,8 +14,8 @@ _*: required in your $PATH (`go installed`-ed by `make bootstrap`), together wit
 
 ## Installation
 
-* Run `make bootstrap` and set the correct details in `.env`
-* Copy the `.env.example` file to `.env` and set the correct credentials
+* Run `make bootstrap` to install all required dependencies
+* Run `make bootstrap-files` and set the correct details in `config.yml`
 * Run `make migrateup` to run all database migrations
 
 ## Development and commands

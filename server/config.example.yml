@@ -1,0 +1,33 @@
+# Application configuration
+development: true
+api_port: 5000
+api_hostname: "http://localhost:5000"          # f.e. https://api.genesis.bytecode.dev, do not include trailing / or v1/
+api_hostname_canary: "http://localhost:6000"   # f.e. https://canary.genesis.bytecode.dev, do not include trailing / or v1/
+
+# Application secrets
+jwt_secret: "very_secret"
+
+# Database configuration
+db_host: "localhost"
+db_port: 5432
+db_name: "genesisdb"
+db_user: "genesisuser"
+db_pass: "genesispass"
+db_ssl: false
+
+# Sentry configuration
+sentry_dsn: "http://something@sentry.io/code"
+sentry_environment: "development"
+
+# Email configuration
+email_sender_name: "Genesis"
+email_sender_email: "development@genesis.bytecode.dev"
+sendinblue_api_key: "Find it here https://account.sendinblue.com/advanced/api" # The API key for APIv3
+
+# Push notification configuration
+apns_topic: "nl.bytecode.genesis"
+apns_team_id: "https://developer.apple.com"
+apns_key_id: "https://developer.apple.com/account/resources/authkeys/list"
+apns_key_base64: "c2VlXzFwYXNzd29yZAo=" # cat [keyname].p8 | base64
+fcm_channel_id: "nl.bytecode.genesis"
+fcm_credentials_base64: "c2VlXzFwYXNzd29yZAo=" # see 1password in base64

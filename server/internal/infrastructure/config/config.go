@@ -3,6 +3,7 @@ package config
 import (
 	b64 "encoding/base64"
 	"fmt"
+	"reflect"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/spf13/viper"
@@ -48,11 +49,26 @@ type Config struct {
 func LoadConfig() (Config, error) {
 	v := viper.New()
 
-	// For now we only support a .env file in the current directory or env variables.
+	var config Config
+
+	// Loop over the Config type and add all mapstructure field values to v.BindEnv
+	// so that Viper will read them, this means you can define application config
+	// both in the config.yml file or in the environment variables
+	cf := reflect.TypeOf(config)
+	for i := 0; i < cf.NumField(); i++ {
+		field := cf.Field(i)
+		tagValue := field.Tag.Get("mapstructure")
+
+		if err := v.BindEnv(tagValue); err != nil {
+			return config, err
+		}
+	}
+
+	// For now we only support a config.yml file in the current directory or env variables.
 	// Later on, using AddConfigPath and SetConfigName we can allow
 	// other methods of application configuration and utilize the
 	// full power of Viper for creating a true 12-factor application
-	v.SetConfigFile(".env")
+	v.SetConfigFile("config.yml")
 	v.AutomaticEnv() // read in environment variables that match
 
 	// If a config file is found, read it in.
@@ -61,7 +77,6 @@ func LoadConfig() (Config, error) {
 	}
 
 	// Marshal Viper config to struct and return
-	var config Config
 	if err := v.Unmarshal(&config); err != nil {
 		return Config{}, err
 	}

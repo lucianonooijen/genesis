@@ -52,7 +52,7 @@ EXPOSE 5000
 USER nobody:nobody
 
 # The binary should live in /app/server with other required files in /app
-# You should mount .env in /app/.env or insert them as environment variables
+# You should mount config.yml in /app/config.yml or insert them as environment variables
 WORKDIR /app
 ENTRYPOINT ["/app/server"]
 
