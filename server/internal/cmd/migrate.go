@@ -1,10 +1,6 @@
 package cmd
 
 import (
-	"errors"
-	"log"
-	"os"
-
 	"git.bytecode.nl/bytecode/genesis/server/internal/infrastructure/migrator"
 
 	"github.com/spf13/cobra"
@@ -21,7 +17,8 @@ var migrateCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		s := loadServices()
 		l := s.BaseLogger.Named("migrate_cmd")
-		migrate := migrator.New(s.DBConn, s.Config.DatabaseName, getMigrationSourceURL())
+
+		migrate := migrator.New(s.DBConn, s.Config.DatabaseName)
 
 		if dbMigrateDirection == "up" {
 			l.Info("Migrating to latest...")
@@ -52,18 +49,4 @@ func init() { // nolint:gochecknoinits // needed for sane Cobra use
 	if err := migrateCmd.MarkFlagRequired("direction"); err != nil {
 		panic(err)
 	}
-}
-
-// TODO: Embed migrations into the binary.
-func getMigrationSourceURL() string {
-	workingDir, err := os.Getwd()
-	if err != nil {
-		panic(err)
-	}
-
-	if _, err := os.Stat("./migrations"); os.IsNotExist(err) {
-		log.Fatal(errors.New("migrations directory not present"))
-	}
-
-	return "file://" + workingDir + "/migrations"
 }

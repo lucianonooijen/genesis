@@ -38,8 +38,8 @@ func New(loggerBase *zap.Logger, fromEmail, fromName, apiKey, staticFileURLBase 
 		hermes: hermes.Hermes{
 			Product: hermes.Product{
 				Name:        "Genesis",
-				Link:        "https://bytecode.nl",                         // TODO: Load this from the configuration (?)
-				Logo:        fmt.Sprintf("%s/logo.png", staticFileURLBase), // TODO: This breaks on localhost due to SendInBlue serving the images. Can this be fixed?
+				Link:        "https://bytecode.nl",
+				Logo:        fmt.Sprintf("%s/logo.png", staticFileURLBase), // NOTE: This breaks on localhost due to SendInBlue serving the images. Can this be fixed?
 				Copyright:   fmt.Sprintf("Copyright © %d Genesis. All rights reserved.", time.Now().Year()),
 				TroubleText: "Als je problemen hebt met de knop '{ACTION}', knip en plak de URL hieronder in je webbrowser.",
 			},
@@ -67,7 +67,6 @@ type emailRequest struct {
 
 func (m *Mailer) sendEmail(toMail, toName, subject, htmlContents string) error {
 	url := "https://api.sendinblue.com/v3/smtp/email"
-	// TODO: Support reply-to (?)
 
 	reqBody := emailRequest{
 		Sender: contact{

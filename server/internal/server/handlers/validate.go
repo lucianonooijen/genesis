@@ -21,7 +21,7 @@ func createValidationError(err error) error {
 	// Build array with incorrect error fields and create error string
 	var incorrectFields []string
 	for _, e := range validationErrors {
-		incorrectFields = append(incorrectFields, fmt.Sprintf("%s (%s)", e.Field(), e.Tag())) // TODO: Return JSON fields instead of Go naming
+		incorrectFields = append(incorrectFields, fmt.Sprintf("%s (%s)", e.Field(), e.Tag()))
 	}
 
 	incorrectFieldsString := strings.Join(incorrectFields, ", ")
@@ -69,7 +69,7 @@ func (h Handlers) checkResponseBody(c *gin.Context, data interface{}) {
 	rt := reflect.TypeOf(data)
 	switch rt.Kind() {
 	case reflect.Slice:
-		err = validate.Var(data, "dive") // TODO: Test better
+		err = validate.Var(data, "dive")
 	default:
 		err = validate.Struct(data)
 	}

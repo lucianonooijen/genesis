@@ -16,8 +16,6 @@ const (
 	MaxRequestTimeBeforeLoggingError = 1000
 )
 
-// TODO: Add https://github.com/plimble/zap-sentry
-
 // GinLogger is Gin middleware to log request metadata and save Sentry data.
 func GinLogger(logger *zap.Logger) gin.HandlerFunc { // nolint:funlen // can't be shorter without increasing cognitive load
 	timeFormat := "02/Jan/2006:15:04:05 -0700"
@@ -72,7 +70,7 @@ func GinLogger(logger *zap.Logger) gin.HandlerFunc { // nolint:funlen // can't b
 		if len(c.Errors) > 0 {
 			err := c.Errors.ByType(gin.ErrorTypePrivate).String()
 			httpLog.Error(err, reqData...)
-			sentry.CaptureException(errors.New(err)) // TODO: Maybe remove?
+			sentry.CaptureException(errors.New(err))
 
 			return
 		}

@@ -42,9 +42,6 @@ COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
 # Put the server binary in /app/server
 COPY --from=builder /build/server /app/server
 
-# Put the migration files in /app/migrations
-COPY --from=builder /build/migrations /app/migrations
-
 # Expose port 5000 for running the server
 EXPOSE 5000
 

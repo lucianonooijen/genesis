@@ -43,7 +43,7 @@ func (pn PushService) SendNotification(targets []database.UserPushToken, notific
 // SendNotificationAsync is the exact same as SendNotification but runs in a goroutine.
 // It does not return an error and should thus not be trusted to be error-safe.
 // Errors are logged (and sent to Sentry), but not returned
-// TODO: Send notifications concurrently to speed up delivery.
+// TODO: Send notifications concurrently (with a `sync.WaitGroup`) to speed up delivery, when this becomes necessary.
 func (pn PushService) SendNotificationAsync(targets []database.UserPushToken, notificationData PushNotificationData) {
 	log := pn.logger.Named("SendNotificationAsync")
 
