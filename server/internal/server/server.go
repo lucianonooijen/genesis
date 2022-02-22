@@ -12,7 +12,6 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/sqreen/go-agent/sdk/middleware/sqgin"
 
 	"git.bytecode.nl/bytecode/genesis/server/internal/constants"
 	"git.bytecode.nl/bytecode/genesis/server/internal/domains/user"
@@ -54,7 +53,7 @@ func New(services *interactors.Services) (GinServer, error) {
 	}
 	gin.DefaultWriter = os.Stdout // Reset to the default writer
 
-	registerMiddleware(services, server.Router, debug)
+	registerMiddleware(services, server.Router)
 
 	initializedHandlers, err := handlers.New(services)
 	if err != nil {
@@ -73,22 +72,17 @@ func New(services *interactors.Services) (GinServer, error) {
 	return server, nil
 }
 
-func registerMiddleware(services *interactors.Services, router *gin.Engine, devMode bool) {
-	if !devMode { // Run Sqreen in production
-		router.Use(sqgin.Middleware())
-	}
-
+func registerMiddleware(services *interactors.Services, router *gin.Engine) {
 	router.Use(gin.Recovery())
 	router.Use(middleware.GinLogger(services.BaseLogger))
 
 	config := cors.DefaultConfig()
 	config.AllowAllOrigins = true
-	config.AllowHeaders = []string{ // TODO: Remove unused
+	config.AllowHeaders = []string{
 		"Access-Control-Allow-Headers",
 		"Content-Type",
 		"Content-Length",
 		"Accept-Encoding",
-		"X-CSRF-Token",
 		"accept",
 		"origin",
 		"Cache-Control",
@@ -103,15 +97,18 @@ func registerMiddleware(services *interactors.Services, router *gin.Engine, devM
 	router.Use(middleware.JwtAuth(services.BaseLogger, user.GenerateUserJwtMiddleware(services)))
 	router.Use(middleware.VersionCheck(services.BaseLogger))
 
-	if err := router.SetTrustedProxies([]string{}); err != nil { // TODO: Set this
+	if err := router.SetTrustedProxies([]string{}); err != nil { // TODO: Set this when needed
 		services.BaseLogger.Named("server/registerMiddleware").Fatal("could not set trusted proxies in Gin", zap.Error(err))
 	}
 }
 
 func setGinRouteLogger(logger *zap.Logger) {
 	gin.DebugPrintRouteFunc = func(httpMethod, absolutePath, handlerName string, nuHandlers int) {
-		handlerShort := strings.ReplaceAll(handlerName, "git.bytecode.nl/bytecode/genesis/server/internal/server/handlers.", "") // TODO: cleaner
-		handlerShort = strings.ReplaceAll(handlerShort, "github.com/gin-gonic/", "")                                             // TODO: cleaner
+		handlerReplacer := strings.NewReplacer(
+			"git.bytecode.nl/bytecode/genesis/server/internal/server/handlers.", "",
+			"github.com/gin-gonic/", "")
+		handlerShort := handlerReplacer.Replace(handlerName)
+
 		logger.Debug(fmt.Sprintf("Route registered: %-6s %-25s --> %s (%d handlers)", httpMethod, absolutePath, handlerShort, nuHandlers))
 	}
 }

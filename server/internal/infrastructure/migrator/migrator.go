@@ -4,43 +4,51 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"net/http"
 
 	"github.com/golang-migrate/migrate/v4"
-
 	"github.com/golang-migrate/migrate/v4/database/postgres"
-	// Needs side effects from golang-migrate.
-	_ "github.com/golang-migrate/migrate/v4/source/file"
+	"github.com/golang-migrate/migrate/v4/source/httpfs"
+
 	// Needs side effects from lib/pg.
 	_ "github.com/lib/pq"
+
+	"git.bytecode.nl/bytecode/genesis/server/migrations"
 )
 
 // Direction indicates the migration direction.
-type Direction int
+type Direction string
 
 // UpAll and DownAll indicate the migration direction.
 const (
-	UpAll Direction = iota
-	DownAll
+	UpAll   = Direction("UpAll")
+	DownAll = Direction("DownAll")
 )
 
 // New returns a migrator closure that will accept UpAll or DownAll to up or down migrate the database.
-func New(db *sql.DB, dbName, migrationScriptsPath string) func(Direction) error {
+func New(db *sql.DB, dbName string) func(Direction) error {
 	return func(direction Direction) error {
-		// TODO: Add support for migrating +1/-1 or to a specific migration
 		// Direction check
 		if direction != UpAll && direction != DownAll {
 			return fmt.Errorf("migration direction should be 'UpAll' or 'DownAll'")
 		}
 
-		// Generating migration instance
-		driver, err := postgres.WithInstance(db, &postgres.Config{})
+		// Source instance for the migrations embedded in server binary
+		sourceInstance, err := httpfs.New(http.FS(migrations.Migrations), ".")
 		if err != nil {
-			return err
+			return fmt.Errorf("invalid source instance, %w", err)
 		}
 
-		migrator, err := migrate.NewWithDatabaseInstance(migrationScriptsPath, dbName, driver)
+		// PostgreSQL driver
+		driver, err := postgres.WithInstance(db, &postgres.Config{})
 		if err != nil {
-			return err
+			return fmt.Errorf("invalid target postgres instance, %w", err)
+		}
+
+		// Create migrator instance
+		migrator, err := migrate.NewWithInstance("httpfs", sourceInstance, dbName, driver)
+		if err != nil {
+			return fmt.Errorf("failed to initialize migrate instance, %w", err)
 		}
 
 		// Do the actual migration

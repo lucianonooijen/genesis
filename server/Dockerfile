@@ -42,9 +42,6 @@ COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
 # Put the server binary in /app/server
 COPY --from=builder /build/server /app/server
 
-# Put the migration files in /app/migrations
-COPY --from=builder /build/migrations /app/migrations
-
 # Expose port 5000 for running the server
 EXPOSE 5000
 
@@ -52,7 +49,7 @@ EXPOSE 5000
 USER nobody:nobody
 
 # The binary should live in /app/server with other required files in /app
-# You should mount .env in /app/.env or insert them as environment variables
+# You should mount config.yml in /app/config.yml or insert them as environment variables
 WORKDIR /app
 ENTRYPOINT ["/app/server"]
 

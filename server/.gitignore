@@ -1,6 +1,6 @@
 # Configuration files
 .env
-sqreen.yaml
+config.yml
 
 # Dependecies
 vendor/
