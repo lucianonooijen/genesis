@@ -26,12 +26,12 @@ var replaceValuesBase = []ReplaceValue{
 	{
 		OldValue:     "registry.digitalocean.com/dawny/genesis-server",
 		Description:  "Docker registry for server",
-		ReplaceOrder: 6,
+		ReplaceOrder: 7,
 	},
 	{
 		OldValue:     "git.bytecode.nl/bytecode/genesis/server",
 		Description:  "Golang module name for server",
-		ReplaceOrder: 5,
+		ReplaceOrder: 6,
 	},
 	{
 		OldValue:     "development@genesis.bytecode.dev",
@@ -47,5 +47,20 @@ var replaceValuesBase = []ReplaceValue{
 		OldValue:     "https://bytecode.nl",
 		Description:  "Link in emails",
 		ReplaceOrder: 2,
+	},
+	{
+		OldValue:     "https://genesis.bytecode.nl",
+		Description:  "Contact URL for support",
+		ReplaceOrder: 3,
+	},
+	{
+		OldValue:     "support@genesis.bytecode.nl",
+		Description:  "Contact email for support",
+		ReplaceOrder: 4,
+	},
+	{
+		OldValue:     "https://api.genesis.bytecode.nl",
+		Description:  "API server host",
+		ReplaceOrder: 5,
 	},
 }

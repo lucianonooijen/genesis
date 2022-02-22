@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Exit when any command fails
+set -e
+
+echo "Checking if swag command available"
+ if ! [[ -x "$(command -v swag)" ]]; then
+      echo "Error: swag is not installed, see project readme for instructions"
+      exit 1
+fi
+
+swag init \
+    --output swagger \
+    --generalInfo internal/server/swagger.go
+
+#    --parseDependency \

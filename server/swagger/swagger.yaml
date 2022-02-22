@@ -1,0 +1,498 @@
+basePath: /v1
+definitions:
+  entities.DeleteAccountRequest:
+    properties:
+      password:
+        type: string
+    required:
+    - password
+    type: object
+  entities.JwtResponse:
+    properties:
+      jwt:
+        type: string
+    type: object
+  entities.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  entities.NewUserRequest:
+    properties:
+      email:
+        type: string
+      firstName:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - firstName
+    - password
+    type: object
+  entities.PasswordResetCompleteRequest:
+    properties:
+      password:
+        type: string
+      resetToken:
+        type: string
+    required:
+    - password
+    - resetToken
+    type: object
+  entities.PasswordResetStartRequest:
+    properties:
+      email:
+        type: string
+    required:
+    - email
+    type: object
+  entities.PushNotificationRegister:
+    properties:
+      platform:
+        type: string
+      token:
+        type: string
+    required:
+    - platform
+    - token
+    type: object
+  entities.UserProfile:
+    properties:
+      firstName:
+        type: string
+    required:
+    - firstName
+    type: object
+  responses.ErrorBody:
+    properties:
+      detail:
+        description: Detail contains details about the error
+        example: Slightly longer error detail
+        type: string
+      rawError:
+        description: RawError contains the raw error data
+      status:
+        description: Status contains the HTTP status code
+        example: 418
+        type: integer
+      title:
+        description: Title is the human-readable error
+        example: Error title
+        type: string
+    type: object
+host: api.genesis.bytecode.nl
+info:
+  contact:
+    email: support@genesis.bytecode.nl
+    name: Customer Support
+    url: https://genesis.bytecode.nl
+  description: Genesis API server
+  license:
+    name: GPL-3.0-only
+    url: https://www.gnu.org/licenses/gpl-3.0.txt
+  title: Genesis
+  version: "1"
+paths:
+  /app-version:
+    get:
+      description: To be used with for checking app status based on HTTP version headers
+      parameters:
+      - description: Client version code (semver)
+        in: header
+        name: X-Genesis-Client-Version
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "500":
+          description: ""
+      summary: App version check handler
+      tags:
+      - Common
+  /status:
+    get:
+      description: To be used with for status pings
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "500":
+          description: ""
+      summary: Status handler
+      tags:
+      - Common
+  /user/login:
+    post:
+      consumes:
+      - application/json
+      description: Log into user account
+      parameters:
+      - description: Username and password
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/entities.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.JwtResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "426":
+          description: Upgrade Required
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+      summary: Log into user account
+      tags:
+      - User_Auth
+  /user/password-reset/complete:
+    post:
+      consumes:
+      - application/json
+      description: Complete password request using reset token and new password
+      parameters:
+      - description: ResetData
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/entities.PasswordResetCompleteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.JwtResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "426":
+          description: Upgrade Required
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+      summary: Complete password reset
+      tags:
+      - User_PasswordReset
+  /user/password-reset/start:
+    post:
+      consumes:
+      - application/json
+      description: Start password request by sending a reset token to a user's email
+        address
+      parameters:
+      - description: AccountData
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/entities.PasswordResetStartRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "426":
+          description: Upgrade Required
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+      summary: Begin password reset
+      tags:
+      - User_PasswordReset
+  /user/profile:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes logged-in user's account
+      parameters:
+      - description: Password
+        in: body
+        name: profile
+        required: true
+        schema:
+          $ref: '#/definitions/entities.DeleteAccountRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "426":
+          description: Upgrade Required
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+      security:
+      - JWT_User: []
+      summary: Delete user account
+      tags:
+      - User_Account
+    get:
+      description: Fetches the user account for logged-in user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.UserProfile'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "426":
+          description: Upgrade Required
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+      security:
+      - JWT_User: []
+      summary: Fetch user account
+      tags:
+      - User_Account
+    put:
+      consumes:
+      - application/json
+      description: Updates the user account for logged-in user
+      parameters:
+      - description: Profile
+        in: body
+        name: profile
+        required: true
+        schema:
+          $ref: '#/definitions/entities.UserProfile'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entities.UserProfile'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "426":
+          description: Upgrade Required
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+      security:
+      - JWT_User: []
+      summary: Update user account
+      tags:
+      - User_Account
+  /user/push-notifications:
+    post:
+      consumes:
+      - application/json
+      description: Saves a push notification token for the authenticated user
+      parameters:
+      - description: Token data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/entities.PushNotificationRegister'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "426":
+          description: Upgrade Required
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+      security:
+      - JWT_User: []
+      summary: Register push notification token
+      tags:
+      - User_PushNotifications
+  /user/register:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user account
+      parameters:
+      - description: New account data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/entities.NewUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entities.JwtResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "426":
+          description: Upgrade Required
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.ErrorBody'
+      summary: Create user account
+      tags:
+      - User_Auth
+securityDefinitions:
+  JWT_User:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

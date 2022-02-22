@@ -20,6 +20,9 @@ linters-settings:
       - experimental
     disabled-checks:
       - sloppyReassign
+  godot:
+    exclude:
+      - "@Router"
   godox:
     keywords:
       - FIXME
