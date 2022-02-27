@@ -22,7 +22,14 @@ module.exports = {
         "@semantic-release/gitlab",
         ["@semantic-release/git", {
             message: "release: ${nextRelease.version}\n\n${nextRelease.notes}",
-            assets: ["CHANGELOG.md"]
+            assets: [
+                "CHANGELOG.md",
+                "package.json",
+                "app/android/app/build.gradle",
+                "app/ios/genesis/Info.plist",
+                "app/package.json",
+                "server/internal/constants/version.go"
+            ]
         }]
     ]
 }
