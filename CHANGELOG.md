@@ -1,3 +1,5 @@
+## [0.2.1](https://git.bytecode.nl/bytecode/genesis/compare/v0.2.0...v0.2.1) (2022-02-27)
+
 # [0.2.0](https://git.bytecode.nl/bytecode/genesis/compare/v0.1.1...v0.2.0) (2022-02-27)
 
 
