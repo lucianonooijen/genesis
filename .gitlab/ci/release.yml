@@ -74,8 +74,7 @@ server_release:
     - docker info
     - echo -n "$DO_REGISTRY_API_KEY" | docker login --username "$DO_REGISTRY_API_KEY" --password-stdin "$DOCKER_REGISTRY"
     - export DOCKER_IMAGE_LATEST="$DOCKER_IMAGE_NAME:latest"
-#    - export DOCKER_IMAGE_TAG="$DOCKER_IMAGE_NAME:$CI_COMMIT_TAG"
-    - export DOCKER_IMAGE_TAG="$DOCKER_IMAGE_NAME:v0.1.0"
+    - export DOCKER_IMAGE_TAG="$DOCKER_IMAGE_NAME:$CI_COMMIT_TAG"
     - echo "Building and pushing image '$DOCKER_IMAGE'"
   script:
     - docker pull "$DOCKER_IMAGE_NAME:latest" || true
