@@ -1,0 +1,111 @@
+alerts:
+- rule: DEPLOYMENT_FAILED
+- rule: DOMAIN_FAILED
+databases:
+- engine: PG
+  name: db
+  num_nodes: 1
+  size: db-s-dev-database
+  version: "12"
+envs:
+- key: DEVELOPMENT
+  scope: RUN_AND_BUILD_TIME
+  value: "false"
+- key: API_HOSTNAME
+  scope: RUN_AND_BUILD_TIME
+  value: "genesis.bytedev.io"
+- key: API_HOSTNAME_CANARY
+  scope: RUN_AND_BUILD_TIME
+  value: "" # FIXME: Add canary hostname when available
+- key: API_PORT
+  scope: RUN_AND_BUILD_TIME
+  value: "5000"
+- key: JWT_SECRET
+  scope: RUN_AND_BUILD_TIME
+  type: SECRET
+  value: EV[1:KGtd3o4sgrLf+Lt+yDX+PNhtZHYkzq5Y:Ibo6sNOTv+zLNFfpeD1EWuv+ia/2thh+lxBtbJ+fLQ==]
+- key: DB_HOST
+  scope: RUN_AND_BUILD_TIME
+  value: ${db.HOSTNAME}
+- key: DB_PORT
+  scope: RUN_AND_BUILD_TIME
+  value: ${db.PORT}
+- key: DB_NAME
+  scope: RUN_AND_BUILD_TIME
+  value: ${db.DATABASE}
+- key: DB_USER
+  scope: RUN_AND_BUILD_TIME
+  value: ${db.USERNAME}
+- key: DB_PASS
+  scope: RUN_AND_BUILD_TIME
+  value: ${db.PASSWORD}
+- key: DB_SSL
+  scope: RUN_AND_BUILD_TIME
+  value: "true"
+- key: ADMIN_EMAIL
+  scope: RUN_AND_BUILD_TIME
+  value: genesis@bytecode.nl
+- key: SENTRY_DSN
+  scope: RUN_AND_BUILD_TIME
+  value: https://302e4b5a60864920939df5d1f42706d0@o345560.ingest.sentry.io/6200171
+- key: SENTRY_ENVIRONMENT
+  scope: RUN_AND_BUILD_TIME
+  value: staging
+- key: EMAIL_SENDER_NAME
+  scope: RUN_AND_BUILD_TIME
+  value: Genesis
+- key: EMAIL_SENDER_EMAIL
+  scope: RUN_AND_BUILD_TIME
+  value: development@genesis.bytecode.dev
+- key: SENDINBLUE_API_KEY
+  scope: RUN_AND_BUILD_TIME
+  type: SECRET
+  value: EV[1:/Sph0IulmQUz1VBjz7PXH+/JNLtbnHTJ:DV3Y0rA2vkYQwCEs3Mxu9HHHyQfyMxjeYWzDwziRNX0p/UU6Ar3hls2fVAEB02dQMsLZaH34veq8WuwjcP0Kt/6BzbvBUxceknQ2GNYz5Ep+m0OKyrHErjXXb3ZrRLKTW1i3Xc2wUndj]
+- key: APNS_TOPIC
+  scope: RUN_AND_BUILD_TIME
+  value: nl.bytecode.genesis
+- key: APNS_TEAM_ID
+  scope: RUN_AND_BUILD_TIME
+  value: JS5JAXY9DB
+- key: APNS_KEY_ID
+  scope: RUN_AND_BUILD_TIME
+  value: B8CADZKRP9
+- key: APNS_KEY_BASE64
+  scope: RUN_AND_BUILD_TIME
+  type: SECRET
+  value: EV[1:K+3/I22wFDj8l4hLUX1sbMwMqhFwuxwr:1WQZoXg9UkQ3mh/BRtgWSAWprkL5P3dZd2N/DDMylP3gbUsnnz7AgTcumKZ5CAB2fnjqRI1jwg/w5K+M9luuTWh5WA2Go5/zMagqG37PmvbxiUTGM21IOnAwzoSWrnFSKqMbk2fShJd1ytlS6HHgpCRcVkAAq1+2D02SY0JQRzvhN4TPqqTNqOl5mhNi4FKtXP3Av/3Sugmjr5Eujnvph9yU5bEaRQUo3Tc9p+2QsGamCBzMYk5bTBAiV/DBNq3GQIKKe+8RPREAZ8l3eHbL3RU7rt4Mq1wgucwzoX7rz1z9CAlp8t+z3yZD8UgwK2FAjYY42PjHlHq/na3bxhmOPybJgSVsYCT4c40ucE0WRk2GfMLE/uc32h3Gpi88WgOUSyOBJ6nELudMih6fUY3niD2y8cVaOWWF+Dz9HCKRGVNoCfZOKKsg6no+H5bBARNLSKmDRGUFNKOZijBqtc/Db93jwczqQ7xq]
+- key: FCM_CHANNEL_ID
+  scope: RUN_AND_BUILD_TIME
+  value: com.getdearly.dearly
+- key: FCM_CREDENTIALS_BASE64
+  scope: RUN_AND_BUILD_TIME
+  type: SECRET
+  value: EV[1:La3+VRnPkLDwm5yGwsfbbrwpBJ9ORVWj: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]
+jobs:
+- image:
+    registry_type: DOCR
+    repository: genesis-server
+    tag: latest
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  kind: POST_DEPLOY
+  name: db-migrations
+  run_command: /app/server migrate -d up
+  source_dir: /
+name: genesis-server
+region: ams
+services:
+- health_check:
+    http_path: /v1/status
+  http_port: 5000
+  image:
+    registry_type: DOCR
+    repository: genesis-server
+    tag: latest
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  name: genesis-server
+  routes:
+  - path: /
+  run_command: /app/server server
+  source_dir: /
